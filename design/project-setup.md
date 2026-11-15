@@ -1,7 +1,7 @@
 # Zakładanie nowego projektu
 
-Wersja: 2.2.0  
-Data: 2026-11-10
+Wersja: 2.3.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md) i [routingiem](../routing.md) przy tworzeniu nowego repozytorium. Istniejącego projektu nie zakładaj ponownie. Setup może powstać po ustaleniu nazwy, zakresu pierwszego przyrostu i podstawowych decyzji technicznych; nie wymaga pełnej specyfikacji wszystkich przyszłych funkcji.
 
@@ -25,7 +25,7 @@ docs/
   standards/               pełna kopia tego zestawu
 ```
 
-Jeśli projekt wskazuje dostępny szkielet, wykorzystaj jego sprawdzone komendy kontroli, workflow, skrypty wdrożenia i rollbacku oraz szablon runbooka. Potwierdź wersję i działanie potrzebnych zabezpieczeń; sam plik szablonu nie jest dowodem. Brak szkieletu nie blokuje projektu: przygotuj minimalny potrzebny fundament. Nie usuwaj wymagania standardu na podstawie niezweryfikowanego założenia o szkielecie.
+Dla nowej aplikacji najpierw sprawdź dostępność zatwierdzonego szkieletu zgodnego z potrzebami. Jeśli jest dostępny, wykorzystaj jego sprawdzone komendy kontroli, workflow, skrypty wdrożenia i rollbacku oraz szablon runbooka. Potwierdź wersję i działanie potrzebnych zabezpieczeń; sam plik szablonu nie jest dowodem. Brak szkieletu nie blokuje projektu: przygotuj minimalny potrzebny fundament. Nie usuwaj wymagania standardu na podstawie niezweryfikowanego założenia o szkielecie.
 
 Architekturę, kontrakt, decyzje i zadania dodawaj, gdy są potrzebne; nie twórz pustej dokumentacji. Kod użytecznego prototypu zachowaj jako punkt wyjścia, oznaczając ograniczenia. Fundament implementacyjny uzupełnia uruchamianie, CI i potrzebny artefakt wdrożeniowy.
 

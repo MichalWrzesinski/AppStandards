@@ -1,7 +1,7 @@
 # Standardy tworzenia aplikacji przez agentów AI
 
-Wersja zestawu: 4.1.0  
-Data: 2026-11-10
+Wersja zestawu: 5.0.0  
+Data: 2026-11-15
 
 Proces budowy i rozwoju aplikacji webowych, także legacy. Człowiek określa oczekiwany produkt i granice uprawnień; agent sam prowadzi uzgodnioną pracę do integracji oraz przygotowuje wydanie. Produkcja wymaga zgody człowieka.
 
@@ -35,9 +35,12 @@ Ryzyko jest niezależne od liczby linii. Mała zmiana uprawnień lub migracja ni
 | Implementacja | [realizacja](development/task-workflow.md), [kod](development/code-standards.md), [backend](development/backend.md), [frontend](development/frontend.md), [AI aplikacji](development/ai.md) |
 | Weryfikacja i integracja | [jakość](development/quality-checks.md), [ścieżki krytyczne](development/critical-paths.md), [bezpieczeństwo](development/security.md), [prywatność](development/privacy.md), [review](development/code-review.md) z [listą recenzenta](development/review-checklist.md), [Git](development/git-workflow.md) |
 | Dostarczenie i utrzymanie | [DevOps](development/devops.md), [rutynowe wydania](development/deployment.md), [przygotowanie środowisk](development/deployment-setup.md), [utrzymanie](development/operations.md), [awarie i rollback](development/incidents.md) — czytane według wyzwalaczy z routingu |
+| Wejście nowego produktu | [Szablon opisu](planning/project-brief.md) i [wybór sposobu uzupełnienia](planning/input-readiness.md#wstępna-ocena-opisu-nowego-produktu) |
 | Wiedza i koszt | [dokumentacja](development/documentation.md), [postęp](development/progress-reporting.md), [dobór modeli](development/model-selection.md) |
 
 ## Udział człowieka
+
+Wieloetapowa praca korzysta z [delegowania spójnych zadań](development/task-workflow.md#delegowanie-pracy); główny agent koordynuje zakres i zależności, a subagenci mogą podejmować decyzje w powierzonych granicach.
 
 Człowiek rozstrzyga nierozstrzygnięte decyzje produktowe, ocenia konkretny prototyp, zatwierdza nowe zobowiązania i produkcję. Nie musi zatwierdzać każdego zadania ani szczegółów wykonania. Zgody kosztowe mogą obejmować kategorie działań i limity. Granice określa rdzeń, a wdrożenia mają dodatkowe zabezpieczenia.
 

@@ -1,7 +1,7 @@
 # Kontrola jakości
 
-Wersja: 3.1.0  
-Data: 2026-11-10
+Wersja: 3.2.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
 
@@ -14,6 +14,12 @@ Zaczynaj od ukierunkowanych kontroli. Przed commitem sprawdź dotknięty obszar,
 Ograniczaj wyjście narzędzi do potrzebnego: status zakończenia, podsumowanie, błędy i ostrzeżenia istotne dla oceny. Pełny log czytaj tylko przy diagnozie; nie wklejaj logów sukcesu do kontekstu i raportów.
 
 Nie twórz obowiązkowych testów kodu do zmiany pisowni lub formatowania. Właściwa kontrola diffu, dokumentu lub podglądu nadal obowiązuje. Zasady całych procesów produktu określają [ścieżki krytyczne](critical-paths.md).
+
+## Kontrole według wpływu
+
+Zmiana wyłącznie CSS bez wpływu na kontrakt, logikę serwera, zależności ani konfigurację backendu nie wymaga analizy całego kodu Python/PHP ani uruchamiania testów backendu. Sprawdź diff, właściwe kontrole stylów lub build frontendu oraz dotknięty widok w odpowiednich rozmiarach, uwzględniając wpływ na dostępność. Głębokość sprawdzenia UI dobierz do rzeczywistej zmiany; nie wykonuj pełnych procesów aplikacji dla lokalnej poprawki wyglądu bez wpływu na ich działanie.
+
+Wspólne style mogą wpływać na wiele widoków. Zmiana konfiguracji, zależności lub procesu budowania może wymagać szerszych kontroli mimo małego diffu. Zakres ustalaj z zależności, nie wyłącznie z rozszerzeń plików. Wymaganych checków projektu nie pomijaj ręcznie; selektywność musi być częścią ich uzgodnionej konfiguracji.
 
 ## Analiza statyczna, formater i linter
 

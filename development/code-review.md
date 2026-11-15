@@ -1,7 +1,7 @@
 # Niezależny przegląd zmian
 
-Wersja: 4.0.0  
-Data: 2026-11-10
+Wersja: 4.1.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
 
@@ -15,7 +15,7 @@ Recenzent zgłasza uwagi, nie edytuje kodu. Bez subagenta użyj nowej sesji z ty
 
 ## Głębokość przeglądu
 
-- Zmiana mechaniczna: diff i właściwe kontrole, bez uruchamiania niezmienionej aplikacji.
+- Zmiana mechaniczna: diff i właściwe kontrole, bez uruchamiania niezmienionej aplikacji. Zmiana wyłącznie CSS podlega [kontrolom według wpływu](quality-checks.md#kontrole-według-wpływu), bez przeglądu niepowiązanego backendu.
 - Zmiana zachowania: wymagania, powiązany kod i aktualne dowody testów lub wykonania przepływu. Zmiana reguł dokumentacji wymaga oceny spójności i skutków, nie buildu aplikacji.
 - Podwyższone ryzyko — dostęp, dane osobowe, płatności, migracje, sekrety, kontrakty: rozszerzone kontrole właściwe dla ryzyka, w tym odmowy, granice danych i częściowe niepowodzenia.
 
@@ -23,16 +23,20 @@ Nie oceniaj całego repozytorium. Nie powtarzaj aktualnych wiarygodnych kontroli
 
 ## Uwagi i rozstrzygnięcia
 
-Uwaga wskazuje miejsce, wymaganie lub konkretne ryzyko, skutek i propozycję. Preferencja recenzenta nie jest błędem.
+Uwaga wskazuje miejsce, wymaganie lub konkretne ryzyko, skutek i propozycję. Preferencja recenzenta nie jest błędem. Poprawnym wynikiem jest „brak istotnych uwag”; nie ma wymaganej liczby ustaleń. Zgłaszaj problemy poparte wymaganiem, dowodem lub wiarygodnym scenariuszem skutków. Nie żądaj zmiany tylko po to, aby przegląd zakończył się poprawką.
 
 | Kategoria | Dalszy krok |
 |---|---|
 | Blokująca | Błąd, brak kryterium lub naruszenie reguł: poprawić przed integracją |
-| Drobna | Oczywista lokalna poprawka bez zmiany zachowania: recenzent proponuje, autor poprawia |
-| Sugestia | Niewymagane usprawnienie: decyzja autora lub osobna propozycja |
+| Drobna | Lokalna niezgodność z wymaganiem lub obowiązującą regułą: autor poprawia, recenzent potwierdza; preferencje należą do sugestii |
+| Sugestia | Niewymagane usprawnienie: decyzja autora lub osobna propozycja; nie blokuje zatwierdzenia i nie wymaga kolejnej rundy bez zmiany |
 | Do decyzji człowieka | Nierozstrzygnięta istotna kwestia produktu lub uprawnień według rdzenia |
 
 Spór techniczny rozstrzygaj kryterium, dowodem i standardem; przy równorzędnych wariantach wybierz prostszy i bezpieczniejszy. Autor nie pomija i nie przeklasyfikowuje sam uwagi blokującej. Po trzech rundach bez rozwiązania podsumuj problem i zmień sposób diagnozy według realizacji; nie przekazuj człowiekowi sporu możliwego do rozstrzygnięcia technicznie.
+
+## Warunek zakończenia
+
+Spełnione kryteria, wystarczające aktualne dowody i brak nierozwiązanych wymaganych poprawek pozwalają zatwierdzić zmianę bez uwag. Nie poszerzaj przeglądu po spełnieniu tych warunków bez nowej przesłanki. Brak wymaganej kontroli pozostaje brakiem dowodu, a nie wynikiem pozytywnym.
 
 ## Poprawki i wynik
 

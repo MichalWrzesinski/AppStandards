@@ -1,13 +1,15 @@
 # Lista kontrolna recenzenta
 
-Wersja: 1.2.0  
-Data: 2026-11-10
+Wersja: 1.3.0  
+Data: 2026-11-15
 
 Zwarty wyciąg reguł do przeglądu zmian według [standardu review](code-review.md). Recenzent czyta [rdzeń](../core.md), standard review i tę listę. Pełny standard szczegółowy czyta tylko dla obszaru podwyższonego ryzyka objętego zmianą albo przy konkretnej wątpliwości. Wyciąg nie zmienia reguł; przy rozbieżności rozstrzyga standard źródłowy.
 
 Przed oceną odczytaj właściwe instrukcje projektu, nadpisania i potrzebną część profilu. Poniższe domyślne konwencje nie wymagają migracji zastanych rozwiązań. Rozróżniaj udokumentowany baseline od błędów wprowadzonych przez zmianę; zastana podatność nadal podlega standardowi bezpieczeństwa. Pozycje stosuj tylko w zakresie, którego dotyczą.
 
 Przy zmianie reguły źródłowej sprawdź i w tej samej zmianie zaktualizuj odpowiadający jej wyciąg, zachowując istotne wyjątki. Lista nie ustanawia osobnej polityki.
+
+Brak istotnych uwag jest poprawnym wynikiem. Sugestie nie blokują zatwierdzenia; obowiązek poprawy wynika z niezgodności, nie preferencji. Zakres kontroli, w tym dla CSS bez wpływu na backend, określa [jakość](quality-checks.md#kontrole-według-wpływu).
 
 ## Zawsze
 

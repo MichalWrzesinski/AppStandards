@@ -1,7 +1,7 @@
 # Analiza produktu
 
-Wersja: 3.0.0  
-Data: 2026-11-10
+Wersja: 3.1.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
 
@@ -9,7 +9,7 @@ Stosuj do nowego produktu lub tylko nowego obszaru, którego nie rozstrzygają w
 
 ## Rozpoznanie i decyzje
 
-Odczytaj opis i materiały, ustal problem, użytkowników, ich główny przepływ i oczekiwany efekt. Przy szczegółowym opisie sprawdź luki zamiast ponawiać wywiad. Przy luźnym pomyśle zaproponuj najmniejszy sprawdzalny zakres z przykładami.
+Najpierw zastosuj [wstępną ocenę opisu](../planning/input-readiness.md#wstępna-ocena-opisu-nowego-produktu). Wykorzystaj jej ustalenia i odpowiedzi bez ponawiania tych samych pytań. Odczytaj opis i materiały, ustal problem, użytkowników, ich główny przepływ i oczekiwany efekt. Przy szczegółowym opisie sprawdź luki zamiast ponawiać wywiad. Przy luźnym pomyśle zaproponuj najmniejszy sprawdzalny zakres z przykładami.
 
 Zachowaj nazwę użytkownika. Brak nazwy docelowej nie blokuje analizy i prototypu; użyj jawnej roboczej i ustal docelową przed utworzeniem trwałych identyfikatorów. W istniejącym projekcie zachowaj nazwę i pojęcia.
 

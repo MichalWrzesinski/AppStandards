@@ -1,7 +1,7 @@
 # Standard doboru technologii i architektury dla agentów AI
 
-Wersja: 2.2.0  
-Data: 2026-11-10
+Wersja: 2.3.0  
+Data: 2026-11-15
 
 ## Zakres i stosowanie
 
@@ -79,6 +79,8 @@ Istotne odstępstwo od stacku zapisz jedną linią w profilu: wybór i powód. A
 - Frontend może generować typy i klienta z aktualnej specyfikacji. Równoległa praca wymaga stabilnego kontraktu potrzebnego do danego przyrostu.
 
 ## Usługi zewnętrzne
+
+Do wysyłki poczty domyślnie wykorzystuj istniejącą pocztę wskazaną przez użytkownika, przez dostępny SMTP lub API. Nie proponuj nowego konta, np. Brevo, jeśli obecna usługa spełnia potrzeby aplikacji. Oceń jej limity i możliwość użycia w wymaganym procesie; brak potrzebnej funkcji zgłoś z rekomendacją według rdzenia. Dostęp jest potrzebny przed rzeczywistą wysyłką, nie przed lokalną implementacją z atrapą. Sekrety przekazuj przez konfigurację środowiska, nie w opisie produktu.
 
 - Dla nowej potrzeby integracyjnej rekomenduj jednego dostawcę; porównanie 2–3 przygotuj, gdy istnieje istotna różnica funkcji, kosztu lub ograniczeń. Sprawdź:
   - aktualny sposób naliczania opłat, opłaty stałe i limity; koszt scenariusza użycia tylko wtedy, gdy projekt dostarcza dane do jego oszacowania;

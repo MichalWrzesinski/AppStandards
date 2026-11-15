@@ -1,7 +1,7 @@
 # Standard infrastruktury (DevOps) dla agentów AI
 
-Wersja: 2.1.2  
-Data: 2026-11-10
+Wersja: 2.2.0  
+Data: 2026-11-15
 
 ## Zakres i stosowanie
 
@@ -11,7 +11,7 @@ Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji 
 
 ## Zasady nadrzędne
 
-- **Jedna komenda.** Uruchomienie, testy i kontrole wykonuje się jedną komendą, taką samą dla człowieka, agenta i CI.
+- **Wspólne komendy.** Każda operacja ma wspólną komendę dla człowieka, agenta i CI; kontrole mogą mieć warianty obszarowe zgodnie z wpływem zmiany.
 - **Wszystko w repozytorium.** Konfiguracja środowisk, CI i serwerów jest zapisana w repozytorium. Nie wprowadzaj ręcznych zmian na serwerach.
 - **Jeden artefakt.** Artefakt wydania budujesz raz i używasz tego samego w każdym środowisku. Środowiska różnią się tylko konfiguracją.
 - **Przenośność.** W nowym projekcie preferuj standardowe usługi i ogranicz zależności od dostawcy, gdy ułatwia to realne wdrożenie; nie buduj abstrakcji na hipotetyczną migrację.
@@ -43,6 +43,7 @@ Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji 
 | `make down` | Zatrzymuje środowisko |
 | `make test` | Uruchamia testy |
 | `make check` | Uruchamia wszystkie kontrole wymagane w CI: formater, linter, analizę statyczną, testy z pokryciem |
+| `make check-frontend` / `make check-backend` | Kontrole danego obszaru, jeśli projekt ma te warstwy; CI dobiera je według zależności zmiany |
 | `make migrate` | Wykonuje migracje |
 | `make seed` | Ładuje dane demonstracyjne i konta testowe |
 
@@ -69,7 +70,7 @@ Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji 
 ## CI
 
 - Domyślnie stosuj GitHub Actions.
-- **Na PR** CI wykonuje kontrole właściwe dla zakresu: testy i analizę, skan sekretów, zgodność API przy wpływie na kontrakt oraz build właściwego artefaktu. Audyt zależności wykonuj przy ich zmianie i cyklicznie. Zmiana wyłącznie dokumentacyjna może pomijać build aplikacji, ale wymagany check musi rzetelnie ocenić zakres. Nie pomijaj kontroli wspólnych zależności i konfiguracji na podstawie samego rozszerzenia pliku.
+- **Na PR** CI wykonuje kontrole właściwe dla zakresu: testy i analizę, skan sekretów, zgodność API przy wpływie na kontrakt oraz build właściwego artefaktu. Audyt zależności wykonuj przy ich zmianie i cyklicznie. Zmiana wyłącznie dokumentacyjna może pomijać build aplikacji, ale wymagany check musi rzetelnie ocenić zakres. Nie pomijaj kontroli wspólnych zależności i konfiguracji na podstawie samego rozszerzenia pliku. Wymagany check podsumowujący ocenia wpływ i wynik właściwych kontroli; zakres niewymagany oznacza z uzasadnieniem jako nie dotyczy. Nie wymagaj uruchomienia pełnego `make check` dla każdej zmiany. Nieznany wpływ oznacza szersze kontrole. Konfigurację selekcji weryfikuj przy jej wprowadzaniu i zmianie.
 - **Po merge zmiany aplikacji do gałęzi głównej** CI publikuje niezmienny artefakt, domyślnie obraz kontenera, oznaczony commitem. Buduj go raz do promocji między środowiskami. Dla strony statycznej lub platformy z innym modelem wdrożenia profil określa równoważny artefakt. Sama dokumentacja nie wymaga nowego obrazu.
 - CI wykonuje te same komendy co środowisko lokalne, aby wynik był taki sam.
 - Buforuj zależności i warstwy obrazów, aby skrócić czas CI.

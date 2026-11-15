@@ -1,9 +1,21 @@
 # Realizacja zmiany
 
-Wersja: 3.1.1  
-Data: 2026-11-10
+Wersja: 3.2.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md), [routingiem](../routing.md) i [workflow](../workflow.md). Ten standard opisuje wykonanie uzgodnionego zadania; nie wymaga osobnego agenta wykonawcy.
+
+## Delegowanie pracy
+
+Przy budowie całej aplikacji lub wieloetapowej pracy domyślnie deleguj spójne zadania, jeśli narzędzia udostępniają subagentów. Główny agent utrzymuje cel, zakres, uprawnienia, zależności i komunikację z użytkownikiem; nie musi przeprowadzać każdej analizy ani podejmować wszystkich decyzji technicznych osobiście. Małą zmianę wykonuj bez dodatkowych ról poza wymaganym niezależnym review.
+
+Delegować można analizę wsadu, projektowanie architektury i kontraktów, planowanie przyrostu oraz implementację. Role dobieraj do aktualnej potrzeby; nie uruchamiaj stałego zespołu dla każdego zadania. Subagent może podejmować decyzje w powierzonym zakresie, ale nie rozszerza uprawnień i nie zastępuje decyzji człowieka z rdzenia.
+
+Przekazuj kompletny wynik do osiągnięcia, wraz z odpowiedzialnością za diagnozę, kontrole i poprawki. Zlecenie zawiera cel, granice, kryteria, właściwe instrukcje i źródła, stan repozytorium, uprawnienia, zależności oraz oczekiwany rezultat. Preferuj czysty kontekst i odnośniki do artefaktów zamiast kopiowania całej rozmowy.
+
+Wynik zawiera krótkie rozstrzygnięcie i uzasadnienie, odnośniki do zmienionych artefaktów, dowody kontroli, ograniczenia i otwarte decyzje. Pełne logi oraz historię prób zachowuj poza kontekstem głównego agenta; przekazuj istotne wnioski i odnośnik do szczegółów potrzebnych do wznowienia. Główny agent sprawdza wynik i zależności, bez odtwarzania analizy lub powtarzania wiarygodnych kontroli bez konkretnej wątpliwości.
+
+Równolegle wykonuj tylko niezależne zadania lub prace z uzgodnionym kontraktem. Rozdziel własność plików lub użyj osobnych worktree; wspólne pliki, integracje i operacje zewnętrzne koordynuj kolejno. Autor analizy lub implementacji nie jest jej niezależnym recenzentem. Bez subagentów kontynuuj sekwencyjnie, zachowując artefakty i osobny review według jego standardu.
 
 ## Przed zmianą
 
@@ -36,6 +48,8 @@ Każda próba naprawy wymaga hipotezy i obserwacji. Po trzech nieskutecznych pr�
 Kontynuuj, jeśli pojawiła się nowa sprawdzalna hipoteza, a praca mieści się w zatwierdzonych granicach. Zgłoś blokadę, gdy brakuje decyzji lub dostępu, brak nowej drogi diagnozy albo dalsza praca przekroczyłaby uzgodniony limit czasu lub kosztu. Nie powtarzaj czynności bez nowej przesłanki. Awaria środowiska nie oznacza, że potrzebna jest decyzja produktowa.
 
 ## Przerwanie i wznowienie
+
+Aktualizuj checkpoint po zakończeniu spójnego zadania, przed przekazaniem pracy i przed przewidywaną utratą kontekstu. Nie czekaj na przerwanie. Zakończone zadanie może użyć swojego raportu jako checkpointu, bez drugiej kopii.
 
 W źródle zadania zachowaj: cel, wykonany zakres, bieżący stan, branch lub commit, niezapisane zmiany, wyniki kontroli, blokadę i następną czynność. Dla małej zmiany bez PR użyj krótkiej trwałej notatki w miejscu projektu, nie twórz rozbudowanego zadania tylko dla checkpointu.
 

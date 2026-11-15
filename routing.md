@@ -1,7 +1,7 @@
 # Dobór ścieżki i kontekstu
 
-Wersja: 1.3.0  
-Data: 2026-11-10
+Wersja: 1.4.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](core.md). Przy nowym zleceniu wybierz ścieżkę według niepewności i skutków błędu. Nie uruchamiaj osobnego agenta do klasyfikacji. Zmiana ścieżki w trakcie pracy wymaga tylko uzupełnienia brakujących ustaleń, nie powtórzenia wykonanych etapów.
 
@@ -44,6 +44,7 @@ Na początku sesji odczytaj rdzeń, routing i główne instrukcje projektu. Przy
 | Backup, odtworzenie, monitoring, rotacja sekretów, organizacja utrzymania | [Utrzymanie](development/operations.md); przy zmianie środowiska sekcja koordynacji wdrożeń |
 | Awaria lub rollback | [Incydenty](development/incidents.md) i wskazane sekcje bezpieczeństwa operacji; bez instrukcji wyboru hostingu |
 | Dodanie lub zmiana flagi funkcji | Sekcja [Flagi funkcji](development/deployment.md#flagi-funkcji); nie wymaga lektury całego standardu wdrożeń |
+| Wieloetapowa praca i delegowanie spójnych zadań | Sekcja [Delegowanie pracy](development/task-workflow.md#delegowanie-pracy) |
 | Dobór lub eskalacja modelu wykonawcy | [Dobór modeli](development/model-selection.md) |
 | Zbiorczy plan, podsumowanie etapu, pomiary | [Postęp](development/progress-reporting.md) |
 
