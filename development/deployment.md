@@ -1,7 +1,7 @@
 # Rutynowe wdrożenia i wydania
 
-Wersja: 3.3.1  
-Data: 2026-11-10
+Wersja: 3.3.2  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md). Używaj przy wydaniu na przygotowane środowisko. [Setup](deployment-setup.md) czytaj przy przygotowaniu lub istotnej zmianie infrastruktury, [utrzymanie](operations.md) przy konfiguracji lub kontroli operacyjnej, [awarie](incidents.md) przy rollbacku i incydencie. Nie wczytuj tych instrukcji do każdego wydania, jeśli aktualny profil i runbook rozstrzygają potrzebne warunki.
 
@@ -52,7 +52,7 @@ Każde wdrożenie produkcyjne wymaga jawnej zgody człowieka na wskazanego kandy
 
 Kandydat wydania ma jeden rekord poza historią gałęzi, domyślnie szkic GitHub Release albo równoważny zapis platformy wskazany w profilu. Zapis poza repozytorium nie wymaga commita, więc nie zmienia kandydata ani stagingu. Rekord zawiera dane z listy gotowości poniżej, wynik ścieżek krytycznych, stan wstrzymania stagingu, blokady z warunkiem odblokowania i odwołanie do zgody platformy lub ręcznego uruchomienia przez człowieka. Po wdrożeniu produkcyjnym rekord staje się opublikowanym wydaniem z digestem artefaktu; historia potwierdzonych wdrożeń jest źródłem celów rollbacku. Sam opis lub publikacja Release nie dowodzi wdrożenia: zachowaj identyfikator operacji platformy, środowisko, digest i faktyczny wynik. Jeśli publikacja rekordu zawiedzie po udanym wdrożeniu, odtwórz rekord z dowodów operacji, bez ponownego wdrażania.
 
-**Wersja istotnej konfiguracji** to skrót jawnej konfiguracji oraz identyfikatory rewizji sekretów udostępniane przez menedżer, bez wartości i bez skrótów samych sekretów. Jeśli menedżer nie udostępnia rewizji, np. GitHub Secrets, użyj nazwy sekretu i znacznika ostatniej zmiany z API platformy (`updated_at`); dzięki temu widoczna jest także zmiana wykonana ręcznie przez człowieka. Gdy platforma nie udostępnia nawet znacznika, rejestruj każdą zmianę sekretu jako zdarzenie w rekordzie wydania, także przy niezmienionej nazwie i odwołaniu. Rotacja poświadczenia do tego samego zasobu w zatwierdzonym runbooku nie musi zmieniać kandydata, lecz wymaga zapisu i właściwej kontroli działania; zmiana zasobu, konta, uprawnień lub znaczenia wymaga ponownej oceny dowodów i zgody.
+**Wersja istotnej konfiguracji** identyfikuje jawną konfigurację i rewizje sekretów, bez ich wartości; wyznacza ją mechanizm projektu opisany w [przygotowaniu środowisk](deployment-setup.md#wersja-istotnej-konfiguracji). Rotacja poświadczenia do tego samego zasobu w zatwierdzonym runbooku nie musi zmieniać kandydata, lecz wymaga zapisu i właściwej kontroli działania; zmiana zasobu, konta, uprawnień lub znaczenia wymaga ponownej oceny dowodów i zgody.
 
 Edytowalny rekord porządkuje odwołania; nie zastępuje egzekwowanej zgody, wyników CI ani historii wykonania platformy. Workflow sprawdza źródłowe dowody, nie samą deklarację autora rekordu.
 

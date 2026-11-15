@@ -21,7 +21,7 @@ Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji 
 - Konfigurację przekazuj wyłącznie przez zmienne środowiskowe. Kod nie zawiera adresów, nazw hostów ani ustawień środowiska.
 - Kontener aplikacji nie przechowuje stanu. Uruchomienie kolejnej kopii lub wymiana kontenera nie traci danych.
 - Pliki użytkowników domyślnie zapisuj na dysku serwera, w trwałym wolumenie poza kontenerem, objętym kopiami zapasowymi.
-- Zapis i odczyt plików wykonuj przez warstwę abstrakcji magazynu plików, uznaną dla frameworka, np. Flysystem w PHP. Kod nie odwołuje się bezpośrednio do ścieżek na dysku. Dzięki temu przejście na magazyn obiektów, np. S3, R2 lub usługę dostawcy hostingu, wymaga tylko zmiany konfiguracji.
+- Pliki obsługuj przez uznaną dla frameworka abstrakcję magazynu, bez bezpośrednich ścieżek dysku, aby przejście na magazyn obiektów wymagało tylko zmiany konfiguracji.
 - Przejdź na magazyn obiektów, gdy aplikacja działa na więcej niż jednym serwerze lub gdy wskazuje to projekt.
 - Sesje, blokady i kolejki trzymaj w bazie lub cache, nie w pamięci procesu ani w plikach lokalnych.
 - Korzystaj z usług standardowych, dostępnych jako usługi zarządzane u każdego dużego dostawcy: PostgreSQL, Redis lub Valkey, SMTP.
@@ -42,8 +42,8 @@ Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji 
 | `make up` | Uruchamia projekt od zera po sklonowaniu: tworzy `.env` z `.env.example`, buduje obrazy, wykonuje migracje i seed |
 | `make down` | Zatrzymuje środowisko |
 | `make test` | Uruchamia testy |
-| `make check` | Uruchamia wszystkie kontrole wymagane w CI: formater, linter, analizę statyczną, testy z pokryciem |
-| `make check-frontend` / `make check-backend` | Kontrole danego obszaru, jeśli projekt ma te warstwy; CI dobiera je według zależności zmiany |
+| `make check` | Uruchamia pełny komplet kontroli: formater, linter, analizę statyczną, testy z pokryciem |
+| `make check-frontend` / `make check-backend` | Kontrole danego obszaru, jeśli projekt ma te warstwy; CI wybiera je według zależności zmiany |
 | `make migrate` | Wykonuje migracje |
 | `make seed` | Ładuje dane demonstracyjne i konta testowe |
 
@@ -70,7 +70,7 @@ Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji 
 ## CI
 
 - Domyślnie stosuj GitHub Actions.
-- **Na PR** CI wykonuje kontrole właściwe dla zakresu: testy i analizę, skan sekretów, zgodność API przy wpływie na kontrakt oraz build właściwego artefaktu. Audyt zależności wykonuj przy ich zmianie i cyklicznie. Zmiana wyłącznie dokumentacyjna może pomijać build aplikacji, ale wymagany check musi rzetelnie ocenić zakres. Nie pomijaj kontroli wspólnych zależności i konfiguracji na podstawie samego rozszerzenia pliku. Wymagany check podsumowujący ocenia wpływ i wynik właściwych kontroli; zakres niewymagany oznacza z uzasadnieniem jako nie dotyczy. Nie wymagaj uruchomienia pełnego `make check` dla każdej zmiany. Nieznany wpływ oznacza szersze kontrole. Konfigurację selekcji weryfikuj przy jej wprowadzaniu i zmianie.
+- **Na PR** CI wykonuje kontrole właściwe dla zakresu: testy i analizę, skan sekretów, zgodność API przy wpływie na kontrakt oraz build właściwego artefaktu. Audyt zależności wykonuj przy ich zmianie i cyklicznie. Zmiana wyłącznie dokumentacyjna może pomijać build aplikacji, ale wymagany check musi rzetelnie ocenić zakres. Nie pomijaj kontroli wspólnych zależności i konfiguracji na podstawie samego rozszerzenia pliku. Wymagany check podsumowujący ocenia wpływ i wynik właściwych kontroli; zakres niewymagany oznacza z uzasadnieniem jako nie dotyczy. Nie wymagaj uruchomienia pełnego `make check` dla każdej zmiany. Nieznany wpływ oznacza szersze kontrole. Mechanizm selekcji bierz ze szkieletu, jeśli go zapewnia; nie projektuj go od nowa. Konfigurację selekcji weryfikuj przy jej wprowadzaniu i zmianie.
 - **Po merge zmiany aplikacji do gałęzi głównej** CI publikuje niezmienny artefakt, domyślnie obraz kontenera, oznaczony commitem. Buduj go raz do promocji między środowiskami. Dla strony statycznej lub platformy z innym modelem wdrożenia profil określa równoważny artefakt. Sama dokumentacja nie wymaga nowego obrazu.
 - CI wykonuje te same komendy co środowisko lokalne, aby wynik był taki sam.
 - Buforuj zależności i warstwy obrazów, aby skrócić czas CI.

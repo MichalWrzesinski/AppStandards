@@ -21,11 +21,12 @@ Cel to brak zbędnych pytań, nie gwarancja przewidzenia wszystkich przyszłych 
 
 Przed discovery oceń dostarczony opis lub plik wsadowy, korzystając z [szablonu wejścia](project-brief.md). Sprawdzaj informacje produktowe potrzebne do pierwszej wersji; nie wymagaj od użytkownika projektu architektury ani wypełnienia każdej pozycji szablonu.
 
-Jeśli występują istotne braki, zbierz je w jednej krótkiej liście: brak, skutek i rekomendowane uzupełnienie. Zapytaj, czy użytkownik chce samodzielnie uzupełnić opis, czy powierza agentowi jego uzupełnienie i kontynuację. Do odpowiedzi nie rozpoczynaj zależnego projektowania ani implementacji. Wcześniejszy jawny wybór tego trybu pozostaje ważny.
+Brak jest istotny, gdy dotyczy decyzji zastrzeżonej dla człowieka w rdzeniu albo pozycji blokującej z [typowych braków](#typowe-braki). Pozostałe luki uzupełnij według trybu.
+
+Tryb uzupełniania odczytaj z opisu albo wcześniejszego jawnego wyboru. Jeśli występują istotne braki, wyślij jedną wiadomość z listą: brak, skutek i rekomendacja. Jeśli tryb nie jest znany, zapytaj o niego w tej samej wiadomości. Do odpowiedzi nie rozpoczynaj zależnego projektowania ani implementacji. Bez istotnych braków nie pytaj o tryb i przejdź do discovery.
 
 - Samodzielne uzupełnienie: zachowaj listę braków przy materiale wejściowym lub w istniejącym źródle produktu i zakończ bieżący przebieg. Wznów po dostarczeniu uzupełnienia, sprawdzając tylko zmiany i ich wpływ.
-- Uzupełnienie przez agenta: przygotuj najmniejszy spójny zakres, uzupełnij odwracalne szczegóły i kontynuuj discovery. Istotne decyzje, koszty, dane i uprawnienia nadal podlegają rdzeniowi; ten wybór nie jest zgodą na produkcję.
-- Materiał wystarczający: przejdź dalej bez pytania o sposób uzupełnienia.
+- Uzupełnienie przez agenta: przyjmij rekomendacje z listy, na które użytkownik nie odpowiedział inaczej, uzupełnij odwracalne szczegóły i kontynuuj discovery bez kolejnej rundy o te same sprawy. Koszty, dane i uprawnienia nadal podlegają rdzeniowi; ten wybór nie jest zgodą na produkcję.
 
 Nie raportuj jako braków opcji bez zastosowania, szczegółów wynikających z przyjętych domyślnych rozwiązań ani pytań o niezależny późniejszy zakres. Discovery wykorzystuje wynik tej oceny bez powtarzania wywiadu. Ta jednorazowa ocena poprzedza reguły samodzielnego uzupełniania braków w dalszej pracy.
 

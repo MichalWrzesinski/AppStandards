@@ -19,6 +19,7 @@ Szablon materiału dla [wstępnej oceny opisu](input-readiness.md#wstępna-ocena
 | Wygląd i język | Języki aplikacji, materiały marki, przykłady interfejsu i urządzenia użytkowników |
 | Ograniczenia | Narzucony stack lub hosting, wymagania danych i środowiska, znane potrzeby wydajnościowe |
 | Granice autonomii | Co agent może zaproponować i ustalić sam, zatwierdzone usługi i limity kosztów oraz decyzje zastrzeżone dla użytkownika |
+| Tryb uzupełniania braków | „Uzupełnię sam” albo „agent uzupełnia i kontynuuje”; podanie trybu oszczędza osobne pytanie |
 
 Nie wymagaj biznesplanu, prognoz ruchu, projektu bazy ani kompletnego API. Szczegóły techniczne dobiera agent. Brak danych do oszacowania kosztu nie upoważnia do wymyślania prognozy.
 

@@ -23,12 +23,12 @@ Nie oceniaj całego repozytorium. Nie powtarzaj aktualnych wiarygodnych kontroli
 
 ## Uwagi i rozstrzygnięcia
 
-Uwaga wskazuje miejsce, wymaganie lub konkretne ryzyko, skutek i propozycję. Preferencja recenzenta nie jest błędem. Poprawnym wynikiem jest „brak istotnych uwag”; nie ma wymaganej liczby ustaleń. Zgłaszaj problemy poparte wymaganiem, dowodem lub wiarygodnym scenariuszem skutków. Nie żądaj zmiany tylko po to, aby przegląd zakończył się poprawką.
+Uwaga wskazuje miejsce, wymaganie lub konkretne ryzyko, skutek i propozycję. Preferencja recenzenta nie jest błędem. Zgłaszaj problemy poparte wymaganiem, dowodem lub wiarygodnym scenariuszem skutków. Nie żądaj zmiany tylko po to, aby przegląd zakończył się poprawką.
 
 | Kategoria | Dalszy krok |
 |---|---|
 | Blokująca | Błąd, brak kryterium lub naruszenie reguł: poprawić przed integracją |
-| Drobna | Lokalna niezgodność z wymaganiem lub obowiązującą regułą: autor poprawia, recenzent potwierdza; preferencje należą do sugestii |
+| Drobna | Lokalna niezgodność z wymaganiem lub obowiązującą regułą: autor poprawia, recenzent potwierdza na podstawie samego diffu poprawki; preferencje należą do sugestii |
 | Sugestia | Niewymagane usprawnienie: decyzja autora lub osobna propozycja; nie blokuje zatwierdzenia i nie wymaga kolejnej rundy bez zmiany |
 | Do decyzji człowieka | Nierozstrzygnięta istotna kwestia produktu lub uprawnień według rdzenia |
 
@@ -36,7 +36,7 @@ Spór techniczny rozstrzygaj kryterium, dowodem i standardem; przy równorzędny
 
 ## Warunek zakończenia
 
-Spełnione kryteria, wystarczające aktualne dowody i brak nierozwiązanych wymaganych poprawek pozwalają zatwierdzić zmianę bez uwag. Nie poszerzaj przeglądu po spełnieniu tych warunków bez nowej przesłanki. Brak wymaganej kontroli pozostaje brakiem dowodu, a nie wynikiem pozytywnym.
+Spełnione kryteria, wystarczające aktualne dowody i brak nierozwiązanych wymaganych poprawek pozwalają zatwierdzić zmianę, także bez żadnych uwag. Nie poszerzaj przeglądu po spełnieniu tych warunków bez nowej przesłanki. Brak wymaganej kontroli pozostaje brakiem dowodu, a nie wynikiem pozytywnym.
 
 ## Poprawki i wynik
 

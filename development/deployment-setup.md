@@ -1,7 +1,7 @@
 # Przygotowanie środowisk i pierwszego wydania
 
-Wersja: 1.0.0  
-Data: 2026-11-10
+Wersja: 1.1.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md). Czytaj przy pierwszym zdalnym wdrożeniu, doborze hostingu lub zmianie zabezpieczeń i infrastruktury. Przed pierwszą produkcją wykonaj listę pierwszego wydania. Przy zwykłej publikacji istniejącej aplikacji wystarczają [rutynowe wydania](deployment.md) i aktualne ustalenia projektu.
 
@@ -45,6 +45,10 @@ Zaimplementuj [niezmienniki operacji](deployment.md#koordynacja-operacji) w jedn
 - Wstrzymanie stagingu podczas weryfikacji musi być egzekwowane przez mechanizm wdrożeń, nie tylko wpisane w rekord. Określ właściciela wstrzymania, sposób wznowienia po zakończeniu lub przerwaniu i obsługę utraty sesji. Nie trzymaj bez potrzeby płatnego runnera w oczekiwaniu na człowieka.
 - Dla wielu repozytoriów grupa CI jednego repozytorium nie wystarcza: użyj wspólnej blokady zasobów lub jednego wykonawcy operacji. Zewnętrzna blokada ma właściciela, identyfikator operacji i odnawianą dzierżawę; sam timeout nie dowodzi, że poprzedni wykonawca przestał zmieniać dane. Przed dopuszczeniem następnej operacji potwierdź brak poprzedniego wykonawcy lub technicznie odbierz mu możliwość zapisu.
 - Runbook opisuje bezpieczne rozpoznanie zawieszonej operacji i odzyskanie blokady przez człowieka. Wspólna blokada obejmuje również ręczny rollback i odtworzenie backupu.
+
+## Wersja istotnej konfiguracji
+
+Zaimplementuj w workflow wydań wyznaczanie [wersji istotnej konfiguracji](deployment.md#rekord-wydania): skrót jawnej konfiguracji oraz identyfikatory rewizji sekretów udostępniane przez menedżer, bez wartości i bez skrótów samych sekretów. Jeśli menedżer nie udostępnia rewizji, np. GitHub Secrets, użyj nazwy sekretu i znacznika ostatniej zmiany z API platformy (`updated_at`); dzięki temu widoczna jest także zmiana wykonana ręcznie przez człowieka. Gdy platforma nie udostępnia nawet znacznika, rejestruj każdą zmianę sekretu jako zdarzenie w rekordzie wydania, także przy niezmienionej nazwie i odwołaniu.
 
 ## Mechanizm zgody na produkcję
 

@@ -32,7 +32,7 @@ Na początku sesji odczytaj rdzeń, routing i główne instrukcje projektu. Przy
 | Ocena wpływu na ścieżki krytyczne, koniec iteracji, przygotowanie wydania | [Ścieżki krytyczne](development/critical-paths.md) |
 | API, dane, integracje, workery | [Backend](development/backend.md) |
 | Widoki, interakcje, dostępność | [Frontend](development/frontend.md) |
-| Dane wejściowe, dostęp, sekrety, dane osobowe | [Bezpieczeństwo](development/security.md) |
+| Dane wejściowe, dostęp, sekrety, dane osobowe | Sekcje [bezpieczeństwa](development/security.md) według tabeli na jego początku |
 | Nowe dane osobowe lub dostawca, ciasteczka, analityka, dokumenty prawne, pierwsze wydanie publiczne | [Prywatność](development/privacy.md) |
 | Modele AI w budowanej aplikacji | [AI aplikacji](development/ai.md) |
 | Zmiana dokumentacji i instrukcji projektu | [Dokumentacja](development/documentation.md) |
@@ -46,6 +46,7 @@ Na początku sesji odczytaj rdzeń, routing i główne instrukcje projektu. Przy
 | Dodanie lub zmiana flagi funkcji | Sekcja [Flagi funkcji](development/deployment.md#flagi-funkcji); nie wymaga lektury całego standardu wdrożeń |
 | Wieloetapowa praca i delegowanie spójnych zadań | Sekcja [Delegowanie pracy](development/task-workflow.md#delegowanie-pracy) |
 | Dobór lub eskalacja modelu wykonawcy | [Dobór modeli](development/model-selection.md) |
-| Zbiorczy plan, podsumowanie etapu, pomiary | [Postęp](development/progress-reporting.md) |
+| Zbiorczy plan, podsumowanie etapu | [Postęp](development/progress-reporting.md) |
+| Pomiary czasu, tokenów lub kosztu pracy AI | [Pomiary](development/usage-metrics.md) |
 
 To lista wyzwalaczy, nie lista obowiązkowej lektury dla każdego zadania. Praca wyłącznie dokumentacyjna nie wymaga czytania backendu ani uruchamiania aplikacji. Każdy plik szczegółowy obowiązuje łącznie z rdzeniem; jego odnośniki nie oznaczają konieczności czytania wszystkich zależnych plików.

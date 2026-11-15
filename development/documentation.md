@@ -1,7 +1,7 @@
 # Standard dokumentacji technicznej dla agentów AI
 
-Wersja: 3.2.0  
-Data: 2026-11-10
+Wersja: 3.3.0  
+Data: 2026-11-15
 
 ## Zakres i stosowanie
 
@@ -29,7 +29,7 @@ Tabela wskazuje odpowiedzialności etapów, nie odrębnych agentów ani zakaz pr
 | Opis produktu, logika biznesowa, wymagania | `docs/product/` | projektowanie i planowanie; aktualizacja przy realizacji uzgodnionej zmiany |
 | Kierunek i prototyp UI | `docs/design/` lub narzędzie projektu | projektowanie; komponenty i tokeny aktualizowane razem z aplikacją |
 | Zbiorczy plan i raport postępu | `docs/progress.md` | planowanie tworzy plan, agent bieżącego etapu aktualizuje widok ze źródeł |
-| Pomiary pracy AI, jeśli dostępne | `docs/metrics/usage.jsonl` albo istniejący eksport narzędzia | dostępna telemetria lub agent na podstawie udostępnionych liczników; bez treści rozmów |
+| Pomiary pracy AI, jeśli dostępne | `docs/metrics/usage.jsonl` albo istniejący eksport narzędzia, według [pomiarów](usage-metrics.md) | dostępna telemetria lub agent na podstawie udostępnionych liczników; bez treści rozmów |
 | Zadania i raporty | `docs/tasks/` albo zewnętrzny system zadań | planowanie tworzy zadanie, development dopisuje raport |
 | Plan i wyniki ścieżek krytycznych | `docs/qa/critical-paths.md`, `docs/qa/runs/` | według [standardu ścieżek](critical-paths.md) |
 | Rekord kandydata i wydania | szkic i opublikowane wydanie na platformie, np. GitHub Release | według [wdrożeń](deployment.md#rekord-wydania) |
@@ -69,7 +69,8 @@ Postęp większej pracy opisuje [raportowanie](progress-reporting.md); mała zmi
 
 ## Instrukcje dla agentów AI
 
-- Projekt ma jeden główny plik instrukcji dla agentów, np. `AGENTS.md` lub `CLAUDE.md`, zgodnie z konwencją używanego narzędzia. Jeśli projekt obsługuje kilka narzędzi, pozostałe główne pliki odsyłają do niego. Zachowaj niepowielone instrukcje specyficzne dla modułów i narzędzi.
+- Projekt ma jeden główny plik instrukcji dla agentów, np. `AGENTS.md` lub `CLAUDE.md`, zgodnie z konwencją używanego narzędzia. Jeśli projekt obsługuje kilka narzędzi, pozostałe główne pliki odsyłają do niego. Sprawdź, który plik narzędzie wczytuje automatycznie. Odsyłacz musi działać jako import, np. `CLAUDE.md` zawierający `@AGENTS.md`; sam link nie wczytuje treści. Zachowaj niepowielone instrukcje specyficzne dla modułów i narzędzi.
+- Nadpisania domyślnych zachowań narzędzia, np. zakaz atrybucji AI w commitach, zapisz w głównym pliku albo w konfiguracji narzędzia. Standard w `docs/standards/` nie jest wczytywany automatycznie i może nie wygrać z domyślną instrukcją narzędzia.
 - Plik jest wczytywany w każdej sesji, więc ma zwykle do 80 linii. Zawiera tylko informacje specyficzne dla projektu, których nie da się łatwo odczytać z kodu:
   - nadpisania standardów obowiązujące w projekcie;
   - komendy uruchomienia, testów i kontroli;

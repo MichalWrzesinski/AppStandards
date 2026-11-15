@@ -1,7 +1,7 @@
 # Praca z Git
 
-Wersja: 3.0.0  
-Data: 2026-11-10
+Wersja: 3.1.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
 
@@ -34,7 +34,7 @@ Format: `[area][task-or-iteration] Short change description`. Tag obszaru jest w
 
 Tytuł: po angielsku, czasownik w trybie rozkazującym, wielka litera po tagach, do 72 znaków, bez kropki. Treść dodawaj dla istotnego „dlaczego” i ograniczeń, z pustą linią i zawijaniem do 72 znaków. Nie powtarzaj ID z tytułu. Nie narzucaj Conventional Commits, chyba że wymaga tego automatyzacja projektu.
 
-Nie dodawaj `Co-Authored-By` ani innej atrybucji AI, również automatycznie przez narzędzie, chyba że użytkownik lub projekt tego wymaga.
+Nie dodawaj `Co-Authored-By` ani innej atrybucji AI, również automatycznie przez narzędzie, chyba że użytkownik lub projekt tego wymaga. Zakaz zapisz według [instrukcji dla agentów](documentation.md#instrukcje-dla-agentów-ai), aby wygrał z domyślnym ustawieniem narzędzia.
 
 ## Integracja i historia
 

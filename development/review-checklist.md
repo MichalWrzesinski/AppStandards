@@ -9,8 +9,6 @@ Przed oceną odczytaj właściwe instrukcje projektu, nadpisania i potrzebną cz
 
 Przy zmianie reguły źródłowej sprawdź i w tej samej zmianie zaktualizuj odpowiadający jej wyciąg, zachowując istotne wyjątki. Lista nie ustanawia osobnej polityki.
 
-Brak istotnych uwag jest poprawnym wynikiem. Sugestie nie blokują zatwierdzenia; obowiązek poprawy wynika z niezgodności, nie preferencji. Zakres kontroli, w tym dla CSS bez wpływu na backend, określa [jakość](quality-checks.md#kontrole-według-wpływu).
-
 ## Zawsze
 
 - Kryteria akceptacji mają dowody dla aktualnego commita: testy, CI, zapis obserwacji z przeglądarki. Deklaracja autora nie jest dowodem.

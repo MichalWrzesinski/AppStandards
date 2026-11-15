@@ -1,7 +1,7 @@
 # Dobór modeli wykonawców
 
-Wersja: 1.1.0  
-Data: 2026-11-10
+Wersja: 1.2.0  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](../core.md) przy faktycznym wyborze lub eskalacji modelu agenta programistycznego. Modele działające wewnątrz budowanej aplikacji opisuje [AI aplikacji](ai.md).
 
@@ -17,7 +17,7 @@ Wybieraj najtańszy dostępny poziom wystarczający do rzetelnego wykonania prac
 
 Oceń ryzyko, niepewność i sprawdzalność na podstawie dostępnego zadania; nie uruchamiaj osobnego agenta do klasyfikacji. Liczba linii i rodzaj pliku nie wyznaczają poziomu: kilka linii autoryzacji lub zmiana reguł w dokumentacji może wymagać zaawansowanego rozumowania.
 
-Części zadania rozdzielaj między poziomy tylko wtedy, gdy narzędzie to wspiera, a przekazanie kontekstu ma sens ekonomiczny. W przeciwnym razie dobierz poziom do najtrudniejszej istotnej części. Nie uruchamiaj subagenta wyłącznie dla pozornej oszczędności pojedynczego wywołania.
+Kiedy delegować pracę ze względu na kontekst, określa [realizacja](task-workflow.md#delegowanie-pracy). Delegowane zadanie dostaje poziom według tej tabeli. Dodatkowo nie dziel zadania między poziomy, jeśli przekazanie kontekstu kosztuje więcej niż różnica stawek; wtedy dobierz poziom do najtrudniejszej istotnej części.
 
 ## Konfiguracja i ograniczenia
 
@@ -36,4 +36,4 @@ Poziom recenzenta dobieraj niezależnie do ryzyka zmiany. Może używać tego sa
 
 ## Ocena kosztu
 
-Rejestruj model faktycznie potwierdzony przez narzędzie i dostępne koszty według [raportowania](progress-reporting.md). Brak danych oznacz jawnie; model rekomendowany nie jest modelem użytym. Uwzględniaj poprawki, review i przekazanie pracy bez podwójnego naliczania. Rutynowego wyboru nie opisuj po każdym zadaniu; raportuj istotną eskalację i ograniczenia. Nie deklaruj oszczędności bez pomiaru.
+Rejestruj model faktycznie potwierdzony przez narzędzie i dostępne koszty według [pomiarów](usage-metrics.md). Brak danych oznacz jawnie; model rekomendowany nie jest modelem użytym. Uwzględniaj poprawki, review i przekazanie pracy bez podwójnego naliczania. Rutynowego wyboru nie opisuj po każdym zadaniu; raportuj istotną eskalację i ograniczenia. Nie deklaruj oszczędności bez pomiaru.

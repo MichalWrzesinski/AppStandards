@@ -36,7 +36,7 @@ Ryzyko jest niezależne od liczby linii. Mała zmiana uprawnień lub migracja ni
 | Weryfikacja i integracja | [jakość](development/quality-checks.md), [ścieżki krytyczne](development/critical-paths.md), [bezpieczeństwo](development/security.md), [prywatność](development/privacy.md), [review](development/code-review.md) z [listą recenzenta](development/review-checklist.md), [Git](development/git-workflow.md) |
 | Dostarczenie i utrzymanie | [DevOps](development/devops.md), [rutynowe wydania](development/deployment.md), [przygotowanie środowisk](development/deployment-setup.md), [utrzymanie](development/operations.md), [awarie i rollback](development/incidents.md) — czytane według wyzwalaczy z routingu |
 | Wejście nowego produktu | [Szablon opisu](planning/project-brief.md) i [wybór sposobu uzupełnienia](planning/input-readiness.md#wstępna-ocena-opisu-nowego-produktu) |
-| Wiedza i koszt | [dokumentacja](development/documentation.md), [postęp](development/progress-reporting.md), [dobór modeli](development/model-selection.md) |
+| Wiedza i koszt | [dokumentacja](development/documentation.md), [postęp](development/progress-reporting.md), [pomiary](development/usage-metrics.md), [dobór modeli](development/model-selection.md) |
 
 ## Udział człowieka
 

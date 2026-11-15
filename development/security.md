@@ -1,13 +1,25 @@
 # Standard bezpieczeństwa kodu dla agentów AI
 
-Wersja: 2.0.0  
-Data: 2026-11-10
+Wersja: 2.1.0  
+Data: 2026-11-15
 
 ## Zakres i stosowanie
 
 Stosuj ten standard przy pisaniu i zmianie kodu, który przetwarza dane wejściowe, uwierzytelnia użytkowników, kontroluje dostęp, przechowuje dane osobowe, obsługuje sekrety lub udostępnia API. Dokument określa, jak budować zabezpieczenia w kodzie i konfiguracji aplikacji.
 
 Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji określa [routing](../routing.md).
+
+Zawsze czytaj zasady nadrzędne i sekcję zmian zabezpieczeń poza zadaniem, a pozostałe sekcje według zmiany:
+
+| Zmiana | Sekcje |
+|---|---|
+| Nowe lub zmienione wejście: endpoint, formularz, webhook, plik, kolejka | Walidacja; wstrzykiwanie; przy plikach i nagłówkach konfiguracja HTTP |
+| Logowanie, sesja, tokeny, hasła | Uwierzytelnianie; ochrona przed enumeracją; konfiguracja HTTP |
+| Dostęp do danych, role, nowe pola w odpowiedzi | Kontrola dostępu |
+| Dane osobowe | Dane osobowe i wrażliwe |
+| Klucze, konta techniczne, konfiguracja środowisk | Sekrety |
+
+Zmiana dotykająca kilku wierszy wymaga sekcji z każdego z nich.
 
 ## Zasady nadrzędne
 

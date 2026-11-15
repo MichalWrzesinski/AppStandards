@@ -1,11 +1,11 @@
 # Workflow sterowany artefaktami
 
-Wersja: 2.0.0  
-Data: 2026-11-10
+Wersja: 2.0.1  
+Data: 2026-11-15
 
 Stosuj z [rdzeniem](core.md), według [routingu](routing.md).
 
-Stan wynika z aktualnych artefaktów i dowodów, nie deklaracji wykonawcy. Etap nie oznacza osobnego agenta lub sesji. Wykorzystaj istniejący aktualny wynik zamiast odtwarzać go od początku.
+Stan wynika z aktualnych artefaktów i dowodów, nie deklaracji wykonawcy. Etap nie oznacza osobnego agenta lub sesji; delegowanie określa [realizacja](development/task-workflow.md#delegowanie-pracy). Wykorzystaj istniejący aktualny wynik zamiast odtwarzać go od początku.
 
 ## Stany i przejścia
 

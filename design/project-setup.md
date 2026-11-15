@@ -17,6 +17,7 @@ Stosuj z [rdzeniem](../core.md) i [routingiem](../routing.md) przy tworzeniu now
 ```text
 README.md                  cel, uruchomienie i odnośniki
 AGENTS.md                  punkt wejścia, nadpisania i źródła wiedzy projektu
+CLAUDE.md                  import `@AGENTS.md`, jeśli narzędzie nie wczytuje AGENTS.md
 .gitignore
 .editorconfig
 docs/
@@ -25,7 +26,7 @@ docs/
   standards/               pełna kopia tego zestawu
 ```
 
-Dla nowej aplikacji najpierw sprawdź dostępność zatwierdzonego szkieletu zgodnego z potrzebami. Jeśli jest dostępny, wykorzystaj jego sprawdzone komendy kontroli, workflow, skrypty wdrożenia i rollbacku oraz szablon runbooka. Potwierdź wersję i działanie potrzebnych zabezpieczeń; sam plik szablonu nie jest dowodem. Brak szkieletu nie blokuje projektu: przygotuj minimalny potrzebny fundament. Nie usuwaj wymagania standardu na podstawie niezweryfikowanego założenia o szkielecie.
+Dla nowej aplikacji użyj szkieletu wskazanego w poleceniu, instrukcjach użytkownika lub dostępnym poleceniu narzędzia, np. skillu tworzenia aplikacji. Nie szukaj szkieletu poza tymi źródłami i nie pytaj o niego, jeśli żadne go nie wskazuje. Jeśli szkielet jest dostępny i zgodny z potrzebami, wykorzystaj jego sprawdzone komendy kontroli, workflow, skrypty wdrożenia i rollbacku oraz szablon runbooka. Potwierdź wersję i działanie potrzebnych zabezpieczeń; sam plik szablonu nie jest dowodem. Brak szkieletu nie blokuje projektu: przygotuj minimalny potrzebny fundament. Nie usuwaj wymagania standardu na podstawie niezweryfikowanego założenia o szkielecie.
 
 Architekturę, kontrakt, decyzje i zadania dodawaj, gdy są potrzebne; nie twórz pustej dokumentacji. Kod użytecznego prototypu zachowaj jako punkt wyjścia, oznaczając ograniczenia. Fundament implementacyjny uzupełnia uruchamianie, CI i potrzebny artefakt wdrożeniowy.
 
