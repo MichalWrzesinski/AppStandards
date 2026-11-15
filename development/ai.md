@@ -1,6 +1,6 @@
 # Standard for using AI in applications, for AI agents
 
-Version: 1.1.0  
+Version: 1.1.1  
 Date: 2026-11-15
 
 ## Scope and application

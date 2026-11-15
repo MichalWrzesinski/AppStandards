@@ -1,6 +1,6 @@
 # Planning increments and tasks
 
-Version: 4.0.0  
+Version: 4.0.1  
 Date: 2026-11-15
 
 Use with the [core](../core.md), following [routing](../routing.md).

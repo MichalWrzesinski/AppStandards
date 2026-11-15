@@ -1,6 +1,6 @@
 # UX/UI and prototype design
 
-Version: 2.0.0  
+Version: 2.0.1  
 Date: 2026-11-15
 
 Use with the [core](../core.md) and [routing](../routing.md) for a new product or an area without an established pattern. The goal is to validate the main flow and visual direction before costly implementation. An existing interface pattern usually allows proceeding directly to the frontend standard.

@@ -1,6 +1,6 @@
 # Operations and data restoration
 
-Version: 1.0.0  
+Version: 1.0.1  
 Date: 2026-11-15
 
 Apply with the [core](../core.md), following [routing](../routing.md). Read when organizing operations, configuring and checking backups or monitoring, rotating secrets, and restoring data. A routine release uses the project's prepared procedures under [deployment](deployment.md); an active incident follows [incidents](incidents.md).
@@ -34,7 +34,7 @@ If no integration starts the agent, record manual operation and a specific respo
 
 - Report backend and frontend errors to Sentry or the project's designated tool.
 - Sentry integration:
-  - the release (`release`) is the commit identifier, and the environment (`environment`) is the environment name;
+  - `release` is the commit identifier, and `environment` is the environment name;
   - CI creates a Sentry release for every deployment and associates it with commits; connecting Sentry to the GitHub repository helps identify the commit that likely introduced an error;
   - CI uploads frontend source maps to Sentry and does not publish them on the server;
   - reports contain no personal data, passwords, or tokens; disable default user data transmission and filter sensitive fields.

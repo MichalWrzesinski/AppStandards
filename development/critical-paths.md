@@ -1,6 +1,6 @@
 # Critical paths
 
-Version: 1.2.0  
+Version: 1.2.1  
 Date: 2026-11-15
 
 Apply with the [core](../core.md) when identifying paths during discovery, assessing task impact, at iteration end, and before release. This is the sole source of critical path rules; other standards refer to it. [Quality checks](quality-checks.md) describe checks for individual changes.
@@ -28,15 +28,15 @@ When planning a task, record identifiers of paths it may affect and the verifica
 
 | Readiness | Meaning |
 |---|---|
-| Awaiting implementation (`Awaiting implementation`) | Features needed to execute the entire path are missing |
-| Ready for verification (`Ready for verification`) | All path elements are available |
-| Blocked (`Blocked`) | Verification is prevented by, for example, an environment failure or missing data |
+| `Awaiting implementation` | Features needed to execute the entire path are missing |
+| `Ready for verification` | All path elements are available |
+| `Blocked` | Verification is prevented by, for example, an environment failure or missing data |
 
 | Result | Meaning |
 |---|---|
-| Not verified (`Not verified`) | No complete verification for the version and environment being assessed |
-| Passed (`Passed`) | All steps were executed and results confirmed |
-| Failed (`Failed`) | Execution revealed a discrepancy |
+| `Not verified` | No complete verification for the version and environment being assessed |
+| `Passed` | All steps were executed and results confirmed |
+| `Failed` | Execution revealed a discrepancy |
 
 An unimplemented feature is not a failed result, but prevents treating the path as verified. Record a partial check as partial. Readiness belongs in the plan; the result belongs in the execution report.
 

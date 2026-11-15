@@ -1,6 +1,6 @@
 # Production incidents and rollback
 
-Version: 1.0.0  
+Version: 1.0.1  
 Date: 2026-11-15
 
 Apply with the [core](../core.md), following [routing](../routing.md). Read for an incident, a failed deployment requiring rollback, or a later rollback. First restore service safely, then remove the cause. Use the current runbook and [production access limits](operations.md#agent-access-to-production); do not load hosting selection instructions.

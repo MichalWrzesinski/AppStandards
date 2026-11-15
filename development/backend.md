@@ -1,6 +1,6 @@
 # Backend and integrations
 
-Version: 2.0.0  
+Version: 2.0.1  
 Date: 2026-11-15
 
 Apply with the [core](../core.md), according to [routing](../routing.md).

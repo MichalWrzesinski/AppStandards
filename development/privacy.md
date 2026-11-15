@@ -1,6 +1,6 @@
 # Product privacy and legal requirements
 
-Version: 1.2.1  
+Version: 1.2.2  
 Date: 2026-11-15
 
 Apply with the [core](../core.md) when the application processes personal data, uses cookies or analytics, sends data to providers, or prepares its first public release. [Security](security.md) covers technical data protection; this standard covers product obligations and their evidence.
