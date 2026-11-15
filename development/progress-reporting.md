@@ -1,6 +1,6 @@
 # Work Progress
 
-Version: 3.0.0  
+Version: 3.0.1  
 Date: 2026-11-15
 
 Use with the [core](../core.md) for a larger assignment or multistage product. A small change ends with its outcome recorded in the task or PR, without a separate progress report.
@@ -11,7 +11,7 @@ The default `docs/progress.md` summarizes the current scope, not the project's e
 
 Create the report when first recording larger work persistently, even before the repository exists. Update it during planning, stage completion, integration, a blocker, and scope changes as natural steps in the work. Maintain task statuses, including `DONE` taking effect upon merge, according to [planning](../planning/task-planning.md#statuses-and-a-single-source). Update the view in `docs/progress.md` in the PR that changes state or at the next natural update, with an explicit date and scope of the reported state; do not create a PR solely for the view. Do not start a loop of successive report changes.
 
-A conversation message combines the most important outcome with a progress summary; it does not repeat the full task report. Project convention determines the document language; the user determines the conversation language.
+A conversation message combines the most important outcome with a progress summary; it does not repeat the full task report. The core defines the language of documents and messages.
 
 ## Minimal layout
 

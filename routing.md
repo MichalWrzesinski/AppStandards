@@ -1,6 +1,6 @@
 # Selecting a Path and Context
 
-Version: 1.4.0  
+Version: 1.5.0  
 Date: 2026-11-15
 
 Use with the [core](core.md). For a new assignment, select a path based on uncertainty and the consequences of error. Do not launch a separate agent for classification. Changing paths during work requires filling in missing decisions only, not repeating completed stages.
@@ -36,6 +36,7 @@ At the start of a session, read the core, routing, and the project's main instru
 | New personal data or provider, cookies, analytics, legal documents, first public release | [Privacy](development/privacy.md) |
 | AI models in the application being built | [Application AI](development/ai.md) |
 | Changing documentation and project instructions | [Documentation](development/documentation.md) |
+| Cleanup at iteration end or before the first release | [Artifact lifecycle](development/documentation.md#artifact-lifecycle) section |
 | Commits, PRs, integration | [Git](development/git-workflow.md); when assigning a review, the [Reviewer](development/code-review.md#reviewer) section |
 | Reviewing a change as a reviewer | [Review](development/code-review.md), [reviewer checklist](development/review-checklist.md); full standards only for areas of elevated risk |
 | Environment, images, CI, infrastructure | [DevOps](development/devops.md) |

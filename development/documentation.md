@@ -1,6 +1,6 @@
 # Technical documentation standard for AI agents
 
-Version: 3.3.0  
+Version: 3.4.0  
 Date: 2026-11-15
 
 ## Scope and application
@@ -86,6 +86,20 @@ The profile is in `docs/technical-profile.md` and is loaded when a task concerns
 Include necessary decisions about stack, data, contracts and their source, authentication, UI components, files, CI/CD, and quality checks. Reference manifests and configuration instead of manually copying their versions. Baseline check results must identify the code version and date, rather than imply an always-current state. Record primarily non-obvious pitfalls, commands, and material departures; minor implementation details need no register.
 
 The agent independently adds durable facts established during work and updates the solution description in the same change. It does not change permissions, quality policy, or standards overrides without the appropriate decision. Do not automatically add every detail found in code.
+
+## Artifact lifecycle
+
+Keep a file in the repository only while it has a current reader: a future task, operations or audit. An outdated document misleads more than a missing one; Git history, PRs, CI and the release record preserve the past.
+
+| Category | Examples | Handling |
+|---|---|---|
+| Living sources | README, agent instructions, product overview, architecture, profile, decisions, API contract, critical path plan, runbook, tokens and components | Keep and maintain |
+| Input and design notes | Input brief, discovery notes, prototype findings | Move missing findings to the product or design source, then remove, linking the commit |
+| Work history | `DONE` task files, `docs/qa/runs/`, outdated progress view | Remove after the release covering them; keep open tasks. Remove or reduce `docs/progress.md` when no multistage work is active. Do not reuse identifiers |
+| Leftovers | Unused prototype code, mocks, diagnostic files | Remove |
+| Agent working files | Helper scripts, logs, screenshots, working notes | Keep outside the repository or in `.gitignore`; do not commit |
+
+Clean up briefly at the end of an iteration and fully before the first production release, as a regular task with a PR and review. Do not remove material supplied by the user on your own: propose it in the [increment review](../planning/task-planning.md#increment-review) and remove it after approval. The PR description lists removed and merged files; no separate report.
 
 ## What not to document
 

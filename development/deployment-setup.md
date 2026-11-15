@@ -1,6 +1,6 @@
 # Preparing environments and the first release
 
-Version: 1.1.0  
+Version: 1.2.0  
 Date: 2026-11-15
 
 Apply with the [core](../core.md), following [routing](../routing.md). Read for the first remote deployment, hosting selection, or changes to security and infrastructure. Complete the first-release checklist before the first production deployment. For routine publication of an existing application, [routine releases](deployment.md) and current project decisions suffice.
@@ -73,6 +73,7 @@ Before the first production deployment, confirm and record in the release record
 - production error pages, `robots.txt`, and `sitemap.xml`; `noindex` only in test environments;
 - request limits and bot protection active on public forms;
 - documents and mechanisms from [privacy](privacy.md#documents-before-public-release) ready, with their content reviewed by a human;
-- [runbook and operational organization](operations.md#runbook-and-operational-organization) prepared, including responsibility and the alert response route.
+- [runbook and operational organization](operations.md#runbook-and-operational-organization) prepared, including responsibility and the alert response route;
+- repository cleaned up according to the [artifact lifecycle](documentation.md#artifact-lifecycle).
 
 An unmet item required for the application blocks the readiness report or is included in the report as a risk accepted by a human.

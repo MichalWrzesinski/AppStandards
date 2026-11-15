@@ -1,6 +1,6 @@
 # Reviewer Checklist
 
-Version: 1.3.0  
+Version: 1.4.0  
 Date: 2026-11-15
 
 A compact extract of rules for reviewing changes according to the [review standard](code-review.md). The reviewer reads the [core](../core.md), review standard, and this checklist. Read a full detailed standard only for an area of elevated risk affected by the change or when a specific doubt arises. This extract does not change the rules; the source standard takes precedence if they differ.
@@ -12,7 +12,7 @@ When a source rule changes, check and update its corresponding extract in the sa
 ## Always
 
 - Acceptance criteria have evidence for the current commit: tests, CI, recorded browser observations. The author's declaration is not evidence.
-- Scope matches the task; no unrelated changes, diagnostic code, dead code, commented-out fragments, or secrets.
+- Scope matches the task; no unrelated changes, diagnostic code, dead code, commented-out fragments, secrets, or agent working files such as helper scripts, logs and screenshots ([artifact lifecycle](documentation.md#artifact-lifecycle)).
 - The simplest solution meeting the goal: no speculative abstractions, parameters, or layers ([code](code-standards.md)).
 - Strict types, no `any`/`mixed`/`Any` without justification; names follow the domain vocabulary.
 - Errors: no empty `catch` blocks, broad exceptions caught only at boundaries, each error logged once, messages without internal details.

@@ -1,6 +1,6 @@
 # Shared Core Rules
 
-Version: 2.1.0  
+Version: 2.2.0  
 Date: 2026-11-15
 
 Applies to all work using this suite. [Routing](routing.md) selects instructions; [workflow](workflow.md) defines transitions. Detailed files are not self-contained.
@@ -39,6 +39,6 @@ Reuse settled decisions in subsequent tasks. Reopen them only when requirements 
 
 ## Context, artifacts, and cost
 
-Persistent information has one source; other locations link to it. Create an artifact when needed for execution, verification, resumption, or operations; a template does not require empty sections. Record decisions and pitfalls, not what is readily evident from configuration. Documentation for new projects is in English; retain the convention in existing projects.
+Persistent information has one source; other locations link to it. Create an artifact when needed for execution, verification, resumption, or operations; a template does not require empty sections. Record decisions and pitfalls, not what is readily evident from configuration. Documentation for new projects is in English; retain the convention in existing projects. Messages to the user, including questions, recommendations, increment reviews and readiness reports, are in the user's language regardless of the documentation language; the main agent relays subagent questions in that language.
 
 Read the necessary parts of the instructions, not the entire suite for every task. Reuse valid evidence without unnecessary repetition; an unperformed check means missing evidence. Work state belongs to the task, progress is a view, and results identify the version and environment. Do not claim an action that was not performed, an unavailable measurement, or a model switch that the tool did not confirm.
