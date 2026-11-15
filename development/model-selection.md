@@ -1,39 +1,39 @@
-# Dobór modeli wykonawców
+# Selecting Executor Models
 
-Wersja: 1.2.0  
-Data: 2026-11-15
+Version: 1.2.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md) przy faktycznym wyborze lub eskalacji modelu agenta programistycznego. Modele działające wewnątrz budowanej aplikacji opisuje [AI aplikacji](ai.md).
+Use with the [core](../core.md) when actually selecting or escalating the model of a coding agent. [Application AI](ai.md) covers models running inside the application being built.
 
-## Poziomy i wybór
+## Levels and selection
 
-Wybieraj najtańszy dostępny poziom wystarczający do rzetelnego wykonania pracy. Oceniaj cały koszt: wykonanie, poprawki, ponowienia, przekazanie kontekstu i review. Tańszy model nie uzasadnia obniżenia jakości ani pominięcia kontroli.
+Choose the least expensive available level sufficient to perform the work reliably. Assess total cost: execution, fixes, retries, context handoff, and review. A cheaper model does not justify lower quality or skipped checks.
 
-| Poziom | Zastosowanie |
+| Level | Use |
 |---|---|
-| Ekonomiczny | Jednoznaczna praca mechaniczna o małym ryzyku; wynik łatwy do sprawdzenia |
-| Standardowy — domyślny | Typowa implementacja według wzorców, testy, zwykła diagnoza i review |
-| Zaawansowany | Duża niepewność, złożone zależności, trudna diagnoza lub istotne skutki błędu niewystarczająco wykrywane zwykłymi kontrolami |
+| Economy | Unambiguous mechanical work with low risk; result easy to verify |
+| Standard — default | Typical implementation following patterns, tests, routine diagnosis, and review |
+| Advanced | High uncertainty, complex dependencies, difficult diagnosis, or significant consequences of errors that ordinary checks do not detect sufficiently |
 
-Oceń ryzyko, niepewność i sprawdzalność na podstawie dostępnego zadania; nie uruchamiaj osobnego agenta do klasyfikacji. Liczba linii i rodzaj pliku nie wyznaczają poziomu: kilka linii autoryzacji lub zmiana reguł w dokumentacji może wymagać zaawansowanego rozumowania.
+Assess risk, uncertainty, and verifiability from the available task; do not launch a separate agent for classification. Line count and file type do not determine the level: a few authorization lines or a change to documentation rules may require advanced reasoning.
 
-Kiedy delegować pracę ze względu na kontekst, określa [realizacja](task-workflow.md#delegowanie-pracy). Delegowane zadanie dostaje poziom według tej tabeli. Dodatkowo nie dziel zadania między poziomy, jeśli przekazanie kontekstu kosztuje więcej niż różnica stawek; wtedy dobierz poziom do najtrudniejszej istotnej części.
+[Execution](task-workflow.md#delegating-work) defines when to delegate work to manage context. Assign a delegated task a level according to this table. Additionally, do not split a task between levels if handing over context costs more than the difference in rates; in that case, choose the level for the hardest significant part.
 
-## Konfiguracja i ograniczenia
+## Configuration and limitations
 
-- Mapowanie poziomów na modele utrzymuj w jednym miejscu konfiguracji narzędzia; projekt odsyła do niego. Weryfikuj aktualne możliwości, dostępność i rozliczanie w oficjalnej dokumentacji dostawcy, gdy konfigurujesz lub zmieniasz mapowanie.
-- Sprawdź wymagane narzędzia, kontekst i limity planu. Nie wybieraj modelu bez potrzebnych możliwości tylko dlatego, że jest tańszy. Koryguj mapowanie na podstawie jakości rzeczywistych wyników.
-- Brak mapowania lub mechanizmu przełączania nie blokuje pracy dostępnym, odpowiednim modelem. Nie wymyślaj identyfikatorów i nie deklaruj zmiany bez potwierdzenia narzędzia. Istotne ograniczenie zapisz w raporcie.
-- Nowy sposób rozliczania i przekroczenie limitów wymagają zgody według rdzenia.
+- Maintain the level-to-model mapping in one place in the tool's configuration; the project links to it. Verify current capabilities, availability, and billing in the provider's official documentation when configuring or changing the mapping.
+- Check required tools, context, and plan limits. Do not choose a model lacking required capabilities simply because it is cheaper. Adjust the mapping based on the quality of actual results.
+- A missing mapping or switching mechanism does not block work with an available, suitable model. Do not invent identifiers or claim a switch without tool confirmation. Record a material limitation in the report.
+- A new billing method and exceeding limits require approval according to the core.
 
-## Eskalacja i przekazanie
+## Escalation and handoff
 
-Podnieś poziom przy ujawnionej złożoności, ryzyku lub nieskutecznej diagnozie. Błąd uprawnień, awaria środowiska i wyczerpanie limitu nie są same w sobie powodem użycia mocniejszego modelu.
+Raise the level when complexity, risk, or ineffective diagnosis emerges. A permissions error, environment failure, or exhausted limit is not in itself a reason to use a stronger model.
 
-Przekazuj cel, kryteria, aktualny stan kodu, dowody kontroli, próby i nierozwiązany problem zamiast całej rozmowy. Zmiana modelu nie zeruje historii prób ani rund review. Nie przełączaj wielokrotnie bez nowej przesłanki. Kolejną niezależną pracę oceń ponownie, bez automatycznego utrzymywania droższego poziomu.
+Hand over the goal, criteria, current code state, check evidence, attempts, and unresolved problem instead of the whole conversation. A model change does not reset attempt history or review rounds. Do not switch repeatedly without new grounds. Reassess the next independent piece of work without automatically retaining the more expensive level.
 
-Poziom recenzenta dobieraj niezależnie do ryzyka zmiany. Może używać tego samego modelu co autor, ale zachowuje niezależność według standardu review. Nie uruchamiaj kilku recenzentów tej samej zmiany bez konkretnej potrzeby. Mocniejszy model nie zastępuje testów i dowodów działania.
+Choose the reviewer's level independently according to change risk. It may use the same model as the author but maintains independence according to the review standard. Do not launch multiple reviewers for the same change without a specific need. A stronger model does not replace tests and evidence of behavior.
 
-## Ocena kosztu
+## Cost assessment
 
-Rejestruj model faktycznie potwierdzony przez narzędzie i dostępne koszty według [pomiarów](usage-metrics.md). Brak danych oznacz jawnie; model rekomendowany nie jest modelem użytym. Uwzględniaj poprawki, review i przekazanie pracy bez podwójnego naliczania. Rutynowego wyboru nie opisuj po każdym zadaniu; raportuj istotną eskalację i ograniczenia. Nie deklaruj oszczędności bez pomiaru.
+Record the model actually confirmed by the tool and available costs according to [metrics](usage-metrics.md). Mark missing data explicitly; the recommended model is not the model used. Include fixes, review, and handoffs without double counting. Do not describe routine selection after every task; report significant escalation and limitations. Do not claim savings without measurement.

@@ -1,52 +1,52 @@
-# Dobór ścieżki i kontekstu
+# Selecting a Path and Context
 
-Wersja: 1.4.0  
-Data: 2026-11-15
+Version: 1.4.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](core.md). Przy nowym zleceniu wybierz ścieżkę według niepewności i skutków błędu. Nie uruchamiaj osobnego agenta do klasyfikacji. Zmiana ścieżki w trakcie pracy wymaga tylko uzupełnienia brakujących ustaleń, nie powtórzenia wykonanych etapów.
+Use with the [core](core.md). For a new assignment, select a path based on uncertainty and the consequences of error. Do not launch a separate agent for classification. Changing paths during work requires filling in missing decisions only, not repeating completed stages.
 
-## Ścieżki
+## Paths
 
-| Ścieżka | Kiedy | Wymagany zapis i przebieg |
+| Path | When | Required record and process |
 |---|---|---|
-| Mała zmiana | Jednoznaczny, spójny zakres; małe ryzyko; znany wzorzec; łatwa weryfikacja; bez zmiany kontraktów, modelu danych, uprawnień i zobowiązań | Krótki zapis celu, zakresu i sprawdzenia w istniejącym zadaniu lub opisie PR; implementacja, kontrole, review i integracja według polityki projektu. Bez obowiązkowego pliku zadania i iteracji |
-| Standardowa zmiana | Funkcja, integracja, refaktoryzacja lub naprawa wymagająca rozpoznania zależności | Bramka wejścia w zakresie zmiany, plan zadania lub przyrostów, implementacja, kontrole, review, integracja |
-| Nowy produkt lub istotny obszar | Nieustalone potrzeby, reguły lub główne przepływy, których nie rozstrzygają wzorce projektu | Discovery i prototyp właściwego obszaru, decyzje techniczne, setup tylko dla nowego projektu; dalsza praca standardowymi przyrostami |
+| Small change | Unambiguous, coherent scope; low risk; known pattern; easy verification; no changes to contracts, the data model, permissions, or commitments | Brief record of the goal, scope, and verification in an existing task or PR description; implementation, checks, review, and integration according to project policy. No mandatory task file or iteration |
+| Standard change | Feature, integration, refactoring, or fix requiring investigation of dependencies | Input readiness gate within the scope of the change, task or increment plan, implementation, checks, review, integration |
+| New product or significant area | Unsettled needs, rules, or main flows that project patterns do not resolve | Discovery and prototype for the relevant area, technical decisions, setup only for a new project; further work in standard increments |
 
-Ryzyko oceniaj niezależnie od rozmiaru diffu. Autoryzacja, izolacja klientów, płatności, dane osobowe, migracje, sekrety, usuwanie danych i kompatybilność kontraktów wymagają odpowiednich kontroli także przy zmianie jednej linii. Wątpliwość co do małej ścieżki oznacza ścieżkę standardową, nie automatyczne pytanie do użytkownika.
+Assess risk independently of diff size. Authorization, tenant isolation, payments, personal data, migrations, secrets, data deletion, and contract compatibility require appropriate checks even for a one-line change. Doubt about the small-change path means using the standard path, not automatically asking the user.
 
-## Co wczytać
+## What to load
 
-Na początku sesji odczytaj rdzeń, routing i główne instrukcje projektu. Przy przejściu etapu stosuj [workflow](workflow.md). Dalej czytaj potrzebne sekcje według nagłówków i zakresu zmiany, nie automatycznie całe wskazane pliki. W tej samej sesji nie wczytuj ponownie aktualnej instrukcji bez utraty kontekstu. Właściwe wymagania nadal obowiązują; nie pomijaj sekcji istotnej dla ryzyka.
+At the start of a session, read the core, routing, and the project's main instructions. Use [workflow](workflow.md) when moving between stages. Then read the necessary sections according to headings and change scope, rather than automatically reading every linked file in full. Within the same session, do not reload an unchanged instruction unless context has been lost. Applicable requirements remain binding; do not skip a section relevant to the risk.
 
-| Praca / wyzwalacz | Instrukcja |
+| Work / trigger | Instruction |
 |---|---|
-| Nieustalony produkt lub nowy obszar | [Discovery](design/discovery.md) |
-| Nowy kierunek wyglądu lub interakcji | [UX/UI](design/ux-ui.md); przy istniejącym wzorcu wystarcza frontend |
-| Nowy stack lub decyzja architektoniczna | [Technologia](design/technology.md) |
-| Utworzenie nowego repozytorium | [Setup](design/project-setup.md) |
-| Rozpoznanie istniejącego projektu, niejasny zakres | [Gotowość wejścia](planning/input-readiness.md) |
-| Standardowa zmiana i większy zakres | [Planowanie](planning/task-planning.md) |
-| Wykonanie zmiany | [Realizacja](development/task-workflow.md) |
-| Kod i jego weryfikacja | Właściwe sekcje [kodu](development/code-standards.md) i [jakości](development/quality-checks.md); bez projektowania od nowa narzędzi już ustalonych w projekcie |
-| Ocena wpływu na ścieżki krytyczne, koniec iteracji, przygotowanie wydania | [Ścieżki krytyczne](development/critical-paths.md) |
-| API, dane, integracje, workery | [Backend](development/backend.md) |
-| Widoki, interakcje, dostępność | [Frontend](development/frontend.md) |
-| Dane wejściowe, dostęp, sekrety, dane osobowe | Sekcje [bezpieczeństwa](development/security.md) według tabeli na jego początku |
-| Nowe dane osobowe lub dostawca, ciasteczka, analityka, dokumenty prawne, pierwsze wydanie publiczne | [Prywatność](development/privacy.md) |
-| Modele AI w budowanej aplikacji | [AI aplikacji](development/ai.md) |
-| Zmiana dokumentacji i instrukcji projektu | [Dokumentacja](development/documentation.md) |
-| Commity, PR, integracja | [Git](development/git-workflow.md); przy zlecaniu przeglądu sekcja [Recenzent](development/code-review.md#recenzent) |
-| Przegląd zmiany jako recenzent | [Review](development/code-review.md), [lista recenzenta](development/review-checklist.md); pełne standardy tylko dla obszarów podwyższonego ryzyka |
-| Środowisko, obrazy, CI, infrastruktura | [DevOps](development/devops.md) |
-| Rutynowe wydanie na przygotowane środowisko | [Wdrożenia](development/deployment.md); runbook i profil projektu, bez ponownego czytania setupu i utrzymania |
-| Wybór hostingu, pierwsze środowisko lub zmiana mechanizmu zgody | [Przygotowanie wdrożeń](development/deployment-setup.md); przy wykonywaniu wydania także instrukcja rutynowa |
-| Backup, odtworzenie, monitoring, rotacja sekretów, organizacja utrzymania | [Utrzymanie](development/operations.md); przy zmianie środowiska sekcja koordynacji wdrożeń |
-| Awaria lub rollback | [Incydenty](development/incidents.md) i wskazane sekcje bezpieczeństwa operacji; bez instrukcji wyboru hostingu |
-| Dodanie lub zmiana flagi funkcji | Sekcja [Flagi funkcji](development/deployment.md#flagi-funkcji); nie wymaga lektury całego standardu wdrożeń |
-| Wieloetapowa praca i delegowanie spójnych zadań | Sekcja [Delegowanie pracy](development/task-workflow.md#delegowanie-pracy) |
-| Dobór lub eskalacja modelu wykonawcy | [Dobór modeli](development/model-selection.md) |
-| Zbiorczy plan, podsumowanie etapu | [Postęp](development/progress-reporting.md) |
-| Pomiary czasu, tokenów lub kosztu pracy AI | [Pomiary](development/usage-metrics.md) |
+| Unsettled product or new area | [Discovery](design/discovery.md) |
+| New visual or interaction direction | [UX/UI](design/ux-ui.md); frontend is sufficient when a pattern already exists |
+| New stack or architectural decision | [Technology](design/technology.md) |
+| Creating a new repository | [Setup](design/project-setup.md) |
+| Investigating an existing project, unclear scope | [Input readiness](planning/input-readiness.md) |
+| Standard change and larger scope | [Planning](planning/task-planning.md) |
+| Executing a change | [Execution](development/task-workflow.md) |
+| Code and its verification | Relevant sections of [code](development/code-standards.md) and [quality](development/quality-checks.md); do not redesign tools already established in the project |
+| Assessing impact on critical paths, iteration end, release preparation | [Critical paths](development/critical-paths.md) |
+| API, data, integrations, workers | [Backend](development/backend.md) |
+| Views, interactions, accessibility | [Frontend](development/frontend.md) |
+| Input data, access, secrets, personal data | [Security](development/security.md) sections according to the table at its beginning |
+| New personal data or provider, cookies, analytics, legal documents, first public release | [Privacy](development/privacy.md) |
+| AI models in the application being built | [Application AI](development/ai.md) |
+| Changing documentation and project instructions | [Documentation](development/documentation.md) |
+| Commits, PRs, integration | [Git](development/git-workflow.md); when assigning a review, the [Reviewer](development/code-review.md#reviewer) section |
+| Reviewing a change as a reviewer | [Review](development/code-review.md), [reviewer checklist](development/review-checklist.md); full standards only for areas of elevated risk |
+| Environment, images, CI, infrastructure | [DevOps](development/devops.md) |
+| Routine release to a prepared environment | [Deployments](development/deployment.md); project runbook and profile, without rereading setup and operations |
+| Hosting selection, first environment, or change to the approval mechanism | [Deployment setup](development/deployment-setup.md); also the routine instructions when executing a release |
+| Backup, restore, monitoring, secret rotation, operational responsibilities | [Operations](development/operations.md); deployment coordination section when changing an environment |
+| Incident or rollback | [Incidents](development/incidents.md) and the specified sections on operational safety; no hosting selection instructions |
+| Adding or changing a feature flag | [Feature flags](development/deployment.md#feature-flags) section; no need to read the entire deployment standard |
+| Multistage work and delegation of coherent tasks | [Delegating work](development/task-workflow.md#delegating-work) section |
+| Selecting or escalating an executor's model | [Model selection](development/model-selection.md) |
+| Overall plan, stage summary | [Progress](development/progress-reporting.md) |
+| Measuring time, tokens, or cost of AI work | [Metrics](development/usage-metrics.md) |
 
-To lista wyzwalaczy, nie lista obowiązkowej lektury dla każdego zadania. Praca wyłącznie dokumentacyjna nie wymaga czytania backendu ani uruchamiania aplikacji. Każdy plik szczegółowy obowiązuje łącznie z rdzeniem; jego odnośniki nie oznaczają konieczności czytania wszystkich zależnych plików.
+This is a list of triggers, not mandatory reading for every task. Documentation-only work does not require reading the backend standard or running the application. Each detailed file applies together with the core; its links do not imply that all linked files must be read.

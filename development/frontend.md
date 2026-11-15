@@ -1,42 +1,42 @@
 # Frontend
 
-Wersja: 2.0.0  
-Data: 2026-11-10
+Version: 2.0.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
+Apply with the [core](../core.md), according to [routing](../routing.md).
 
-## Spójność wyglądu
+## Visual consistency
 
-Stosuj komponenty, tokeny i ton projektu. Domyślnie mobile first, bez ukrywania na telefonie funkcji bez podstawy w wymaganiach. Makieta nie wymaga mechanicznego odwzorowania, ale wspólne elementy muszą zachowywać się spójnie.
+Use the project's components, tokens, and tone. Default to mobile first, without hiding features on phones unless requirements justify it. A mockup does not require mechanical reproduction, but shared elements must behave consistently.
 
-Przed dodaniem komponentu sprawdź istniejący wariant. Wartości wizualne należą do tokenów, nie rozproszonych kopii. Domyślnie jeden sposób stylowania, bez inline styles poza wartościami dynamicznymi. Bibliotekę UI dobieraj do potrzeb interakcji; nie buduj złożonych elementów od zera tylko dlatego, że aplikacja jest mała.
+Before adding a component, check for an existing variant. Visual values belong in tokens, not scattered copies. Default to one styling approach, without inline styles except for dynamic values. Choose a UI library to meet interaction needs; do not build complex elements from scratch merely because the application is small.
 
-Brak odwracalnego szczegółu widoku rozstrzygaj z ustalonych wzorców, bez pytania. Istotnie nowy przepływ podlega UX/UI. W raporcie wymień tylko samodzielne decyzje warte oceny użytkownika, nie każdy domyślny odstęp i tekst.
+Resolve unspecified, reversible view details using established patterns, without asking. A substantially new flow follows UX/UI. In the report, list only independent decisions worth the user's assessment, not every default spacing value and text.
 
-## Dostępność
+## Accessibility
 
-Celem nowego UI jest WCAG 2.2 AA. Stosuj semantykę HTML, etykiety, obsługę klawiaturą i widoczny fokus. Domyślnie obszar dotykowy co najmniej 44 × 44 px; kontrast tekstu co najmniej 4,5:1, dużego tekstu i elementów UI 3:1. Nie przekazuj informacji samym kolorem; obrazy mają właściwy `alt`, dekoracyjne pusty. ARIA uzupełnia semantykę, nie zastępuje jej bez potrzeby. Uwzględniaj `prefers-reduced-motion`.
+New UI targets WCAG 2.2 AA. Use semantic HTML, labels, keyboard support, and visible focus. Default to touch targets of at least 44 × 44 px; text contrast of at least 4.5:1, and large text and UI element contrast of 3:1. Do not convey information through color alone; images have appropriate `alt` text, empty for decorative images. ARIA supplements semantics rather than replacing them unnecessarily. Respect `prefers-reduced-motion`.
 
-Układ musi działać na istotnych rozmiarach bez wymuszonego poziomego przewijania. Uwzględnij klawiaturę ekranową i obszary bezpieczne przy formularzach. Weryfikację dostępności i UI określa [jakość](quality-checks.md#weryfikacja-frontendu).
+The layout must work at relevant screen sizes without forced horizontal scrolling. Account for the on-screen keyboard and safe areas in forms. [Quality checks](quality-checks.md#frontend-verification) define accessibility and UI verification.
 
-## Formularze i stany
+## Forms and states
 
-Walidacja klienta poprawia UX; serwer nadal rozstrzyga poprawność i uprawnienia. Reguły muszą być zgodne z kontraktem. Błędy serwera przypisuj do pól, powiąż komunikaty z polami dla czytników, zachowuj wpisane dane. Blokuj ponowną wysyłkę podczas przetwarzania i pokaż jej stan.
+Client validation improves UX; the server still determines validity and permissions. Rules must match the contract. Associate server errors with fields, link messages to fields for screen readers, and preserve entered data. Prevent duplicate submission during processing and show its state.
 
-Element z danymi obsługuje właściwe stany: ładowanie, pusty, błąd i sukces. Błąd daje możliwość ponowienia, gdy jest bezpieczne; pusty stan wskazuje sensowne działanie. Unikaj przesunięć układu przy ładowaniu. Nie zostawiaj pustego ekranu i nieobsłużonego żądania.
+A data-driven element handles appropriate states: loading, empty, error, and success. An error allows retrying when safe; an empty state suggests a useful action. Avoid layout shifts during loading. Do not leave a blank screen or an unhandled request.
 
-## Komunikacja z API
+## API communication
 
-Domyślnie wspólna warstwa klienta API z typami generowanymi z kontraktu, jeśli projekt je generuje lub zapobiega to istotnemu duplikowaniu. Prosty klient nie wymaga uruchamiania generatora bez uzasadnienia; zgodność typów i obsługa błędów nadal obowiązują. Błędy sieci, timeout, brak uprawnień i wygaśnięcie sesji obsługuj spójnie. Korzystaj z istniejącej biblioteki pobierania i cache danych, gdy jest potrzebna; nie buduj jej odpowiednika.
+Default to a shared API client layer with types generated from the contract if the project generates them or this prevents significant duplication. A simple client does not require introducing a generator without justification; type compatibility and error handling still apply. Handle network errors, timeouts, lack of permissions, and session expiry consistently. Use an existing data fetching and caching library when needed; do not build an equivalent.
 
-Nowy UI nie ma błędów i ostrzeżeń konsoli, buildu i analizy. W istniejącym projekcie zmiana nie dodaje nowych, a wcześniejsze problemy raportuj osobno.
+New UI has no console, build, or analysis errors or warnings. In an existing project, the change adds none; report pre-existing issues separately.
 
-## Teksty i tłumaczenia
+## Text and translations
 
-Projekt jednojęzyczny bez planu rozszerzenia nie wymaga biblioteki tłumaczeń. Powtarzalne komunikaty utrzymuj wspólnie. Projekt wielojęzyczny domyślnie używa plików tłumaczeń i biblioteki i18n. Daty, liczby i kwoty formatuj według ustawień regionalnych.
+A monolingual project with no expansion plan does not require a translation library. Maintain repeated messages centrally. A multilingual project defaults to translation files and an i18n library. Format dates, numbers, and monetary amounts according to locale settings.
 
-## Strony publiczne i wydajność
+## Public pages and performance
 
-Treść publiczna powinna być dostępna w HTML przez SSR lub generację statyczną; część po zalogowaniu może być kliencka. Publiczne strony mają właściwe tytuły, opisy i adresy kanoniczne; sitemap, robots, metadane udostępniania i dane strukturalne dodawaj odpowiednio do publikowanej treści.
+Public content should be available in HTML through SSR or static generation; authenticated areas may be client-rendered. Public pages have appropriate titles, descriptions, and canonical URLs; add a sitemap, robots directives, sharing metadata, and structured data as appropriate to the published content.
 
-Dla publicznych stron dąż do Core Web Vitals: LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1. Dobieraj obrazy i fonty do użycia, nie ładuj ciężkich tras i elementów wcześniej niż potrzeba. Kontroluj rozmiar JavaScriptu; optymalizację uzasadniaj wpływem, nie samą możliwością.
+For public pages, aim for Core Web Vitals: LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1. Choose images and fonts for their use; do not load heavy routes and elements before they are needed. Control JavaScript size; justify optimization by its impact, not merely its possibility.

@@ -1,43 +1,43 @@
-# Workflow sterowany artefaktami
+# Artifact-Driven Workflow
 
-Wersja: 2.0.1  
-Data: 2026-11-15
+Version: 2.0.1  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](core.md), według [routingu](routing.md).
+Use with the [core](core.md), following [routing](routing.md).
 
-Stan wynika z aktualnych artefaktów i dowodów, nie deklaracji wykonawcy. Etap nie oznacza osobnego agenta lub sesji; delegowanie określa [realizacja](development/task-workflow.md#delegowanie-pracy). Wykorzystaj istniejący aktualny wynik zamiast odtwarzać go od początku.
+State follows from current artifacts and evidence, not the executor's declarations. A stage does not imply a separate agent or session; [execution](development/task-workflow.md#delegating-work) defines delegation. Reuse an existing valid result instead of recreating it from scratch.
 
-## Stany i przejścia
+## States and transitions
 
-| Przejście | Warunek |
+| Transition | Condition |
 |---|---|
-| Rozpoznanie → gotowe do pracy | Cel, kryteria, granice, sposób weryfikacji i potrzebne zależności są znane; brak decyzji blokującej tę część |
-| Gotowe → implementacja | Materiały i założenia aktualne, zależności wykonawcze i dostępy spełnione |
-| Implementacja → weryfikacja i review | Dostępna spójna zmiana i diff. Kontrole można wykonywać już w trakcie implementacji |
-| Weryfikacja → integracja | Kryteria spełnione, wymagane aktualne CI i niezależny review końcowego commita pozytywne, spełnione warunki Git |
-| Integracja → staging | Przygotowane i zabezpieczone środowisko, właściwy artefakt CI oraz wymagane dostępy i zatwierdzone koszty |
-| Staging → gotowe do wydania | Kandydat i konfiguracja zweryfikowane, wymagane ścieżki z dowodami, znane skutki migracji i plan niepowodzenia |
-| Integracja → gotowe do wydania bez stagingu | Wyłącznie istniejący projekt dopuszczający ten tryb; wymagania, braki dowodów i decyzje według [zakresu weryfikacji](development/deployment.md#zakres-weryfikacji) |
-| Gotowe → produkcja | Świadoma zgoda człowieka na wskazanego kandydata i spełnione warunki wdrożenia |
+| Investigation → ready for work | Goal, criteria, boundaries, verification method, and required dependencies are known; no decision blocks this part |
+| Ready → implementation | Materials and assumptions are current; execution dependencies and access requirements are satisfied |
+| Implementation → verification and review | A coherent change and diff are available. Checks may already run during implementation |
+| Verification → integration | Criteria are met, required current CI and independent review of the final commit pass, and Git conditions are satisfied |
+| Integration → staging | Environment is prepared and protected, with the correct CI artifact, required access, and approved costs |
+| Staging → ready for release | Candidate and configuration are verified, required paths have evidence, migration effects are known, and a failure plan exists |
+| Integration → ready for release without staging | Only an existing project that permits this mode; requirements, evidence gaps, and decisions follow the [verification scope](development/deployment.md#verification-scope) |
+| Ready → production | Informed human approval for the specified candidate, with deployment conditions met |
 
-Implementacja, integracja i produkcja to odrębne wyniki. Wydanie może obejmować wiele zadań. Nowy projekt przygotowuje fundament lokalny i CI przed integracją kodu; termin stagingu określa [setup](development/deployment-setup.md#zakres-i-moment-uruchomienia). Ocena przyrostu przez człowieka przebiega według [planowania](planning/task-planning.md#przegląd-przyrostu).
+Implementation, integration, and production are distinct outcomes. A release may include multiple tasks. A new project prepares the local foundation and CI before integrating code; [setup](development/deployment-setup.md#scope-and-timing) defines when staging is needed. Human assessment of an increment follows [planning](planning/task-planning.md#increment-review).
 
-## Źródło stanu i artefakty
+## Source of state and artifacts
 
-Zadanie ma jedno źródło i [statusy z planowania](planning/task-planning.md#statusy-i-jedno-źródło). Rozpoznanie odpowiada `PROPOSED` lub `PLANNED`, gotowość `READY`, implementacja z kontrolami i review `IN_PROGRESS`, integracja `DONE`. Zależna niezintegrowana praca może być `BLOCKED` z warunkiem odblokowania.
+A task has one source and uses the [planning statuses](planning/task-planning.md#statuses-and-a-single-source). Investigation corresponds to `PROPOSED` or `PLANNED`, readiness to `READY`, implementation with checks and review to `IN_PROGRESS`, and integration to `DONE`. Dependent work that has not been integrated may be `BLOCKED`, with an unblocking condition.
 
-Stan stagingu i produkcji dotyczy [rekordu wydania](development/deployment.md#rekord-wydania), nie zmienia `DONE`. Potrzebna poprawka to nowe zadanie. Nie twórz drugiego rejestru statusów dla grafu.
+Staging and production state belongs to the [release record](development/deployment.md#release-record) and does not change `DONE`. A required fix is a new task. Do not create a second status register for the graph.
 
-Materiały, prototyp, kontrakt, kod, wynik CI i zatwierdzenie są artefaktami; nie każdy wymaga osobnego dokumentu. Checkpoint i raport określa realizacja. Blokada zatrzymuje tylko zależną część, nie całe zlecenie.
+Materials, a prototype, a contract, code, a CI result, and an approval are artifacts; not every artifact requires a separate document. Execution defines the checkpoint and report. A blocker stops only dependent work, not the entire assignment.
 
-## Aktualność i powroty
+## Validity and returning to earlier stages
 
-- Zmiana wymagania lub UX wymaga ponownej oceny zależnego planu, kodu i testów, nie całego produktu.
-- Zmiana kodu, konfiguracji, zależności lub historii wymaga ponowienia dotkniętych kontroli i review; CI przed merge dotyczy końcowego commita.
-- Zmiana kandydata lub istotnej konfiguracji wymaga oceny dowodów wydania i nowej zgody według wdrożeń. Zmiana kosztu lub dostępu wymaga oceny zakresu autoryzacji.
+- A requirement or UX change requires reassessing the dependent plan, code, and tests, not the entire product.
+- A change to code, configuration, dependencies, or history requires rerunning affected checks and review; pre-merge CI applies to the final commit.
+- A change to the candidate or significant configuration requires assessing release evidence and obtaining new approval according to deployments. A cost or access change requires reassessing the scope of authorization.
 
-Wyniki niezależnych części można zachować z uzasadnieniem aktualności. Nie dopasowuj kryteriów do błędnej implementacji. Przy wznowieniu porównaj checkpoint z rzeczywistym stanem repozytorium i środowiska. Przed ponowieniem skutku zewnętrznego sprawdź jego wynik — timeout nie dowodzi porażki.
+Results for independent parts may be retained with a justification of their validity. Do not adjust criteria to match an incorrect implementation. On resumption, compare the checkpoint with the actual repository and environment state. Before repeating an external side effect, check its outcome — a timeout does not prove failure.
 
-## Kiedy automatyzować graf
+## When to automate the graph
 
-Najpierw korzystaj z zadań, Git i CI. Dodaj walidację powtarzalnych błędów. Osobny orkiestrator ma sens przy rzeczywistej potrzebie trwałego wznawiania lub wielu wykonawców; musi zachować jedno źródło stanu, aktualność dowodów i bezpieczne ponawianie.
+Start with tasks, Git, and CI. Add validation for recurring errors. A separate orchestrator makes sense when durable resumption or multiple executors are genuinely needed; it must preserve a single source of state, evidence validity, and safe retries.

@@ -1,28 +1,28 @@
-# Opis wejściowy nowego produktu
+# New product input brief
 
-Wersja: 1.0.0  
-Data: 2026-11-15
+Version: 1.0.0  
+Date: 2026-11-15
 
-Szablon materiału dla [wstępnej oceny opisu](input-readiness.md#wstępna-ocena-opisu-nowego-produktu). Użytkownik może dostarczyć równoważny opis w dowolnej formie. Nie wymagaj wszystkich pól; „zaproponuj rozwiązanie” jest dopuszczalną odpowiedzią, z zachowaniem granic decyzji z [rdzenia](../core.md).
+A material template for the [initial assessment of the description](input-readiness.md#initial-assessment-of-a-new-product-description). The user may supply an equivalent description in any form. Do not require every field; “propose a solution” is an acceptable answer, subject to the decision boundaries in the [core](../core.md).
 
-## Informacje do podania
+## Information to provide
 
-| Temat | Co warto opisać |
+| Topic | What to describe |
 |---|---|
-| Cel | Jaki problem rozwiązujemy i po czym poznamy, że aplikacja pomaga |
-| Pierwsza wersja | Niezbędne funkcje, wykluczenia i pomysły odłożone na później |
-| Użytkownicy i dostęp | Role, kto nadaje uprawnienia, kto widzi i zmienia jakie dane |
-| Główne procesy | Przebieg od początku do końca, statusy, istotne odmowy i wyjątki |
-| Reguły | Kwoty, waluty, terminy, limity, usuwanie i historia, jeśli dotyczą produktu |
-| Przykłady | Konkretne wejście i oczekiwany wynik głównych operacji |
-| Dane i integracje | Potrzebne informacje, istniejące systemy, poczta SMTP/API i dostępne zasoby; bez sekretów i rzeczywistych danych osobowych |
-| Wygląd i język | Języki aplikacji, materiały marki, przykłady interfejsu i urządzenia użytkowników |
-| Ograniczenia | Narzucony stack lub hosting, wymagania danych i środowiska, znane potrzeby wydajnościowe |
-| Granice autonomii | Co agent może zaproponować i ustalić sam, zatwierdzone usługi i limity kosztów oraz decyzje zastrzeżone dla użytkownika |
-| Tryb uzupełniania braków | „Uzupełnię sam” albo „agent uzupełnia i kontynuuje”; podanie trybu oszczędza osobne pytanie |
+| Goal | What problem we are solving and how we will know the application helps |
+| First release | Essential features, exclusions and ideas deferred until later |
+| Users and access | Roles, who grants permissions, who sees and changes which data |
+| Main processes | End-to-end flow, statuses, material refusals and exceptions |
+| Rules | Amounts, currencies, deadlines, limits, deletion and history, if applicable to the product |
+| Examples | Concrete input and expected output of main operations |
+| Data and integrations | Required information, existing systems, SMTP/API email and available resources; no secrets or real personal data |
+| Appearance and language | Application languages, brand materials, interface examples and users' devices |
+| Constraints | Mandated stack or hosting, data and environment requirements, known performance needs |
+| Autonomy boundaries | What the agent may propose and decide independently, approved services and cost limits, and decisions reserved for the user |
+| Gap-filling mode | “I will fill in the gaps myself” or “the agent fills in the gaps and continues”; specifying the mode saves a separate question |
 
-Nie wymagaj biznesplanu, prognoz ruchu, projektu bazy ani kompletnego API. Szczegóły techniczne dobiera agent. Brak danych do oszacowania kosztu nie upoważnia do wymyślania prognozy.
+Do not require a business plan, traffic forecasts, database design or complete API. The agent selects technical details. Insufficient data to estimate cost does not authorize inventing a forecast.
 
-## Wykorzystanie
+## Usage
 
-Opis jest wejściem, nie drugim rejestrem wymagań. Ustalenia utrzymuj w źródle produktu według [discovery](../design/discovery.md#dokumentacja-produktu), zachowując odnośnik do materiału wejściowego. Po uzupełnieniu nie przepisuj tych samych reguł do kolejnych raportów. Dokładnie ustal granicę pierwszej wersji, a szczegóły przygotowuj dla najbliższego przyrostu.
+The description is input, rather than a second requirements register. Maintain findings in the product source according to [discovery](../design/discovery.md#product-documentation), retaining a link to the input material. After filling gaps, do not copy the same rules into subsequent reports. Establish the first release boundary precisely and prepare details for the next increment.

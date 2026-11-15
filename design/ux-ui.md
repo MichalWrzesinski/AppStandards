@@ -1,41 +1,41 @@
-# Projektowanie UX/UI i prototypu
+# UX/UI and prototype design
 
-Wersja: 2.0.0  
-Data: 2026-11-10
+Version: 2.0.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md) i [routingiem](../routing.md) przy nowym produkcie lub obszarze bez wzorca. Celem jest sprawdzenie głównego przepływu i kierunku wyglądu przed kosztowną implementacją. Istniejący wzorzec interfejsu zwykle pozwala przejść bezpośrednio do standardu frontendu.
+Use with the [core](../core.md) and [routing](../routing.md) for a new product or an area without an established pattern. The goal is to validate the main flow and visual direction before costly implementation. An existing interface pattern usually allows proceeding directly to the frontend standard.
 
-## Kierunek i udział człowieka
+## Direction and human involvement
 
-Odczytaj role, główny przepływ, zakres, treści, markę i referencje. Brak kolorów, gęstości lub słów opisujących styl uzupełnij rekomendacją wynikającą z produktu; nie wymagaj pełnego briefu graficznego. Pytaj tylko o preferencje, które istotnie zmieniają oczekiwany wynik.
+Read the roles, main flow, scope, content, brand and references. Fill in missing colors, density or style descriptions with a recommendation based on the product; do not require a complete visual design brief. Ask only about preferences that materially change the expected outcome.
 
-Domyślnie przygotuj jeden rekomendowany kierunek i działający prototyp kluczowego przepływu. Pokaż go użytkownikowi na telefonie i komputerze, z realnymi tekstami i reprezentatywnymi danymi testowymi. Nie używaj „lorem ipsum” ani prawdziwych danych osobowych.
+By default, prepare one recommended direction and a working prototype of the key flow. Show it to the user on phone and desktop, with realistic copy and representative test data. Do not use “lorem ipsum” or real personal data.
 
-Dwa lub trzy warianty stylu przygotuj, gdy kierunek jest niejasny albo użytkownik chce porównania. Makiety szkicowe dodaj, gdy trzeba osobno rozstrzygnąć złożoną nawigację lub układ; nie wymagaj automatycznie trzech osobnych akceptacji: stylu, wireframe i makiety docelowej.
+Prepare two or three style variants when the direction is unclear or the user wants a comparison. Add wireframes when complex navigation or layout needs a separate decision; do not automatically require three separate approvals for style, wireframe and final mockup.
 
-## Przepływ i prototyp
+## Flow and prototype
 
-- Wskaż potrzebne ekrany i przejścia głównej roli, a pozostałe role uwzględnij tam, gdzie zmieniają proces lub dostęp. Diagram jest potrzebny przy nieoczywistych przejściach, nie jako obowiązkowa kopia listy ekranów.
-- Prototyp pozwala przejść kluczowy proces, nie tylko obejrzeć statyczne plansze. Wyraźnie oznacz atrapy i ograniczenia; klikany prototyp nie dowodzi działania backendu.
-- Pokaż istotne stany: pusty, błąd, ładowanie i sukces. Dodaj ważną alternatywę lub przypadek brzegowy, jeśli decyduje o użyteczności procesu.
-- Użytkownik ocenia kierunek i przebieg na konkretnym materiale. Zbierz poprawki razem; po akceptacji nie pytaj ponownie o szczegóły wynikające z tego wzorca. Istotnie nowy przepływ wymaga ponownej oceny tylko zmienionej części.
-- Preferuj prototyp w docelowym stacku i z komponentów, które można wykorzystać w produkcie. Oznacz kod eksperymentalny; przed integracją produkcyjną spełnij właściwe wymagania jakości i bezpieczeństwa.
+- Identify the screens and transitions needed for the main role; account for other roles where they change the process or access. A diagram is needed for non-obvious transitions, rather than as a mandatory copy of the screen list.
+- The prototype allows walking through the key process, rather than just viewing static screens. Clearly mark stubs and limitations; a clickable prototype does not prove that the backend works.
+- Show material states: empty, error, loading and success. Add an important alternative or edge case if it determines the process's usability.
+- The user assesses the direction and flow using concrete material. Collect revisions together; after approval, do not ask again about details derived from that pattern. A materially new flow requires reassessment only of the changed part.
+- Prefer a prototype in the target stack, using components that can be reused in the product. Mark experimental code; satisfy the applicable quality and security requirements before integration into production code.
 
-## Marka, komponenty i teksty
+## Brand, components and copy
 
-- Stosuj istniejącą identyfikację. Gdy jej brak, przygotuj prosty logotyp i ikonę, jeśli produkt tego potrzebuje; branding nie blokuje eksperymentu funkcjonalnego.
-- Logo i ikonę zapisuj jako SVG; favicon i ikony aplikacji generuj tylko w potrzebnych formatach. Dobieraj fonty z licencją pozwalającą na planowane użycie.
-- Wyprowadź tokeny i minimalny zestaw komponentów z zaakceptowanego kierunku. Tokeny mają być używane przez frontend, np. jako zmienne CSS; nie utrzymuj ręcznie ich drugiej definicji w makietach.
-- Rozwijaj komponenty i ich stany z kolejnymi przyrostami. Strona katalogu komponentów jest przydatna, gdy istniejące narzędzie lub rozmiar zestawu to uzasadnia; nie buduj osobnej aplikacji dokumentacyjnej dla kilku elementów.
-- Przygotuj tylko zamówione motywy. Ton tekstów ustal przez kilka przykładów: błąd, potwierdzenie i pusty stan. Pozostałe komunikaty agent pisze sam w tym tonie.
-- Sprawdzaj już w prototypie wymagania dostępności ze standardu frontendu: kontrast, klawiaturę, fokus, etykiety i obszary dotykowe. Nie pokazuj jako rekomendowanego kierunku wymagającego późniejszej naprawy podstaw dostępności.
+- Use the existing visual identity. If none exists, prepare a simple logo and icon if the product needs them; branding does not block a functional experiment.
+- Save the logo and icon as SVG; generate favicons and application icons only in the required formats. Choose fonts licensed for the intended use.
+- Derive tokens and a minimal component set from the approved direction. The frontend must use the tokens, for example as CSS variables; do not maintain a second manual definition in mockups.
+- Develop components and their states with subsequent increments. A component catalog page is useful when an existing tool or the size of the set justifies it; do not build a separate documentation application for a few elements.
+- Prepare only the requested themes. Establish the tone of copy through a few examples: an error, a confirmation and an empty state. The agent writes the remaining messages in that tone.
+- Check the frontend standard's accessibility requirements in the prototype: contrast, keyboard operation, focus, labels and touch targets. Do not present a recommended direction that requires later repairs to basic accessibility.
 
-## Artefakty
+## Artifacts
 
-Domyślnie zapisuj w `docs/design/`: krótki opis zaakceptowanego kierunku, źródło prototypu lub odnośnik do niego, potrzebne zasoby marki i istotne ustalenia przepływów. Tokeny i komponenty przechowuj w miejscu używanym przez aplikację; dokumentacja odsyła do nich.
+By default, save in `docs/design/`: a short description of the approved direction, the prototype source or a link to it, necessary brand assets and material flow decisions. Keep tokens and components where the application uses them; documentation links to them.
 
-Screenshot dodaj, gdy ułatwia review lub zachowanie zaakceptowanego stanu. Nie wymagaj osobnych kopii PNG każdego ekranu, jeśli działający prototyp i aktualne dowody pozwalają go ocenić. W istniejącym projekcie zachowaj jego narzędzia i lokalizacje.
+Add a screenshot when it helps review or preserve the approved state. Do not require separate PNG copies of every screen when a working prototype and current evidence allow assessment. In an existing project, retain its tools and locations.
 
-## Warunek zakończenia
+## Completion condition
 
-Kierunek i kluczowy przepływ zostały ocenione przez użytkownika, materiały wystarczają do najbliższego przyrostu, a istotne ograniczenia są zapisane. Ekrany pomocnicze agent rozwija z ustalonych wzorców bez dodatkowych akceptacji. Zmiana zaakceptowanego produktu wraca do oceny tylko w zakresie wpływu.
+The user has assessed the direction and key flow, the materials are sufficient for the next increment, and material limitations are recorded. The agent develops supporting screens from the established patterns without further approvals. A change to the approved product returns for assessment only within the scope of its impact.

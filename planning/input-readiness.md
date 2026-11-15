@@ -1,99 +1,99 @@
-# Sprawdzenie gotowości wejścia
+# Input readiness assessment
 
-Wersja: 3.0.0  
-Data: 2026-11-15
+Version: 3.0.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md). Rozpoznaj zakres standardowej zmiany lub najbliższego przyrostu nowego produktu. Mała zmiana wymaga tylko odpowiednich sprawdzeń, bez osobnej bramki i raportu.
+Use with the [core](../core.md), following [routing](../routing.md). Identify the scope of a standard change or the next increment of a new product. A small change requires only the relevant checks, without a separate gate or report.
 
-## Dostęp i braki
+## Access and gaps
 
-Sprawdź tylko dostępy potrzebne do kolejnych czynności. Brak GitHuba, zdalnego repozytorium, kopii standardów, hostingu lub dostępu do innej aplikacji nie zatrzymuje niezależnej analizy i lokalnej pracy. Nie deklaruj jednak wykonania integracji lub kontroli, do których brak dostępu.
+Check only the access needed for subsequent actions. Missing GitHub, a remote repository, a copy of the standards, hosting or access to another application does not stop independent analysis and local work. However, do not claim to have completed integration or checks for which access is missing.
 
-| Brak | Działanie |
+| Gap | Action |
 |---|---|
-| Nierozstrzygnięta istotna decyzja produktu lub nieodwracalnych skutków | Zgłoś z propozycją według rdzenia; zatrzymaj zależną część |
-| Szczegół wyprowadzalny ze źródeł i wzorców, odwracalne założenie | Uzupełnij sam; zapisz tylko trwałą informację i istotne założenie |
-| Zasób lub dostęp potrzebny później | Zapisz warunek odpowiedniego przejścia, np. integracji albo wdrożenia; kontynuuj wcześniejsze kroki |
+| Unresolved material decision about the product or irreversible consequences | Report it with a proposal according to the core; stop the dependent part |
+| A detail derivable from sources and patterns, a reversible assumption | Fill it in independently; record only durable information and material assumptions |
+| A resource or access needed later | Record the condition for the appropriate transition, e.g. integration or deployment; continue earlier steps |
 
-Cel to brak zbędnych pytań, nie gwarancja przewidzenia wszystkich przyszłych odkryć.
+The goal is to avoid unnecessary questions, rather than guarantee that every future discovery can be predicted.
 
-## Wstępna ocena opisu nowego produktu
+## Initial assessment of a new product description
 
-Przed discovery oceń dostarczony opis lub plik wsadowy, korzystając z [szablonu wejścia](project-brief.md). Sprawdzaj informacje produktowe potrzebne do pierwszej wersji; nie wymagaj od użytkownika projektu architektury ani wypełnienia każdej pozycji szablonu.
+Before discovery, assess the supplied description or input file using the [input template](project-brief.md). Check product information needed for the first release; do not require the user to design the architecture or complete every template item.
 
-Brak jest istotny, gdy dotyczy decyzji zastrzeżonej dla człowieka w rdzeniu albo pozycji blokującej z [typowych braków](#typowe-braki). Pozostałe luki uzupełnij według trybu.
+A gap is material when it concerns a decision reserved for a human in the core or a blocking item among the [common gaps](#common-gaps). Fill other gaps according to the mode.
 
-Tryb uzupełniania odczytaj z opisu albo wcześniejszego jawnego wyboru. Jeśli występują istotne braki, wyślij jedną wiadomość z listą: brak, skutek i rekomendacja. Jeśli tryb nie jest znany, zapytaj o niego w tej samej wiadomości. Do odpowiedzi nie rozpoczynaj zależnego projektowania ani implementacji. Bez istotnych braków nie pytaj o tryb i przejdź do discovery.
+Read the gap-filling mode from the description or an earlier explicit choice. If material gaps exist, send one message listing each gap, its impact and a recommendation. If the mode is unknown, ask about it in the same message. Do not begin dependent design or implementation before receiving an answer. If there are no material gaps, do not ask about the mode; proceed to discovery.
 
-- Samodzielne uzupełnienie: zachowaj listę braków przy materiale wejściowym lub w istniejącym źródle produktu i zakończ bieżący przebieg. Wznów po dostarczeniu uzupełnienia, sprawdzając tylko zmiany i ich wpływ.
-- Uzupełnienie przez agenta: przyjmij rekomendacje z listy, na które użytkownik nie odpowiedział inaczej, uzupełnij odwracalne szczegóły i kontynuuj discovery bez kolejnej rundy o te same sprawy. Koszty, dane i uprawnienia nadal podlegają rdzeniowi; ten wybór nie jest zgodą na produkcję.
+- User fills in the gaps: retain the gap list with the input material or in the existing product source and end the current run. Resume after the additions are supplied, checking only changes and their impact.
+- Agent fills in the gaps: adopt the recommendations in the list unless the user answered otherwise, fill in reversible details and continue discovery without another round on the same matters. Costs, data and permissions remain subject to the core; this choice is not production approval.
 
-Nie raportuj jako braków opcji bez zastosowania, szczegółów wynikających z przyjętych domyślnych rozwiązań ani pytań o niezależny późniejszy zakres. Discovery wykorzystuje wynik tej oceny bez powtarzania wywiadu. Ta jednorazowa ocena poprzedza reguły samodzielnego uzupełniania braków w dalszej pracy.
+Do not report inapplicable options, details covered by adopted defaults or questions about independent later scope as gaps. Discovery reuses this assessment without repeating the interview. This one-time assessment precedes the rules for independently filling gaps during subsequent work.
 
-## Nowy produkt
+## New product
 
-Przed najbliższym przyrostem ustal:
+Before the next increment, establish:
 
-- cel i użytkowników, zakres oraz obserwowalne kryteria;
-- reguły, role, dostęp i istotne przypadki brzegowe potrzebne do tego przyrostu;
-- języki i znane ograniczenia, w tym prawne, danych, integracji i działania środowiska;
-- kierunek UX i kluczowy przepływ w formie prototypu lub wystarczającego istniejącego wzorca;
-- techniczne zależności i sposób weryfikacji.
+- the goal and users, scope and observable criteria;
+- rules, roles, access and material edge cases needed for this increment;
+- languages and known constraints, including legal, data, integration and environmental constraints;
+- UX direction and the key flow as a prototype or a sufficient existing pattern;
+- technical dependencies and verification method.
 
-Stack, model danych, teksty i szczegóły UI uzupełnia agent. Kontrakt API jest potrzebny przed implementacją zależnych klientów w zakresie danego przyrostu, nie całej przyszłej aplikacji. Brak prognoz ruchu i biznesplanu nie blokuje pracy. Nierozstrzygnięte pytania o późniejsze funkcje nie blokują niezależnego przyrostu.
+The agent supplies the stack, data model, copy and UI details. The API contract is needed before implementing dependent clients within the increment's scope, rather than for the entire future application. Missing traffic forecasts or a business plan do not block work. Unresolved questions about later features do not block an independent increment.
 
-## Istniejący projekt i legacy
+## Existing and legacy projects
 
-Poznawaj projekt w zakresie zlecenia, od najtańszych źródeł:
+Learn the project within the task's scope, starting with the least costly sources:
 
-1. Odczytaj obowiązujące instrukcje, README, istniejące zadanie, manifesty, komendy i konfigurację CI. Zachowaj lokalne instrukcje modułów oraz ograniczenia innych zespołów.
-2. Znajdź dotknięte moduły i zależności: trasy, kontrakty, model danych, integracje i powiązane repozytoria. Narzędzia frameworka preferuj przed lekturą całej implementacji.
-3. Przeczytaj zmieniany kod i reprezentatywny analogiczny przypadek wraz z testami. Sprawdź faktyczne zachowanie, od którego zależy zlecenie.
-4. Uruchom kontrole potrzebne do ustalenia punktu wyjścia dla zmiany, a aplikację, gdy wymaga tego ocena zachowania. Zapisz wersję, wynik i ograniczenia; nie myl konfiguracji testów z potwierdzeniem ich działania.
-5. Uzupełnij trwałą wiedzę: profil techniczny, odnośnik do modułu, pułapkę lub komendę. Rozwijaj mapę kodu stopniowo; nie opisuj wszystkich modułów przy pierwszym kontakcie.
+1. Read applicable instructions, README, the existing task, manifests, commands and CI configuration. Preserve local module instructions and other teams' constraints.
+2. Find affected modules and dependencies: routes, contracts, the data model, integrations and related repositories. Prefer framework tools over reading the entire implementation.
+3. Read the code being changed and a representative analogous case, together with tests. Check the actual behavior on which the task depends.
+4. Run checks needed to establish the change's baseline, and run the application when assessing behavior requires it. Record the version, result and limitations; do not confuse test configuration with proof that tests work.
+5. Extend durable knowledge: the technical profile, a module link, a pitfall or a command. Develop the code map gradually; do not describe every module on first contact.
 
-Szerszy audyt zależności, historii zmian, pokrycia i architektury wykonuj, gdy wymaga tego ryzyko lub osobne zlecenie. Brak testów nie uzasadnia pełnego przepisywania modułu; stosuj testy charakteryzujące w zakresie planowanej zmiany.
+Perform a broader audit of dependencies, change history, coverage and architecture when risk or a separate task requires it. Missing tests do not justify rewriting the entire module; use characterization tests within the planned change's scope.
 
-## Dokumentacja istniejącego projektu
+## Existing project documentation
 
-- Zachowaj aktualny układ i źródła prawdy. W instrukcjach projektu zapisz mapowanie: wymagania, projekt UI, decyzje, API, zadania i wyniki kontroli. Ścieżki w standardach są domyślnymi lokalizacjami nowych projektów.
-- Nie przenoś dokumentacji, nie usuwaj starych instrukcji i nie zastępuj aktywnego procesu w ramach onboardingu. Potrzebna migracja to osobne zlecenie z aktualizacją odwołań i uwzględnieniem użytkowników dokumentacji.
-- Jeśli brak opisu zachowania, odtwórz tylko część potrzebną do zmiany, oznaczając źródło i niepewność. Obserwacja kodu nie staje się automatycznie wymaganiem produktu.
-- Nie dubluj zadań w plikach, jeśli projekt używa zewnętrznego systemu.
+- Retain the current structure and sources of truth. Record a mapping in the project instructions: requirements, UI design, decisions, API, tasks and check results. Paths in the standards are default locations for new projects.
+- Do not move documentation, delete old instructions or replace an active process during onboarding. A necessary migration is a separate task that updates references and accounts for documentation users.
+- If behavior is undocumented, reconstruct only the part needed for the change, marking the source and uncertainty. Observing code does not automatically establish a product requirement.
+- Do not duplicate tasks in files if the project uses an external system.
 
-## Nowe zlecenie
+## New task
 
-Sprawdź cel, obecne zachowanie, realność założeń, zależności i wpływ na istniejących użytkowników. Ustal kryteria i potrzebne materiały. Wyraźne nowe polecenie może zmieniać wcześniejsze ustalenie; pytaj tylko o niejasny zamiar lub nieuzgodnione istotne konsekwencje. Nowy obszar bez ustalonych reguł skieruj do projektowania tylko w potrzebnym zakresie.
+Check the goal, current behavior, whether assumptions are realistic, dependencies and impact on existing users. Establish criteria and necessary materials. An explicit new instruction may change an earlier agreement; ask only about unclear intent or material consequences that have not been agreed. Route a new area without established rules to design only to the extent needed.
 
-## Typowe braki
+## Common gaps
 
-Zadania najczęściej nie opisują poniższych spraw. Sprawdź pozycje istotne dla zmiany; nie raportuj każdej osobno. Jeśli materiały jej nie rozstrzygają, zastosuj rozwiązanie domyślne, chyba że kolumna wskazuje brak blokujący.
+Tasks most often omit the following matters. Check items relevant to the change; do not report each one separately. If the materials do not resolve an item, apply the default unless the column identifies a blocking gap.
 
-| Sprawa | Rozwiązanie domyślne | Kiedy brak jest blokujący |
+| Matter | Default | When the gap is blocking |
 |---|---|---|
-| Uprawnienia: kto może użyć funkcji | Istniejący model ról, najmniejsze potrzebne uprawnienia | Funkcja wymaga nowej roli lub zmiany zasad dostępu |
-| Istniejące dane | Migracja zachowuje dane i ich znaczenie | Zmiana zmienia znaczenie danych lub wymaga decyzji, co zrobić z istniejącymi rekordami |
-| Usuwanie | Rekordy z historią finansową lub prawną archiwizuj statusem; pozostałe usuwaj po potwierdzeniu | Wymogi przechowywania lub usuwania danych osobowych |
-| Przypadki brzegowe i błędy | Zachowanie według standardów i wzorców aplikacji: walidacja, komunikat, możliwość ponowienia | Przypadek dotyczy pieniędzy lub reguły biznesowej |
-| Walidacja i limity pól | Rozsądne limity dla typu pola, np. długość tekstu, zakres dat | Limit biznesowy, np. maksymalna kwota, liczba sztuk |
-| Awaria usługi zewnętrznej | Według standardu backendu: kontrolowany wynik, ponowienia tylko bezpieczne | Brak możliwości działania bez dostawcy wymaga decyzji o ograniczeniu funkcji |
-| Powiadomienia | Tylko powiadomienia niezbędne dla procesu, np. potwierdzenie płatności | Nowe powiadomienia do użytkowników lub osób trzecich |
-| Nowe dane osobowe lub nowy dostawca | Minimalny zakres danych, wpis w rejestrze według [prywatności](../development/privacy.md) | Nowy cel przetwarzania, kategoria danych lub odbiorca |
-| Historia zmian i audyt | Zdarzenia bezpieczeństwa według standardu bezpieczeństwa | Wymóg historii widocznej dla użytkownika lub audytu prawnego |
-| Raporty i eksport | Nie dodawaj, jeśli zadanie ich nie wymaga | — |
-| Widok mobilny | Mobile first według standardu frontendu | — |
-| Wydajność i wolumen danych | Paginacja, indeksy i limity według standardów | Wymagany wolumen lub czas odpowiedzi wyraźnie wyższy niż typowy |
-| Teksty i tłumaczenia | Teksty w językach z profilu, napisane przez agenta | Nowy język aplikacji |
-| Zgodność API dla istniejących klientów | Zmiany zgodne wstecz według standardu backendu | Konieczna zmiana łamiąca zgodność |
-| Widoczność danych: kto zobaczy nowe dane | Rola widzi tylko dane, które widziała dotąd, oraz własne dane | Rola zobaczy dane dotąd dla niej niedostępne, np. dane innych użytkowników, kody kampanii, ceny wewnętrzne |
+| Permissions: who may use the feature | Existing role model, least necessary permissions | The feature requires a new role or a change to access rules |
+| Existing data | Migration preserves data and its meaning | The change alters data meaning or requires a decision about existing records |
+| Deletion | Archive records with financial or legal history using a status; delete others after confirmation | Personal data retention or deletion requirements |
+| Edge cases and errors | Behavior according to application standards and patterns: validation, message, retry option | The case concerns money or a business rule |
+| Validation and field limits | Reasonable limits for the field type, e.g. text length, date range | A business limit, e.g. maximum amount or quantity |
+| External service failure | According to the backend standard: controlled outcome, safe retries only | Inability to operate without the provider requires a decision about limiting functionality |
+| Notifications | Only notifications essential to the process, e.g. payment confirmation | New notifications to users or third parties |
+| New personal data or a new provider | Minimum data scope, an inventory entry according to [privacy](../development/privacy.md) | A new processing purpose, data category or recipient |
+| Change history and audit | Security events according to the security standard | A requirement for user-visible history or a legal audit |
+| Reports and export | Do not add unless the task requires them | — |
+| Mobile view | Mobile first according to the frontend standard | — |
+| Performance and data volume | Pagination, indexes and limits according to the standards | Required volume or response time substantially beyond typical expectations |
+| Copy and translations | Copy in the profile's languages, written by the agent | A new application language |
+| API compatibility for existing clients | Backward-compatible changes according to the backend standard | A necessary breaking change |
+| Data visibility: who will see new data | A role sees only data it previously saw and its own data | A role will see data previously unavailable to it, e.g. other users' data, campaign codes, internal prices |
 
 
-## Problemy wcześniejsze
+## Pre-existing problems
 
-Odróżnij problem bazowy od błędu zmiany na podstawie dowodów. Niedziałające uruchomienie lub kontrolę napraw przed zależną pracą tylko wtedy, gdy uniemożliwia realizację lub wiarygodną ocenę zmiany. Niezwiązany dług zapisz jako propozycję; nie naprawiaj całego projektu przy okazji. Obowiązkowa kontrola, której nie można wykonać, nadal blokuje właściwe przejście do integracji lub wydania.
+Distinguish a baseline problem from a defect introduced by the change using evidence. Fix a broken startup or check before dependent work only when it prevents implementation or reliable assessment of the change. Record unrelated debt as a proposal; do not repair the entire project along the way. A mandatory check that cannot be run still blocks the relevant transition to integration or release.
 
-## Wynik i przejście
+## Outcome and transition
 
-Zapisz ustalenia w istniejących materiałach lub zadaniu. W wiadomości pokaż tylko braki wymagające decyzji, istotne założenia i warunki potrzebne później. Nie twórz osobnego raportu bramki. Bez blokad przejdź automatycznie do planowania lub realizacji zgodnie z wybraną ścieżką.
+Record findings in existing materials or the task. In the message, show only gaps requiring a decision, material assumptions and conditions needed later. Do not create a separate gate report. Without blocking issues, proceed automatically to planning or implementation according to the selected path.
 
-Warunek zakończenia: najbliższa część pracy ma cel, kryteria, sposób sprawdzenia i rozpoznane zależności; nie zależy od otwartej decyzji blokującej. Niezależne części mogą mieć różny stan gotowości.
+Completion condition: the next part of the work has a goal, criteria, a verification method and identified dependencies; it does not depend on an open blocking decision. Independent parts may have different readiness states.

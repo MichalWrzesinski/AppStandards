@@ -1,47 +1,47 @@
-# Niezależny przegląd zmian
+# Independent Change Review
 
-Wersja: 4.1.0  
-Data: 2026-11-15
+Version: 4.1.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
+Use with the [core](../core.md), following [routing](../routing.md).
 
-Każda zmiana przed integracją wymaga niezależnego review końcowego commita. Autor nie zatwierdza własnej pracy. Review sprawdza działanie względem kryteriów i poprawność w granicach projektu.
+Every change requires independent review of the final commit before integration. Authors do not approve their own work. Review checks behavior against criteria and correctness within the project's boundaries.
 
-## Recenzent
+## Reviewer
 
-Przegląd wykonuje subagent z czystym kontekstem, bez historii rozumowania autora. Dostaje cel, kryteria, zakres diffu, komendy, instrukcje i nadpisania projektu, potrzebny profil, baseline oraz [listę kontrolną](review-checklist.md). Właściwe sekcje pełnych standardów czyta dla podwyższonego ryzyka lub konkretnej wątpliwości. Opis PR może wskazywać zakres i dowody, ale deklaracje wymagają potwierdzenia.
+A subagent with clean context performs the review, without the author's reasoning history. It receives the goal, criteria, diff scope, commands, project instructions and overrides, the required profile, baseline, and [checklist](review-checklist.md). It reads relevant sections of full standards for elevated risk or a specific doubt. The PR description may identify scope and evidence, but claims require confirmation.
 
-Recenzent zgłasza uwagi, nie edytuje kodu. Bez subagenta użyj nowej sesji z tym samym wejściem; jeśli to niemożliwe, przegląd pozostaje niewykonany i blokuje integrację.
+The reviewer reports findings and does not edit code. Without a subagent, use a new session with the same input; if that is impossible, the review remains unperformed and blocks integration.
 
-## Głębokość przeglądu
+## Review depth
 
-- Zmiana mechaniczna: diff i właściwe kontrole, bez uruchamiania niezmienionej aplikacji. Zmiana wyłącznie CSS podlega [kontrolom według wpływu](quality-checks.md#kontrole-według-wpływu), bez przeglądu niepowiązanego backendu.
-- Zmiana zachowania: wymagania, powiązany kod i aktualne dowody testów lub wykonania przepływu. Zmiana reguł dokumentacji wymaga oceny spójności i skutków, nie buildu aplikacji.
-- Podwyższone ryzyko — dostęp, dane osobowe, płatności, migracje, sekrety, kontrakty: rozszerzone kontrole właściwe dla ryzyka, w tym odmowy, granice danych i częściowe niepowodzenia.
+- Mechanical change: diff and relevant checks, without running the unchanged application. A CSS-only change follows [impact-based checks](quality-checks.md#checks-based-on-impact), without reviewing unrelated backend code.
+- Behavior change: requirements, related code, and current evidence from tests or execution of the flow. A change to documentation rules requires assessing consistency and consequences, not building the application.
+- Elevated risk — access, personal data, payments, migrations, secrets, contracts: extended checks appropriate to the risk, including denials, data boundaries, and partial failures.
 
-Nie oceniaj całego repozytorium. Nie powtarzaj aktualnych wiarygodnych kontroli ani uwag rozstrzyganych automatycznie. Sprawdzaj dowody; brak lub wątpliwość wymaga uzupełnienia. Autor i recenzent nie muszą wykonywać ponownie tego samego scenariusza.
+Do not assess the entire repository. Do not repeat current reliable checks or findings resolved automatically. Verify evidence; a gap or doubt requires follow-up. The author and reviewer do not both need to execute the same scenario again.
 
-## Uwagi i rozstrzygnięcia
+## Findings and resolutions
 
-Uwaga wskazuje miejsce, wymaganie lub konkretne ryzyko, skutek i propozycję. Preferencja recenzenta nie jest błędem. Zgłaszaj problemy poparte wymaganiem, dowodem lub wiarygodnym scenariuszem skutków. Nie żądaj zmiany tylko po to, aby przegląd zakończył się poprawką.
+A finding identifies the location, requirement or specific risk, consequence, and proposal. A reviewer's preference is not a bug. Report problems supported by a requirement, evidence, or a credible scenario of consequences. Do not demand a change merely so that the review results in a correction.
 
-| Kategoria | Dalszy krok |
+| Category | Next step |
 |---|---|
-| Blokująca | Błąd, brak kryterium lub naruszenie reguł: poprawić przed integracją |
-| Drobna | Lokalna niezgodność z wymaganiem lub obowiązującą regułą: autor poprawia, recenzent potwierdza na podstawie samego diffu poprawki; preferencje należą do sugestii |
-| Sugestia | Niewymagane usprawnienie: decyzja autora lub osobna propozycja; nie blokuje zatwierdzenia i nie wymaga kolejnej rundy bez zmiany |
-| Do decyzji człowieka | Nierozstrzygnięta istotna kwestia produktu lub uprawnień według rdzenia |
+| Blocking | Bug, unmet criterion, or rule violation: fix before integration |
+| Minor | Local noncompliance with a requirement or applicable rule: the author fixes it, and the reviewer confirms using only the fix's diff; preferences are suggestions |
+| Suggestion | Optional improvement: the author's decision or a separate proposal; does not block approval or require another round if no change is made |
+| Human decision required | Unresolved significant product or permissions issue according to the core |
 
-Spór techniczny rozstrzygaj kryterium, dowodem i standardem; przy równorzędnych wariantach wybierz prostszy i bezpieczniejszy. Autor nie pomija i nie przeklasyfikowuje sam uwagi blokującej. Po trzech rundach bez rozwiązania podsumuj problem i zmień sposób diagnozy według realizacji; nie przekazuj człowiekowi sporu możliwego do rozstrzygnięcia technicznie.
+Resolve technical disputes using criteria, evidence, and the standard; for equivalent alternatives, choose the simpler and safer one. The author does not independently dismiss or reclassify a blocking finding. After three rounds without resolution, summarize the problem and change the diagnostic approach according to execution; do not refer a technically resolvable dispute to the human.
 
-## Warunek zakończenia
+## Completion condition
 
-Spełnione kryteria, wystarczające aktualne dowody i brak nierozwiązanych wymaganych poprawek pozwalają zatwierdzić zmianę, także bez żadnych uwag. Nie poszerzaj przeglądu po spełnieniu tych warunków bez nowej przesłanki. Brak wymaganej kontroli pozostaje brakiem dowodu, a nie wynikiem pozytywnym.
+Met criteria, sufficient current evidence, and no outstanding required fixes allow the change to be approved, including with no findings at all. Do not expand the review after these conditions are met without new grounds. A missing required check remains missing evidence, not a passing result.
 
-## Poprawki i wynik
+## Fixes and outcome
 
-Kolejna runda dostaje poprzednie uwagi i nowy diff. Recenzent ocenia poprawki i ich wpływ, bez ponownego czytania całego niezmienionego zakresu. Sam raport lub status również wymaga krótkiego niezależnego review jego prawdziwości, lecz nie ponowienia niezwiązanych testów aplikacji. Zmiana kryteriów nie jest mechaniczna tylko dlatego, że nie zmienia kodu.
+A subsequent round receives the previous findings and the new diff. The reviewer assesses fixes and their impact without rereading the entire unchanged scope. A report or status alone also requires a brief independent review of its accuracy, but not repetition of unrelated application tests. A criteria change is not mechanical merely because it does not change code.
 
-Wielkość zmiany musi pozwalać na rzetelną ocenę całości; bez arbitralnego limitu linii. Niejednorodny lub zbyt duży zakres recenzent może zablokować z propozycją podziału. Oddziel zmiany mechaniczne od logiki, gdy ułatwia to sprawdzenie.
+The change must be small enough to assess thoroughly as a whole, without an arbitrary line limit. The reviewer may block a heterogeneous or excessively large scope with a proposal to split it. Separate mechanical changes from logic when this makes verification easier.
 
-Werdykt: **zatwierdzone**, **do poprawy** lub **do decyzji człowieka**, z commitem, zakresem kontroli, uwagami i ograniczeniami. Każdy kolejny commit wymaga oceny jego wpływu. Zatwierdzenie i wymagane zielone CI dla końcowego commita pozwalają na integrację po spełnieniu warunków Git, bez dodatkowej zgody człowieka.
+Verdict: **approved**, **changes requested**, or **human decision required**, with the commit, scope of checks, findings, and limitations. Each subsequent commit requires an assessment of its impact. Approval and required passing CI for the final commit allow integration once Git conditions are met, without additional human approval.

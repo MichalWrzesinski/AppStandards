@@ -1,24 +1,24 @@
-# Pomiary i koszt pracy AI
+# AI Work Metrics and Cost
 
-Wersja: 1.0.0  
-Data: 2026-11-15
+Version: 1.0.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md) tylko przy zbieraniu pomiarów lub raportowaniu czasu, tokenów i kosztu pracy agentów. Zwykły widok postępu opisuje [postęp](progress-reporting.md).
+Use with the [core](../core.md) only when collecting measurements or reporting agent work time, tokens, and cost. [Progress](progress-reporting.md) describes the regular progress view.
 
-## Dane pomiarowe
+## Measurement data
 
-- Korzystaj tylko z udostępnionych liczników, eksportów i znaczników czasu. Brak pomiaru nie blokuje pracy; zapisz go jednym wierszem. Nie buduj osobnej telemetrii bez zlecenia.
-- Zbieraj od początku dostępnej obserwacji. Nie odtwarzaj historycznych tokenów z długości tekstu, kosztów z pamięci ani czasu aktywnego z różnicy dwóch dat. Wskaż zakres i kompletność danych.
-- Preferuj istniejące źródło. Jeśli potrzebny zapis, użyj `docs/metrics/usage.jsonl` z identyfikatorem źródła i rekordu, etapem, zadaniem, sesją, wykonawcą, faktycznym modelem, znacznikami czasu i kategoriami tokenów, o ile są dostępne. Braki to `null`, nie zero. Bez promptów, sekretów i danych osobowych.
-- Oddziel czas kalendarzowy, aktywny i oczekiwania. Równoległe czasy agentów mogą przekraczać czas kalendarzowy; nie dodawaj ich do niego. Nie zgaduj czasu oczekiwania jako reszty.
-- Rozróżniaj niebuforowane wejście, wyjście, odczyt i zapis cache według semantyki źródła. Nie doliczaj cache drugi raz, jeśli licznik już je obejmuje. Nierozstrzygniętą semantykę oznacz jako ograniczenie.
-- Uwzględniaj review, subagentów, poprawki i próby nieudane. Deduplikuj rekordy, używaj przyrostów liczników narastających; wznowienie nie nalicza historii ponownie. Nie dodawaj subagenta drugi raz, gdy jest już w sumie sesji.
-- Nierozdzielalną część pomiaru pozostaw nieprzypisaną; nie dziel jej arbitralnie między zadania.
+- Use only provided counters, exports, and timestamps. Missing measurements do not block work; record the gap in one line. Do not build separate telemetry without an assignment.
+- Collect from the start of available observation. Do not reconstruct historical tokens from text length, costs from memory, or active time from the difference between two dates. Identify the scope and completeness of the data.
+- Prefer an existing source. If a record is needed, use `docs/metrics/usage.jsonl` with source and record identifiers, stage, task, session, executor, actual model, timestamps, and token categories where available. Missing values are `null`, not zero. No prompts, secrets, or personal data.
+- Separate elapsed, active, and waiting time. Parallel agent times may exceed elapsed time; do not add them to it. Do not guess waiting time as the remainder.
+- Distinguish uncached input, output, cache reads, and cache writes according to the source's semantics. Do not count cache twice if the counter already includes it. Mark unresolved semantics as a limitation.
+- Include review, subagents, fixes, and failed attempts. Deduplicate records and use deltas from cumulative counters; resumption does not count history again. Do not add a subagent twice when it is already included in the session total.
+- Leave any inseparable part of a measurement unassigned; do not distribute it arbitrarily across tasks.
 
-## Koszt i prezentacja
+## Cost and presentation
 
-Oddziel opłatę faktycznie naliczoną, wartość zużycia w abonamencie i szacunek API. Nie rozdzielaj abonamentu na projekt bez uzgodnionej metody. Koszt wytwarzania przez AI jest osobny od hostingu i usług produktu.
+Separate the amount actually charged, the value of usage included in a subscription, and an API estimate. Do not allocate subscription cost to a project without an agreed method. AI development cost is separate from hosting and product services.
 
-Szacunek wymaga stawek właściwego modelu, kategorii tokenów i cache, daty oraz źródła oficjalnego cennika lub rozliczenia; uwzględnij znane rabaty i opłaty dodatkowe. Przy braku podstaw nie podawaj kwoty. Nie sumuj różnych walut lub opłaty z estymacją tego samego użycia. Opcjonalne przeliczenie waluty wymaga źródła i daty kursu.
+An estimate requires the rates for the appropriate model, token and cache categories, a date, and the official pricing or billing source; include known discounts and additional fees. Do not provide an amount without a basis. Do not add different currencies or a charge and an estimate for the same usage. Optional currency conversion requires an exchange-rate source and date.
 
-Na zakończenie lub żądanie pokaż tabelę etapów: projektowanie, planowanie, implementacja z review i weryfikacją, wdrożenie. Podaj dostępny czas, kategorie tokenów i koszt z rodzajem, sumę oraz część nieprzypisaną. Nie powtarzaj pełnych logów. Prognozę podawaj jako przedział dopiero na podstawie reprezentatywnych zakończonych prac, nigdy mechanicznie z liczby zadań.
+At completion or on request, show a table of stages: design, planning, implementation with review and verification, deployment. Provide available time, token categories, and cost with its type, the total, and the unassigned portion. Do not repeat full logs. Provide a forecast as a range only on the basis of representative completed work, never mechanically from the number of tasks.

@@ -1,69 +1,69 @@
-# Realizacja zmiany
+# Executing a Change
 
-Wersja: 3.2.0  
-Data: 2026-11-15
+Version: 3.2.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), [routingiem](../routing.md) i [workflow](../workflow.md). Ten standard opisuje wykonanie uzgodnionego zadania. Etap nie wymaga osobnego agenta; o delegowaniu decyduje poniższa sekcja.
+Use with the [core](../core.md), [routing](../routing.md), and [workflow](../workflow.md). This standard describes executing an agreed task. A stage does not require a separate agent; the section below determines delegation.
 
-## Delegowanie pracy
+## Delegating work
 
-Jeśli narzędzia udostępniają subagentów, deleguj zadanie, gdy spełnia oba warunki:
+If tools provide subagents, delegate a task when it meets both conditions:
 
-- jest spójną jednostką z własnym wynikiem, zwykle jednym PR, etapem projektowania lub analizą obszaru;
-- wymaga czytania standardów etapu, kodu lub logów, które nie będą potrzebne głównemu agentowi w dalszej pracy.
+- it is a coherent unit with its own outcome, usually one PR, a design stage, or analysis of an area;
+- it requires reading stage-specific standards, code, or logs that the main agent will not need later.
 
-Nie deleguj małej zmiany, pojedynczej poprawki ani pracy, której zlecenie byłoby dłuższe niż jej wykonanie. Niezależny review deleguj zawsze według jego standardu. Role dobieraj do aktualnej potrzeby; nie uruchamiaj stałego zespołu.
+Do not delegate a small change, a single correction, or work for which the assignment would take longer than execution. Always delegate independent review according to its standard. Select roles for the current need; do not launch a standing team.
 
-Główny agent utrzymuje cel, zakres, uprawnienia, zależności i komunikację z użytkownikiem. Przy delegowaniu nie czyta sam standardów etapu ani szczegółów kodu potrzebnych tylko wykonawcy. Subagent podejmuje decyzje w powierzonym zakresie, ale nie rozszerza uprawnień i nie zastępuje decyzji człowieka z rdzenia. Nie rozmawia z użytkownikiem: pytania zwraca w wyniku i kontynuuje część od nich niezależną.
+The main agent maintains the goal, scope, permissions, dependencies, and communication with the user. When delegating, it does not itself read stage-specific standards or code details needed only by the executor. The subagent makes decisions within its assigned scope but does not expand permissions or replace human decisions defined by the core. It does not communicate with the user: it returns questions in its result and continues work independent of them.
 
-Zlecenie zawiera cel, granice, kryteria, stan repozytorium, uprawnienia, zależności, oczekiwany rezultat oraz odnośniki do potrzebnych sekcji standardów i artefaktów, nie ich treść ani historię rozmowy. Subagent czyta rdzeń, główne instrukcje projektu i wskazane sekcje; routing tylko wtedy, gdy zlecenie nie wskazuje sekcji. Odpowiada za diagnozę, kontrole i poprawki w swoim zakresie.
+The assignment includes the goal, boundaries, criteria, repository state, permissions, dependencies, expected result, and links to required standard sections and artifacts, not their content or conversation history. The subagent reads the core, the project's main instructions, and the specified sections; routing only when the assignment does not specify sections. It is responsible for diagnosis, checks, and fixes within its scope.
 
-Wynik to do kilkunastu linii: rozstrzygnięcie i uzasadnienie, odnośniki do zmienionych artefaktów, dowody kontroli, ograniczenia, pytania i otwarte decyzje. Logi i historia prób zostają w sesji subagenta lub w CI; informacje potrzebne do wznowienia trafiają do checkpointu zadania. Główny agent sprawdza wynik i zależności, bez odtwarzania analizy i powtarzania wiarygodnych kontroli bez konkretnej wątpliwości.
+The result is up to a dozen or so lines: decision and rationale, links to changed artifacts, evidence of checks, limitations, questions, and outstanding decisions. Logs and attempt history remain in the subagent's session or CI; information needed for resumption goes into the task checkpoint. The main agent checks the result and dependencies without recreating the analysis or repeating reliable checks unless there is a specific doubt.
 
-Równolegle wykonuj tylko niezależne zadania lub prace z uzgodnionym kontraktem. Rozdziel własność plików lub użyj osobnych worktree; wspólne pliki, integracje i operacje zewnętrzne koordynuj kolejno. Autor analizy lub implementacji nie jest jej niezależnym recenzentem. Bez subagentów kontynuuj sekwencyjnie, zachowując artefakty i osobny review według jego standardu.
+Run only independent tasks or work with an agreed contract in parallel. Assign ownership of files or use separate worktrees; coordinate shared files, integrations, and external operations sequentially. The author of an analysis or implementation is not its independent reviewer. Without subagents, continue sequentially, preserving artifacts and a separate review according to its standard.
 
-## Przed zmianą
+## Before making changes
 
-- Odczytaj cel, kryteria, istotne instrukcje i materiały oraz powiązany kod. Sprawdź rzeczywisty stan pracy i zachowaj wcześniejsze zmiany.
-- Dla małej zmiany wystarcza krótki zapis celu, zakresu i sposobu sprawdzenia. Pozostałe prace przygotuj według [planowania](../planning/task-planning.md).
-- `READY` potwierdza wcześniejszą ocenę gotowości, ale nie zastępuje sprawdzenia aktualności materiałów, założeń i zależności wykonawczych. Ponownie oceniaj tylko to, co się zmieniło lub budzi konkretną wątpliwość.
-- Brak profilu nie wymaga audytu całego projektu. Uzupełnij fakty potrzebne do zadania według [gotowości wejścia](../planning/input-readiness.md).
-- Zbyt duży zakres podziel na spójne przyrosty. Blokadę zgłaszaj dla zależnej części; przejście do planowania nie oznacza oczekiwania na człowieka.
+- Read the goal, criteria, relevant instructions and materials, and related code. Check the actual work state and preserve existing changes.
+- For a small change, a brief record of the goal, scope, and verification method is sufficient. Prepare other work according to [planning](../planning/task-planning.md).
+- `READY` confirms the earlier readiness assessment but does not replace checking that materials, assumptions, and execution dependencies are current. Reassess only what has changed or raises a specific doubt.
+- A missing profile does not require an audit of the entire project. Add the facts needed for the task according to [input readiness](../planning/input-readiness.md).
+- Split excessive scope into coherent increments. Report a blocker for the dependent part; returning to planning does not imply waiting for the human.
 
-## Wykonanie
+## Execution
 
-Stosuj zastane wzorce. Jeśli profil nie rozstrzyga szczegółu, sprawdź najbliższy kod lub analogiczny przypadek, potem standard i oficjalną dokumentację. Trwałe nowe fakty dopisz krótko do właściwego źródła; nietypową decyzję zapisz według standardu dokumentacji.
+Follow existing patterns. If the profile does not settle a detail, check nearby code or an analogous case, then the standard and official documentation. Add lasting new facts briefly to the appropriate source; record an unusual decision according to the documentation standard.
 
-Implementuj, weryfikuj i poprawiaj do spełnienia kryteriów. Nie zmieniaj sam wymagań. Istotną rozbieżność skieruj do ponownego ustalenia; ten sam agent może wrócić do planowania i kontynuować po jej rozstrzygnięciu. Zatwierdzoną zmianę wymagań odzwierciedl w dokumentacji, zadaniach i testach w tej samej zmianie.
+Implement, verify, and fix until criteria are met. Do not change requirements independently. Refer a significant discrepancy for clarification; the same agent may return to planning and continue once it is resolved. Reflect an approved requirements change in documentation, tasks, and tests in the same change.
 
-## Problemy poza zakresem
+## Out-of-scope problems
 
-Drobny błąd możesz naprawić w osobnym commicie i odnotować, jeśli łącznie:
+You may fix and note a minor bug in a separate commit if all of the following hold:
 
-- jest lokalny, oczywisty i łatwy do sprawdzenia;
-- nie zmienia kontraktu, modelu danych, uprawnień ani zachowania, na którym polegają inni;
-- nie dotyczy bezpieczeństwa, pieniędzy, danych osobowych ani migracji.
+- it is local, obvious, and easy to verify;
+- it does not change a contract, the data model, permissions, or behavior others depend on;
+- it does not concern security, money, personal data, or migrations.
 
-Inny błąd, niezależną refaktoryzację lub usprawnienie zapisz jako `PROPOSED`. Refaktoryzację niezbędną do wykonania zadania ogranicz do jego zakresu. Jeśli problem blokuje zlecenie, przedstaw najmniejszą potrzebną zmianę zakresu z rekomendacją; nie włączaj automatycznie całego długu technicznego.
+Record any other bug, unrelated refactoring, or improvement as `PROPOSED`. Limit refactoring necessary for the task to its scope. If a problem blocks the assignment, present the smallest necessary scope change with a recommendation; do not automatically include all technical debt.
 
-## Diagnoza i eskalacja
+## Diagnosis and escalation
 
-Każda próba naprawy wymaga hipotezy i obserwacji. Po trzech nieskutecznych próbach tego samego problemu podsumuj dowody i zmień podejście: zawęź reprodukcję, sprawdź założenia lub dobierz mocniejszy model, jeśli narzędzie to umożliwia. Nie zeruj historii prób przy przekazaniu pracy.
+Each repair attempt requires a hypothesis and an observation. After three unsuccessful attempts at the same problem, summarize the evidence and change approach: narrow the reproduction, check assumptions, or select a stronger model if the tool permits it. Do not reset attempt history when handing work over.
 
-Kontynuuj, jeśli pojawiła się nowa sprawdzalna hipoteza, a praca mieści się w zatwierdzonych granicach. Zgłoś blokadę, gdy brakuje decyzji lub dostępu, brak nowej drogi diagnozy albo dalsza praca przekroczyłaby uzgodniony limit czasu lub kosztu. Nie powtarzaj czynności bez nowej przesłanki. Awaria środowiska nie oznacza, że potrzebna jest decyzja produktowa.
+Continue if a new testable hypothesis has emerged and the work stays within approved boundaries. Report a blocker when a decision or access is missing, there is no new diagnostic avenue, or further work would exceed the agreed time or cost limit. Do not repeat actions without new grounds. An environment failure does not mean a product decision is needed.
 
-## Przerwanie i wznowienie
+## Interruption and resumption
 
-Aktualizuj checkpoint przy zdarzeniach: po commicie zmieniającym stan zadania, przed delegowaniem lub przekazaniem pracy, przy blokadzie i po zakończeniu zadania. Nie zakładaj, że przewidzisz utratę kontekstu. Zakończone zadanie może użyć swojego raportu jako checkpointu, bez drugiej kopii.
+Update the checkpoint on events: after a commit that changes task state, before delegating or handing work over, when blocked, and at task completion. Do not assume you can predict context loss. A completed task may use its report as the checkpoint, without a second copy.
 
-W źródle zadania zachowaj: cel, wykonany zakres, bieżący stan, branch lub commit, niezapisane zmiany, wyniki kontroli, blokadę i następną czynność. Dla małej zmiany bez PR użyj krótkiej trwałej notatki w miejscu projektu, nie twórz rozbudowanego zadania tylko dla checkpointu.
+Preserve in the task source: goal, completed scope, current state, branch or commit, uncommitted changes, check results, blocker, and next action. For a small change without a PR, use a brief persistent note in the project's designated location; do not create an elaborate task just for a checkpoint.
 
-Po wznowieniu porównaj zapis z repozytorium i źródłami. Nie ponawiaj operacji zewnętrznej bez ustalenia jej rzeczywistego wyniku. Zasady aktualności dowodów określa workflow.
+On resumption, compare the record with the repository and sources. Do not repeat an external operation without establishing its actual outcome. Workflow defines evidence validity.
 
-## Zakończenie i raport
+## Completion and report
 
-Statusy i sposób zapisu `DONE` prowadź według [planowania](../planning/task-planning.md#statusy-i-jedno-źródło). Przy braku dostępu do integracji zachowaj uczciwy stan gotowości i wskaż warunek dalszego kroku.
+Maintain statuses and record `DONE` according to [planning](../planning/task-planning.md#statuses-and-a-single-source). If integration access is unavailable, preserve an honest readiness state and identify the condition for the next step.
 
-Raport zapisz przy zadaniu lub PR według [wzoru i zasad z planowania](../planning/task-planning.md#plik-zadania). Drobne założenia produktowe wymień tylko wtedy, gdy warto je obejrzeć w przeglądzie przyrostu.
+Save the report with the task or PR according to the [planning template and rules](../planning/task-planning.md#task-file). Mention minor product assumptions only when they are worth assessing in the increment review.
 
-Zaktualizuj zbiorczy [postęp](progress-reporting.md), jeśli praca ma taki raport. W wiadomości podaj wynik, weryfikację i materialne ograniczenia. Kontynuuj następne gotowe zadanie w uzgodnionym zakresie; potwierdzanie każdego kroku jest wyjątkiem określonym w rdzeniu.
+Update overall [progress](progress-reporting.md) if the work has such a report. In the message, state the outcome, verification, and material limitations. Continue the next ready task within the agreed scope; confirmation of every step is an exception defined in the core.

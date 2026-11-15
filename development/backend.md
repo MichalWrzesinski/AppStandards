@@ -1,75 +1,75 @@
-# Backend i integracje
+# Backend and integrations
 
-Wersja: 2.0.0  
-Data: 2026-11-10
+Version: 2.0.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
+Apply with the [core](../core.md), according to [routing](../routing.md).
 
-## Konwencje API
+## API conventions
 
-Domyślne konwencje dotyczą nowych projektów; zastane kontrakty i narzędzia pozostają zgodnie z rdzeniem. Istotne odstępstwo zapisz jedną linią w profilu.
+Default conventions apply to new projects; existing contracts and tools remain in place according to the core. Record a significant deviation in one line in the technical profile.
 
-Domyślnie REST/JSON, zasoby w liczbie mnogiej i kebab-case, spójna konwencja pól właściwa dla ekosystemu. Metody i statusy muszą odpowiadać znaczeniu HTTP; odczyt nie wywołuje skutków ubocznych. Daty API zawierają strefę i format ISO 8601.
+Default to REST/JSON, plural resource names in kebab-case, and a consistent field naming convention appropriate to the ecosystem. Methods and status codes must follow HTTP semantics; reads have no side effects. API dates include a time zone and use ISO 8601 format.
 
-## Format błędów
+## Error format
 
-Domyślnie nowe API używa Problem Details (RFC 9457, `application/problem+json`): `type`, `title`, `status`, stały programowy `code` oraz potrzebne `detail`. Walidacja zwraca listę błędów pól z nazwą, kodem i komunikatem. Klient nie rozpoznaje błędu przez analizę tekstu. W istniejącym API zachowaj uzgodniony format; bezpieczeństwo odpowiedzi określa standard bezpieczeństwa.
+By default, a new API uses Problem Details (RFC 9457, `application/problem+json`): `type`, `title`, `status`, a stable machine-readable `code`, and `detail` where needed. Validation returns a list of field errors with a name, code, and message. Clients do not identify errors by parsing text. Preserve the agreed format in an existing API; the security standard defines response security.
 
-## Listy, paginacja, filtrowanie
+## Lists, pagination, and filtering
 
-Wynik listy musi mieć kontrolowany rozmiar. Dla rosnących zbiorów domyślnie paginuj w bazie z limitem strony; mała, naturalnie ograniczona lista nie wymaga osobnego mechanizmu. Domyślnie paginacja stronami; kursor przy zbiorach szybko zmiennych lub gdy koszt przesunięcia to uzasadnia. Filtrowanie i sortowanie tylko po dozwolonych polach, z indeksami pod realne zapytania. Nie pobieraj całego zbioru, aby paginować w pamięci.
+List results must have a controlled size. For growing datasets, default to database pagination with a page size limit; a small, naturally bounded list does not require a separate mechanism. Default to page-based pagination; use cursors for rapidly changing datasets or when offset costs justify them. Allow filtering and sorting only by permitted fields, with indexes for actual queries. Do not fetch an entire dataset to paginate it in memory.
 
-## Wersjonowanie API
+## API versioning
 
-Domyślnie nowe API ma `/api/v1/`. Zachowuj zgodność z istniejącymi klientami, także własnym frontendem. Zmiana nazw, typów, znaczenia, wymaganych pól lub uwierzytelniania wymaga jawnej migracji kontraktu, domyślnie nowej wersji; preferuj zgodne rozszerzenie przed usunięciem. Nową wartość enum dodawaj zgodnie z możliwościami klientów.
+By default, a new API uses `/api/v1/`. Maintain compatibility with existing clients, including the project's own frontend. Changes to names, types, meaning, required fields, or authentication require an explicit contract migration, by default a new version; prefer a compatible extension before removal. Add new enum values according to client capabilities.
 
-Wycofanie wersji wymaga ustalonego okresu wsparcia, komunikacji i właściwych nagłówków, np. `Deprecation` i `Sunset`. Nie usuwaj starego pola lub endpointu, dopóki zależni klienci go używają. Liczbę wspieranych wersji określają ich realne zależności, nie uniwersalny limit.
+Retiring a version requires an agreed support period, communication, and appropriate headers, e.g. `Deprecation` and `Sunset`. Do not remove an old field or endpoint while dependent clients still use it. The number of supported versions follows actual dependencies, not a universal limit.
 
-## Idempotencja
+## Idempotency
 
-Powtarzanie odczytów i operacji idempotentnych nie zmienia skutku. Operacje, których powtórzenie szkodzi, np. płatność lub wysyłka, wymagają deduplikacji; domyślnie `Idempotency-Key` z zapisem wyniku i okresem przechowywania. Ten sam klucz z inną treścią odrzucaj, domyślnie `422`, a równoczesną operację w toku domyślnie `409`.
+Repeating reads and idempotent operations does not change their effect. Operations whose repetition is harmful, e.g. payments or sending messages, require deduplication; default to `Idempotency-Key` with a stored result and retention period. Reject the same key with different content, by default with `422`, and a concurrent operation still in progress, by default with `409`.
 
-## Baza danych
+## Database
 
-Domyślnie PostgreSQL. Inną bazę lub wyspecjalizowany magazyn wybierz, gdy odpowiada wymaganiom i ograniczeniom; istotny wybór zapisz w profilu. Nie dodawaj kolejnego magazynu na zapas.
+Default to PostgreSQL. Choose another database or specialized store when it meets the requirements and constraints; record a significant choice in the technical profile. Do not add another store for hypothetical needs.
 
-- Integralność chroń również więzami bazy: unikalnością, kluczami obcymi i ograniczeniami wartości.
-- Czas zapisuj w UTC, z zachowaniem właściwej semantyki strefy; lokalizuj przy prezentacji. Kwoty jako `decimal` lub całkowite jednostki z walutą, nigdy float.
-- Wielorekordowa operacja biznesowa wymaga transakcji. Nie wykonuj wywołań zewnętrznych wewnątrz otwartej transakcji. Chroń równoczesne zmiany wersją rekordu lub blokadą odpowiednią do konfliktu.
-- Unikaj N+1, pobierania zbędnych danych i niekontrolowanych zapytań w pętli. Dla kosztownego zapytania sprawdź plan wykonania zamiast optymalizować hipotetycznie.
+- Protect integrity with database constraints as well: uniqueness, foreign keys, and value constraints.
+- Store time in UTC while preserving appropriate time zone semantics; localize it for presentation. Store monetary amounts as `decimal` or integer units with a currency, never as float.
+- A business operation involving multiple records requires a transaction. Do not make external calls inside an open transaction. Protect concurrent changes with record versioning or a lock appropriate to the conflict.
+- Avoid N+1 queries, unnecessary data retrieval, and uncontrolled queries in loops. Inspect the execution plan of an expensive query instead of optimizing hypothetically.
 
-### Migracje
+### Migrations
 
-Każda zmiana schematu i danych startowych przechodzi przez migrację w repozytorium; nie zmieniaj schematu ręcznie i nie edytuj migracji wykonanej we wspólnym środowisku.
+Every schema and seed data change goes through a migration in the repository; do not change the schema manually or edit a migration already executed in a shared environment.
 
-Migracja musi współpracować z kodem przed i po wdrożeniu. Zmianę niezgodną wykonuj etapami expand/contract: rozszerzenie, przełączenie i przeniesienie danych, usunięcie w późniejszym wydaniu. Zmiany danych oddzielaj od schematu, duże aktualizacje wykonuj partiami i ograniczaj blokady tabel.
+A migration must work with the code before and after deployment. Make incompatible changes in expand/contract stages: expand, switch over and migrate data, then remove in a later release. Separate data changes from schema changes, perform large updates in batches, and limit table locks.
 
-Sprawdź migrację na pustej bazie i danych reprezentatywnych. Określ możliwość cofnięcia lub naprawy do przodu; nieodwracalne usunięcie oznacz jawnie. Rollback kodu nie jest rollbackiem danych.
+Check the migration on an empty database and representative data. Define whether rollback or a forward fix is possible; explicitly mark irreversible deletion. A code rollback is not a data rollback.
 
 ## Cache
 
-Dodawaj cache przy wykazanej potrzebie. Wpis ma czas życia i sposób unieważnienia, a klucz uwzględnia użytkownika, język i uprawnienia, jeśli wpływają na wynik. Pusty lub niedostępny cache nie może zmieniać poprawności wyniku. Domyślnie Redis/Valkey, jeśli projekt nie ma rozwiązania.
+Add caching when there is a demonstrated need. An entry has a lifetime and an invalidation mechanism, and its key includes the user, language, and permissions if they affect the result. An empty or unavailable cache must not affect result correctness. Default to Redis/Valkey if the project has no solution.
 
-## Zadania w tle
+## Background jobs
 
-Długie operacje i integracje niewymagające wyniku w żądaniu domyślnie wykonuj w tle. Zadania muszą być idempotentne, z ograniczonymi ponowieniami i widocznym stanem po ich wyczerpaniu. Cykliczne zadanie nie nakłada się samo na siebie. Jeśli zdarzenie musi odpowiadać zapisowi bazy, zapewnij atomowy zapis danych i zamiaru wysłania, domyślnie outbox.
+By default, run long operations and integrations that do not need a result within the request in the background. Jobs must be idempotent, with bounded retries and a visible state after retries are exhausted. A recurring job does not overlap with itself. If an event must correspond to a database write, ensure atomic persistence of the data and the intent to send, by default with an outbox.
 
-## Integracje z usługami zewnętrznymi
+## External service integrations
 
-Integracja jest za adapterem; szczegóły dostawcy nie przenikają do logiki produktu. Każde wywołanie ma jawny timeout połączenia i odpowiedzi, a wynik dostawcy jest walidowany na granicy.
+Place integrations behind adapters; provider details do not leak into product logic. Every call has explicit connection and response timeouts, and provider results are validated at the boundary.
 
-Awaria zależności daje kontrolowany wynik: bezpieczne odroczenie (`202`), działanie ograniczone albo właściwy błąd zależności (`502`/`503`/`504`), zamiast nieobsłużonego `500`. `Retry-After` stosuj, gdy ponowienie ma sens. Przy serii awarii ogranicz dalsze wywołania, np. circuit breakerem.
+A dependency failure produces a controlled outcome: safe deferral (`202`), degraded functionality, or an appropriate dependency error (`502`/`503`/`504`), rather than an unhandled `500`. Use `Retry-After` when retrying makes sense. After a series of failures, limit further calls, e.g. with a circuit breaker.
 
-Ponawiaj tylko przejściowe błędy i operacje bezpieczne do powtórzenia. Stosuj limit, rosnący odstęp, losowy rozrzut i respektuj `Retry-After`. Nie ponawiaj błędów wymagających zmiany żądania lub uprawnień. Nie powtarzaj operacji finansowej bez gwarancji idempotencji.
+Retry only transient errors and operations that are safe to repeat. Use a retry limit, increasing delays, jitter, and respect `Retry-After`. Do not retry errors requiring changes to the request or permissions. Do not repeat a financial operation without an idempotency guarantee.
 
-Przy nieznanym wyniku po timeoutcie ustal stan u dostawcy, poczekaj na webhook lub zapisz do uzgodnienia. Nie zakładaj porażki i nie wykonuj ponownie skutku w ciemno.
+When the outcome after a timeout is unknown, determine the state with the provider, wait for a webhook, or record it for reconciliation. Do not assume failure and blindly repeat the effect.
 
-### Webhooki i testy integracji
+### Webhooks and integration tests
 
-Weryfikuj podpis i aktualność webhooka, deduplikuj zdarzenia i nie zakładaj ich kolejności. Potwierdzaj przyjęcie po bezpiecznym zapisaniu do obsługi, a przetwarzanie domyślnie wykonuj w tle. Testuj timeouty, błędy dostawcy, limity, nieprawidłowy wynik i powtórzenia; używaj sandboxu lub atrapy, nigdy skutków produkcyjnych.
+Verify webhook signatures and freshness, deduplicate events, and do not assume their order. Acknowledge receipt after safely persisting the event for processing; default to background processing. Test timeouts, provider errors, limits, invalid results, and duplicates; use a sandbox or test double, never production effects.
 
-## Logi i kontrola stanu
+## Logs and health checks
 
-Domyślnie strukturalny JSON na stdout, z identyfikatorem żądania propagowanym do zadań i integracji. Zachowuj poziomy logów według znaczenia; szczegóły diagnostyczne wyłącz w produkcji. Bez sekretów i danych osobowych.
+Default to structured JSON on stdout, with a request identifier propagated to jobs and integrations. Use log levels according to their meaning; disable diagnostic details in production. Include no secrets or personal data.
 
-Domyślnie `/health` sprawdza proces bez zależności, a `/ready` gotowość z niezbędnymi zależnościami. Nie uzależniaj życia procesu od awarii opcjonalnej usługi.
+By default, `/health` checks the process without dependencies, and `/ready` checks readiness with essential dependencies. Do not tie process liveness to an optional service failure.

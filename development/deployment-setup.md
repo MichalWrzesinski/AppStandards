@@ -1,78 +1,78 @@
-# Przygotowanie środowisk i pierwszego wydania
+# Preparing environments and the first release
 
-Wersja: 1.1.0  
-Data: 2026-11-15
+Version: 1.1.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md). Czytaj przy pierwszym zdalnym wdrożeniu, doborze hostingu lub zmianie zabezpieczeń i infrastruktury. Przed pierwszą produkcją wykonaj listę pierwszego wydania. Przy zwykłej publikacji istniejącej aplikacji wystarczają [rutynowe wydania](deployment.md) i aktualne ustalenia projektu.
+Apply with the [core](../core.md), following [routing](../routing.md). Read for the first remote deployment, hosting selection, or changes to security and infrastructure. Complete the first-release checklist before the first production deployment. For routine publication of an existing application, [routine releases](deployment.md) and current project decisions suffice.
 
-## Zakres i moment uruchomienia
+## Scope and timing
 
-Ta sekcja jest jedynym źródłem zasad terminu wyboru hostingu i uruchomienia stagingu; inne standardy do niej odsyłają.
+This section is the sole source of rules for when to select hosting and launch staging; other standards refer to it.
 
-- Ograniczenia środowiska ustal wcześnie według standardu technologii. Przygotowanie pierwszego zdalnego środowiska uruchom, gdy wymaga go weryfikacja przyrostu, integracji lub ocena produktu, najpóźniej przed produkcją. Nie wymaga ukończenia wszystkich iteracji; nie uzależniaj też pracy lokalnej od zakupu hostingu.
-- W istniejącym projekcie zachowaj infrastrukturę; zakres wymaganej weryfikacji i wyjątek projektu bez stagingu określają [rutynowe wydania](deployment.md#zakres-weryfikacji). Brakujące środowisko lub CD zapisz jako `PROPOSED` z zakresem i kosztem; realizuj po decyzji lub w granicach już zatwierdzonego zakresu i budżetu. Nie uruchamiaj ponownego wyboru hostingu.
-- Nowy obszar produktu w istniejącym projekcie wymaga oceny tylko dodatkowych potrzeb i kosztów.
-- Jeśli użytkownik wcześniej wskazał wiążącego dostawcę hostingu, nie wybieraj go ponownie. Przed uruchomieniem zweryfikuj dopasowanie do wdrażanego przyrostu i koszt zasobów.
+- Establish environment constraints early under the technology standard. Start preparing the first remote environment when increment or integration verification or product assessment requires it, and before production at the latest. This does not require all iterations to be complete; do not make local work depend on purchasing hosting either.
+- Preserve infrastructure in an existing project; [routine releases](deployment.md#verification-scope) define required verification scope and the exception for projects without staging. Record a missing environment or CD as `PROPOSED`, with scope and cost; implement after a decision or within already approved scope and budget. Do not restart hosting selection.
+- A new product area in an existing project requires assessment only of additional needs and costs.
+- If the user has already made a binding hosting provider choice, do not select it again. Before launch, verify suitability for the increment being deployed and the resource cost.
 
-## Ocena wdrażanego przyrostu
+## Assessing the increment being deployed
 
-- Potwierdź gotowość wdrażanego przyrostu: implementację, integrację i dostępne kontrole lokalne. Ścieżki zależne od przyszłych funkcji oznacz zgodnie z planem QA; nie przedstawiaj niepełnego przyrostu jako gotowej wersji produkcyjnej.
-- Ustal z kodu i konfiguracji rzeczywiste potrzeby: procesy API i frontendu, workery, zadania cykliczne, bazę, cache, kolejki, trwałe pliki, połączenia sieciowe oraz wymagane sekrety.
-- Wykorzystaj dostępne pomiary zużycia zasobów i działania aplikacji. W razie potrzeby wykonaj krótki, reprezentatywny pomiar lokalny; nie uruchamiaj rozbudowanych testów obciążeniowych bez podstawy w wymaganiach.
-- Oznacz ograniczenia pomiaru. Z wyników lokalnych nie wyprowadzaj gwarancji przepustowości produkcji ani liczby obsługiwanych użytkowników.
-- Nie wymagaj biznesplanu, prognoz przychodów, ruchu lub wzrostu. Uwzględnij podane ograniczenia, a pozostałe założenia konfiguracji startowej zapisz jawnie.
+- Confirm the increment's readiness: implementation, integration, and available local checks. Mark paths dependent on future features according to the QA plan; do not present an incomplete increment as a production-ready version.
+- Establish actual needs from code and configuration: API and frontend processes, workers, scheduled jobs, database, cache, queues, persistent files, network connections, and required secrets.
+- Use available resource consumption and application behavior measurements. If needed, take a brief, representative local measurement; do not run extensive load tests without a basis in requirements.
+- State measurement limitations. Do not derive production throughput or supported user count guarantees from local results.
+- Do not require a business plan or revenue, traffic, or growth forecasts. Account for stated constraints and explicitly record other initial configuration assumptions.
 
-## Rekomendacja i decyzja
+## Recommendation and decision
 
-- Sprawdź aktualne parametry i ceny w oficjalnych materiałach dostawcy. Rekomenduj jedno najprostsze rozwiązanie startowe obsługujące potrzebne procesy aplikacji. Alternatywę przedstaw tylko wtedy, gdy wnosi istotną różnicę kosztu lub możliwości.
-- Uwzględnij zasoby dla stagingu i produkcji, bazę, trwałe pliki, backupy, ochronę dostępu i monitoring. Rozdziel koszty stałe od zależnych od użycia; wskaż wyłączenia i niewiadome, np. transfer, domenę lub podatki. Nie podawaj pozornie dokładnej sumy bez danych.
-- Przedstaw ograniczenia rozwiązania i najprostszy sposób późniejszego zwiększenia zasobów. Nie projektuj mikroserwisów ani rozbudowanej infrastruktury skalowania na zapas.
-- Zapisz krótką rekomendację w `docs/decisions/`. Przed zakupem lub uruchomieniem płatnych zasobów potwierdź, że dostawca, umowa i koszt mieszczą się w istniejącej zgodzie; jeśli nie, uzyskaj decyzję według rdzenia. Nie proś o sekrety w treści rozmowy.
+- Check current specifications and prices in the provider's official materials. Recommend the simplest initial solution supporting the required application processes. Present an alternative only if it offers a material difference in cost or capabilities.
+- Include staging and production resources, database, persistent files, backups, access protection, and monitoring. Separate fixed and usage-dependent costs; identify exclusions and unknowns, e.g. transfer, domain, or taxes. Do not give a falsely precise total without data.
+- Present the solution's limitations and the simplest way to increase resources later. Do not design microservices or extensive scaling infrastructure in advance.
+- Record a brief recommendation in `docs/decisions/`. Before purchasing or launching paid resources, confirm that the provider, agreement, and cost fall within existing approval; otherwise obtain a decision under the core. Do not ask for secrets in the conversation.
 
-## Zadania wdrożeniowe i staging
+## Deployment tasks and staging
 
-- Po decyzji zaktualizuj profil techniczny, zaplanuj zadania infrastruktury, sekretów, CD, ochrony stagingu, backupów i monitoringu oraz realizuj je według zwykłego workflow, bez potwierdzania każdego zadania, chyba że obowiązuje jawny tryb krokowy.
-- Zweryfikuj dostępność wymaganych zabezpieczeń platformy w używanym planie. Gdy nie są dostępne, zgłoś blokadę z propozycją skutecznego rozwiązania; nie deklaruj ochrony, której platforma nie egzekwuje.
-- Wdróż opublikowany obraz na zabezpieczony staging. Sprawdź migracje, integracje, odmowę nieuprawnionego dostępu oraz dostępne ścieżki objęte przyrostem. Warunki gotowości do produkcji określa standard rutynowych wydań. Lokalne wyniki nie zastępują tej weryfikacji.
-- Rozróżniaj w raportach: implementacja zakończona, infrastruktura przygotowana, staging zweryfikowany i gotowość do produkcji. Zadania wdrożeniowe są częścią dostarczenia aplikacji.
-- Po spełnieniu warunków zgłoś gotowość do produkcji. Wybór i opłacenie hostingu nie są zgodą na wdrożenie produkcyjne; nadal wymaga ono osobnego zatwierdzenia człowieka.
+- After the decision, update the technical profile, plan infrastructure, secrets, CD, staging protection, backup, and monitoring tasks, and execute them under the normal workflow without confirming each task unless an explicit step-by-step mode applies.
+- Verify that the required platform safeguards are available in the plan in use. If unavailable, report a blocker with a proposed effective solution; do not claim protection the platform does not enforce.
+- Deploy the published image to protected staging. Check migrations, integrations, denial of unauthorized access, and available paths covered by the increment. The routine release standard defines production readiness. Local results do not replace this verification.
+- Distinguish in reports between implementation complete, infrastructure prepared, staging verified, and production readiness. Deployment tasks are part of delivering the application.
+- Once conditions are met, report production readiness. Selecting and paying for hosting is not production deployment approval; separate human approval is still required.
 
-## Konfiguracja koordynacji operacji
+## Configuring operation coordination
 
-Zaimplementuj [niezmienniki operacji](deployment.md#koordynacja-operacji) w jednym mechanizmie wspólnym dla wszystkich workflow zmieniających dane zasoby:
+Implement the [operation invariants](deployment.md#operation-coordination) in one mechanism shared by every workflow modifying the resources concerned:
 
-- W GitHub Actions użyj tej samej grupy `concurrency` środowiska z `cancel-in-progress: false`. Jeśli każde oczekujące uruchomienie ma zostać zachowane, ustaw `queue: max` w obsługiwanej wersji platformy albo użyj równoważnej kolejki. Samo `false` chroni trwającą operację, ale domyślna kolejka może zastępować oczekujące runy. [Dokumentacja GitHub Actions](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
-- Wstrzymanie stagingu podczas weryfikacji musi być egzekwowane przez mechanizm wdrożeń, nie tylko wpisane w rekord. Określ właściciela wstrzymania, sposób wznowienia po zakończeniu lub przerwaniu i obsługę utraty sesji. Nie trzymaj bez potrzeby płatnego runnera w oczekiwaniu na człowieka.
-- Dla wielu repozytoriów grupa CI jednego repozytorium nie wystarcza: użyj wspólnej blokady zasobów lub jednego wykonawcy operacji. Zewnętrzna blokada ma właściciela, identyfikator operacji i odnawianą dzierżawę; sam timeout nie dowodzi, że poprzedni wykonawca przestał zmieniać dane. Przed dopuszczeniem następnej operacji potwierdź brak poprzedniego wykonawcy lub technicznie odbierz mu możliwość zapisu.
-- Runbook opisuje bezpieczne rozpoznanie zawieszonej operacji i odzyskanie blokady przez człowieka. Wspólna blokada obejmuje również ręczny rollback i odtworzenie backupu.
+- In GitHub Actions, use the same environment `concurrency` group with `cancel-in-progress: false`. If every pending run must be retained, set `queue: max` in a supported platform version or use an equivalent queue. `false` alone protects the running operation, but the default queue may replace pending runs. [GitHub Actions documentation](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
+- The deployment mechanism must enforce the staging pause during verification; recording it alone is insufficient. Define the pause owner, how to resume after completion or interruption, and session-loss handling. Do not keep a paid runner waiting for a human unnecessarily.
+- Across multiple repositories, one repository's CI group is insufficient: use a shared resource lock or a single operation executor. An external lock has an owner, operation identifier, and renewable lease; a timeout alone does not prove the previous executor has stopped modifying data. Before admitting the next operation, confirm the previous executor is absent or technically revoke its ability to write.
+- The runbook describes safe identification of a stalled operation and human recovery of the lock. The shared lock also covers manual rollback and backup restoration.
 
-## Wersja istotnej konfiguracji
+## Material configuration version
 
-Zaimplementuj w workflow wydań wyznaczanie [wersji istotnej konfiguracji](deployment.md#rekord-wydania): skrót jawnej konfiguracji oraz identyfikatory rewizji sekretów udostępniane przez menedżer, bez wartości i bez skrótów samych sekretów. Jeśli menedżer nie udostępnia rewizji, np. GitHub Secrets, użyj nazwy sekretu i znacznika ostatniej zmiany z API platformy (`updated_at`); dzięki temu widoczna jest także zmiana wykonana ręcznie przez człowieka. Gdy platforma nie udostępnia nawet znacznika, rejestruj każdą zmianę sekretu jako zdarzenie w rekordzie wydania, także przy niezmienionej nazwie i odwołaniu.
+Implement determination of the [material configuration version](deployment.md#release-record) in release workflows: a hash of non-secret configuration and secret revision identifiers supplied by the manager, without values or hashes of the secrets themselves. If the manager does not expose revisions, e.g. GitHub Secrets, use the secret name and last-change timestamp from the platform API (`updated_at`); this also reveals manual changes by a human. If the platform exposes no timestamp either, register every secret change as an event in the release record, even if the name and reference are unchanged.
 
-## Mechanizm zgody na produkcję
+## Production approval mechanism
 
-Wymaganie: wdrożenie produkcyjne startuje dopiero po jawnej zgodzie człowieka na wskazanego kandydata, a agent nie może tej zgody wyrazić ani obejść. Mechanizm dobierz do możliwości platformy i zapisz w instrukcjach projektu.
+Requirement: production deployment starts only after explicit human approval of the specified candidate, and the agent cannot grant or bypass that approval. Choose the mechanism to match platform capabilities and record it in project instructions.
 
-| Tryb | Mechanizm | Kto uruchamia |
+| Mode | Mechanism | Who starts it |
 |---|---|---|
-| Domyślny | Workflow `Deploy production` uruchamiany ręcznie, z chronionym środowiskiem `production`, wymaganym zatwierdzeniem przez człowieka i blokadą samozatwierdzenia | Człowiek albo agent na prośbę użytkownika; workflow czeka na zatwierdzenie |
-| Zastępczy, gdy plan platformy nie ma chronionych środowisk lub agent działa na koncie użytkownika | Ten sam workflow, którego definicja pochodzi z gałęzi głównej, uruchamiany wyłącznie ręcznie, z warunkiem na tożsamość uruchamiającego; wersję wdrożenia wskazuje parametr z digestem, nie gałąź | Tylko człowiek; uruchomienie jest zgodą. Agent nigdy go nie uruchamia |
+| Default | Manually triggered `Deploy production` workflow with a protected `production` environment, required human approval, and prevention of self-approval | A human, or the agent at the user's request; the workflow waits for approval |
+| Fallback when the platform plan lacks protected environments or the agent uses the user's account | The same workflow, defined on the main branch, triggered manually only, with a condition on the triggering identity; a digest parameter specifies the deployment version, not a branch | Only a human; starting it constitutes approval. The agent never starts it |
 
-- W trybie zastępczym zapisz w instrukcjach projektu, że rozdział jest regułą zachowania, a nie zabezpieczeniem technicznym, oraz jakie kompensacje działają, np. sekrety produkcyjne dostępne tylko w workflow wdrożeń. Nie deklaruj ochrony, której platforma nie egzekwuje.
-- Agent nie zatwierdza wdrożenia, nie omija mechanizmu zgody i nie wdraża na produkcję poza workflow, np. ze swojej maszyny lub przez SSH. Nie korzysta z tokenu z uprawnieniem do zatwierdzania wdrożeń.
+- In fallback mode, record in project instructions that separation is a behavioral rule rather than a technical safeguard, and which compensating controls apply, e.g. production secrets available only to deployment workflows. Do not claim protection the platform does not enforce.
+- The agent does not approve deployments, bypass the approval mechanism, or deploy to production outside the workflow, e.g. from its machine or via SSH. It does not use a token with deployment approval privileges.
 
-## Lista przed pierwszym wydaniem
+## Checklist before the first release
 
-Przed pierwszym wdrożeniem produkcyjnym potwierdź i zapisz w rekordzie wydania, w zakresie dotyczącym aplikacji:
+Before the first production deployment, confirm and record in the release record, as applicable to the application:
 
-- domena, DNS i certyfikat TLS z automatycznym odnawianiem; HTTPS z HSTS; przekierowania z alternatywnych adresów;
-- poczta wychodząca z SPF, DKIM i DMARC dla domeny nadawcy; testowa wiadomość dociera i nie trafia do spamu;
-- sekrety produkcyjne ustawione mechanizmem sekretów; tryb debugowania wyłączony; seed i konta testowe niedostępne;
-- kopia zapasowa wykonana i odtworzona próbnie, razem z ponownym zastosowaniem usunięć według [prywatności](privacy.md#odtworzenie-po-usunięciu-danych); monitoring i alerty działają, potwierdzone alertem testowym;
-- strony błędów, `robots.txt` i `sitemap.xml` w wersji produkcyjnej; `noindex` tylko w środowiskach testowych;
-- limity żądań i ochrona przed botami aktywne na publicznych formularzach;
-- dokumenty i mechanizmy z [prywatności](privacy.md#dokumenty-przed-wydaniem-publicznym) gotowe, a ich treść przejrzana przez człowieka;
-- [runbook i organizacja utrzymania](operations.md#runbook-i-organizacja-utrzymania) są przygotowane, wraz z odpowiedzialnością i drogą reakcji na alert.
+- domain, DNS, and TLS certificate with automatic renewal; HTTPS with HSTS; redirects from alternative addresses;
+- outgoing mail with SPF, DKIM, and DMARC for the sender domain; a test message arrives and does not go to spam;
+- production secrets set through the secrets mechanism; debug mode disabled; seed and test accounts unavailable;
+- backup created and test-restored, including reapplication of deletions under [privacy](privacy.md#restoration-after-data-deletion); monitoring and alerts working, confirmed by a test alert;
+- production error pages, `robots.txt`, and `sitemap.xml`; `noindex` only in test environments;
+- request limits and bot protection active on public forms;
+- documents and mechanisms from [privacy](privacy.md#documents-before-public-release) ready, with their content reviewed by a human;
+- [runbook and operational organization](operations.md#runbook-and-operational-organization) prepared, including responsibility and the alert response route.
 
-Niespełniony punkt wymagany dla aplikacji blokuje zgłoszenie gotowości albo trafia do raportu jako ryzyko zaakceptowane przez człowieka.
+An unmet item required for the application blocks the readiness report or is included in the report as a risk accepted by a human.

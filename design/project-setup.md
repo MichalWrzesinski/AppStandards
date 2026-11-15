@@ -1,61 +1,61 @@
-# Zakładanie nowego projektu
+# Setting up a new project
 
-Wersja: 2.3.0  
-Data: 2026-11-15
+Version: 2.3.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md) i [routingiem](../routing.md) przy tworzeniu nowego repozytorium. Istniejącego projektu nie zakładaj ponownie. Setup może powstać po ustaleniu nazwy, zakresu pierwszego przyrostu i podstawowych decyzji technicznych; nie wymaga pełnej specyfikacji wszystkich przyszłych funkcji.
+Use with the [core](../core.md) and [routing](../routing.md) when creating a new repository. Do not set up an existing project again. Setup can begin once the name, first increment scope and basic technical decisions are established; it does not require a full specification of every future feature.
 
-## Lokalizacja i identyfikatory
+## Location and identifiers
 
-- Zachowaj nazwę produktu podaną przez użytkownika. Robocza nazwa wystarcza do discovery i prototypu; nazwę trwałych zasobów ustal przed ich utworzeniem.
-- Domyślny katalog to `~/projects/<NazwaProjektu>`, z rzeczywistym katalogiem domowym odczytanym ze środowiska. Katalog i repozytorium zapisuj w PascalCase, np. `ProfileHub`, chyba że użytkownik wskazał inaczej. Nie przenoś tej konwencji na domeny, pakiety i inne identyfikatory narzędzi.
-- Utwórz potrzebne katalogi bez dodatkowego potwierdzenia w granicach zlecenia. Zachowaj wcześniejszą zawartość; konflikt z innym projektem rozstrzygnij przed zapisem. Nie obchodź ograniczeń uprawnień.
-- Domyślnie utwórz prywatne repozytorium GitHub na wskazanym koncie lub osobistym koncie użytkownika. Brak zdalnego dostępu blokuje publikację i ustawienia, nie analizę i bezpieczną pracę lokalną. Nie zastępuj go innym kontem bez uzgodnienia.
+- Keep the product name provided by the user. A working name is sufficient for discovery and a prototype; establish the name of persistent resources before creating them.
+- The default directory is `~/projects/<ProjectName>`, using the actual home directory read from the environment. Use PascalCase for the directory and repository, e.g. `ProfileHub`, unless the user specifies otherwise. Do not extend this convention to domains, packages or other tool identifiers.
+- Create necessary directories without additional confirmation within the task's scope. Preserve existing content; resolve a conflict with another project before writing. Do not bypass permission restrictions.
+- By default, create a private GitHub repository under the specified account or the user's personal account. Missing remote access blocks publication and settings, rather than analysis and safe local work. Do not substitute another account without agreement.
 
-## Minimalna zawartość
+## Minimum contents
 
 ```text
-README.md                  cel, uruchomienie i odnośniki
-AGENTS.md                  punkt wejścia, nadpisania i źródła wiedzy projektu
-CLAUDE.md                  import `@AGENTS.md`, jeśli narzędzie nie wczytuje AGENTS.md
+README.md                  purpose, startup and links
+AGENTS.md                  entry point, overrides and project knowledge sources
+CLAUDE.md                  import `@AGENTS.md` if the tool does not load AGENTS.md
 .gitignore
 .editorconfig
 docs/
-  product/                 wymagania pierwszego przyrostu
-  design/                  zaakceptowany kierunek i odnośnik do prototypu
-  standards/               pełna kopia tego zestawu
+  product/                 first increment requirements
+  design/                  approved direction and prototype link
+  standards/               complete copy of this set
 ```
 
-Dla nowej aplikacji użyj szkieletu wskazanego w poleceniu, instrukcjach użytkownika lub dostępnym poleceniu narzędzia, np. skillu tworzenia aplikacji. Nie szukaj szkieletu poza tymi źródłami i nie pytaj o niego, jeśli żadne go nie wskazuje. Jeśli szkielet jest dostępny i zgodny z potrzebami, wykorzystaj jego sprawdzone komendy kontroli, workflow, skrypty wdrożenia i rollbacku oraz szablon runbooka. Potwierdź wersję i działanie potrzebnych zabezpieczeń; sam plik szablonu nie jest dowodem. Brak szkieletu nie blokuje projektu: przygotuj minimalny potrzebny fundament. Nie usuwaj wymagania standardu na podstawie niezweryfikowanego założenia o szkielecie.
+For a new application, use the scaffold specified in the request, user instructions or an available tool instruction, e.g. an application creation skill. Do not look for a scaffold outside these sources or ask about one if none specifies it. If a scaffold is available and meets the needs, use its proven check commands, workflows, deployment and rollback scripts, and runbook template. Confirm the version and operation of necessary safeguards; a template file alone is not evidence. The absence of a scaffold does not block the project: prepare the minimum necessary foundation. Do not remove a standard requirement based on an unverified assumption about a scaffold.
 
-Architekturę, kontrakt, decyzje i zadania dodawaj, gdy są potrzebne; nie twórz pustej dokumentacji. Kod użytecznego prototypu zachowaj jako punkt wyjścia, oznaczając ograniczenia. Fundament implementacyjny uzupełnia uruchamianie, CI i potrzebny artefakt wdrożeniowy.
+Add architecture, contracts, decisions and tasks when needed; do not create empty documentation. Keep useful prototype code as a starting point, marking its limitations. The implementation foundation adds startup, CI and the necessary deployment artifact.
 
-`AGENTS.md` odsyła do `docs/standards/core.md`, `routing.md` i `workflow.md`, a także do komend, profilu i właściwych źródeł wiedzy projektu. Jego zawartość i limit rozmiaru określa [dokumentacja](../development/documentation.md#instrukcje-dla-agentów-ai). Inne główne pliki narzędzi mogą odsyłać do niego, ale zachowuj lokalne instrukcje modułów. Zapisz wersję zestawu i datę kopii; kopiuj cały zestaw z odnośnikami, nie tylko pliki developmentu.
+`AGENTS.md` links to `docs/standards/core.md`, `routing.md` and `workflow.md`, as well as commands, the profile and relevant project knowledge sources. [Documentation](../development/documentation.md#instructions-for-ai-agents) defines its contents and size limit. Other primary tool instruction files may link to it, but preserve local module instructions. Record the set version and copy date; copy the entire set with links, rather than only development files.
 
-## Dostęp i ustawienia
+## Access and settings
 
-Agent potrzebuje dostępu do branchy roboczych, PR i CI oraz integracji po spełnieniu warunków. Nie powinien mieć możliwości zmiany ochrony repozytorium ani zatwierdzania produkcji.
+The agent needs access to working branches, PRs and CI, and to integration once its conditions are met. It should not be able to change repository protection or approve production.
 
-Preferuj osobną tożsamość agenta z minimalnymi uprawnieniami, np. konto lub integrację wspieraną przez platformę. Jeśli potrzebne jest konto, token lub przyjęcie zaproszenia, przygotuj jedną instrukcję dla człowieka. Sekrety zapisuj w menedżerze lub środowisku, nigdy w repozytorium lub rozmowie.
+Prefer a separate agent identity with minimal permissions, e.g. an account or integration supported by the platform. If an account, token or invitation acceptance is needed, prepare one instruction for a human. Store secrets in a manager or environment, never in the repository or conversation.
 
-Jeśli agent pracuje na koncie użytkownika, zapisz ograniczenie egzekwowania rozdziału uprawnień i stosuj zastępczy tryb zgody na produkcję ze standardu wdrożeń. Nie deklaruj technicznej izolacji, której używany plan lub model konta nie zapewnia.
+If the agent works under the user's account, record the limitation on enforcing separation of permissions and use the deployment standard's fallback production approval mode. Do not claim technical isolation that the plan or account model in use does not provide.
 
-Ustawienia zapisz jako idempotentny skrypt, np. `scripts/setup-github.sh`, albo konfigurację platformy:
+Record settings as an idempotent script, e.g. `scripts/setup-github.sh`, or platform configuration:
 
-- integracja przez merge commit zgodnie z Git; domyślnie wyłącz squash i rebase merge;
-- ochrona gałęzi głównej: PR, wymagany check CI o stałej nazwie, zakaz force push i usuwania;
-- niezależny przegląd według standardu review bez obowiązkowej akceptacji człowieka dla każdego PR;
-- środowiska `staging` i `production`: produkcja z wymaganą decyzją człowieka i blokadą samozatwierdzenia; gdy plan platformy tego nie zapewnia, zapisz tryb zastępczy według [wdrożeń](../development/deployment-setup.md#mechanizm-zgody-na-produkcję);
-- minimalne uprawnienia wykonawcy, alerty podatności i skan sekretów w zakresie dostępnym dla repozytorium.
+- integration through a merge commit according to Git; disable squash and rebase merge by default;
+- main branch protection: PR, a required CI check with a stable name, no force pushes or deletion;
+- independent review according to the review standard, without mandatory human approval for every PR;
+- `staging` and `production` environments: production requires a human decision and prevents self-approval; when the platform plan does not provide this, record a fallback mode according to [deployments](../development/deployment-setup.md#production-approval-mechanism);
+- minimal executor permissions, vulnerability alerts and secret scanning to the extent available for the repository.
 
-Najpierw przygotuj konkretny skrypt i sprawdź możliwości planu. Zastosuj go w ramach jawnej zgody na ustawienia; jeśli tej zgody lub uprawnień brak, poproś o najmniejszą czynność potrzebną do wykonania. Ograniczenie platformy blokuje zależne przejście, nie całą pracę lokalną. Nie osłabiaj wymaganej ochrony, aby ominąć brak funkcji.
+First prepare a concrete script and check the plan's capabilities. Apply it within explicit authorization for settings; if that authorization or the necessary permissions are missing, request the smallest action needed to proceed. A platform limitation blocks the dependent transition, rather than all local work. Do not weaken required protection to bypass a missing feature.
 
-Konfiguracja narzędzia może zezwalać na rutynowe komendy projektu i pracę z branchem bez pytań, ale musi respektować rdzeń. Nie nadawaj ogólnego prawa do destrukcyjnych poleceń, zmiany zabezpieczeń lub zatwierdzania produkcji. Ograniczenia narzędzia mają pierwszeństwo przed lokalną listą dozwolonych komend.
+Tool configuration may allow routine project commands and branch work without questions, but must respect the core. Do not grant general permission for destructive commands, security changes or production approval. Tool restrictions take precedence over a local command allowlist.
 
-## Pierwszy zapis i przejście
+## First commit and transition
 
-Sprawdź zawartość bez sekretów i niepowiązanej pracy. Pierwszy commit inicjalizacyjny może powstać na gałęzi głównej przed włączeniem ochrony, z tytułem `[infra] Initialize project with documentation and standards`. To wyjątek obejmujący startową dokumentację i konfigurację; nie dodawaj sztucznego identyfikatora zadania.
+Check the contents for secrets and unrelated work. The first initialization commit may be made on the main branch before protection is enabled, with the title `[infra] Initialize project with documentation and standards`. This exception covers initial documentation and configuration; do not add an artificial task identifier.
 
-Po publikacji zastosuj zatwierdzone ustawienia i sprawdź ich rzeczywiste działanie. Kolejne zmiany przechodzą przez PR, wymagane kontrole i niezależny review. Utwórz fundament CI z checkiem wymaganym przez ochronę gałęzi; jego tymczasowy brak nie upoważnia do obejścia reguł integracji.
+After publication, apply the approved settings and verify their actual operation. Subsequent changes go through PRs, required checks and independent review. Create the CI foundation with the check required by branch protection; its temporary absence does not authorize bypassing integration rules.
 
-Warunek zakończenia: materiały są zachowane, punkt wejścia i wersja zasad wskazane, a repozytorium i zabezpieczenia przygotowane albo ich konkretne blokady zapisane. Przejdź automatycznie do przygotowania pierwszego przyrostu i niezależnej pracy.
+Completion condition: materials are preserved, the entry point and rules version are identified, and the repository and safeguards are prepared or their specific blocking issues are recorded. Proceed automatically to preparing the first increment and independent work.

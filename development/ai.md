@@ -1,111 +1,111 @@
-# Standard wykorzystania AI w aplikacjach dla agentów AI
+# Standard for using AI in applications, for AI agents
 
-Wersja: 1.1.0  
-Data: 2026-11-10
+Version: 1.1.0  
+Date: 2026-11-15
 
-## Zakres i stosowanie
+## Scope and application
 
-Stosuj ten standard przy budowie funkcji aplikacji, które korzystają z modeli językowych (LLM) lub z własnych modeli uczenia maszynowego. Dokument określa wybór dostawcy i modelu, izolację, ochronę danych, koszty, bezpieczeństwo odpowiedzi, odporność na awarie, prompty, ocenę jakości i przejrzystość dla użytkowników.
+Apply this standard when building application features that use language models (LLMs) or custom machine learning models. This document covers provider and model selection, isolation, data protection, costs, response safety, resilience, prompts, quality evaluation, and transparency for users.
 
-Standard nie dotyczy agentów AI, którzy tworzą kod. Dotyczy AI jako części budowanej aplikacji.
+This standard does not concern AI agents that write code. It concerns AI as part of the application being built.
 
-Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji określa [routing](../routing.md).
+Apply together with the [core principles](../core.md). [Routing](../routing.md) determines the other instructions to use.
 
-## Zasady nadrzędne
+## Governing principles
 
-- **Odpowiedź modelu to dane niezaufane.** Traktuj ją jak dane od użytkownika: waliduj, nie wykonuj, nie wstawiaj bez kodowania.
-- **Koszt pod kontrolą.** Każda funkcja z AI ma limity i znany koszt przy przewidywanej skali.
-- **Jakość mierzona, nie zakładana.** Funkcja z AI ma zestaw ewaluacyjny i próg jakości jako kryterium akceptacji.
-- **Działanie bez AI.** Każda funkcja z AI ma zdefiniowane zachowanie, gdy model jest niedostępny.
+- **Model output is untrusted data.** Treat it like user input: validate it, do not execute it, and do not insert it without encoding.
+- **Keep costs under control.** Every AI feature has limits and a known cost at the expected scale.
+- **Measure quality rather than assume it.** An AI feature has an evaluation dataset and a quality threshold as an acceptance criterion.
+- **Operation without AI.** Every AI feature has defined behavior when the model is unavailable.
 
-## Modele językowe
+## Language models
 
-### Dostawca i model
+### Provider and model
 
-- Domyślnym dostawcą jest OpenAI. Zmiana dostawcy to osobne zadanie.
-- Wywołania dostawcy umieszczaj w adapterze za interfejsem, zgodnie ze standardem backendu. Reszta aplikacji nie zna szczegółów dostawcy.
-- Korzystaj z oficjalnej biblioteki dostawcy.
-- Dostępne modele, ich możliwości i ceny sprawdzaj w aktualnej dokumentacji dostawcy, nie z pamięci.
-- Dla każdej funkcji wybierz najtańszy model, który spełnia próg jakości w ewaluacji. Mocniejszy model stosuj tylko tam, gdzie słabszy nie spełnia progu.
-- Przypinaj konkretną wersję modelu. Zmiana modelu to osobne zadanie z uruchomieniem ewaluacji.
+- The default provider is OpenAI. Changing providers is a separate task.
+- Place provider calls in an adapter behind an interface, according to the backend standard. The rest of the application does not know provider details.
+- Use the provider's official library.
+- Check available models, their capabilities, and prices in current provider documentation, not from memory.
+- For each feature, select the cheapest model that meets the quality threshold in evaluation. Use a more capable model only where a less capable one fails to meet the threshold.
+- Pin a specific model version. Changing models is a separate task that includes running evaluations.
 
-### Izolacja
+### Isolation
 
-- Wywołania modeli wykonuje wyłącznie backend. Klucz API nie trafia do frontendu, aplikacji mobilnej, repozytorium ani logów.
-- Klucz ma tylko komponent, który wykonuje wywołania. Jeśli to możliwe, wywołania wykonuje osobny proces, np. zadanie w tle, a nie proces publicznego API.
-- Użytkownik nie kontroluje instrukcji systemowych, wyboru modelu ani parametrów wywołania. Tekst od użytkownika trafia do modelu wyłącznie jako dane, w wyraźnie oddzielonej części wiadomości.
-- Dokumentacja projektu może określić inny sposób izolacji.
+- Only the backend makes model calls. The API key must not reach the frontend, mobile application, repository, or logs.
+- Only the component making calls has the key. Where possible, calls run in a separate process, e.g. a background job, rather than the public API process.
+- Users do not control system instructions, model selection, or call parameters. User text reaches the model only as data, in a clearly separated part of the message.
+- Project documentation may define a different isolation approach.
 
-### Dane wysyłane do dostawcy
+### Data sent to the provider
 
-- Wysyłaj tylko dane niezbędne do zadania. Dane osobowe usuwaj lub maskuj, jeśli nie są potrzebne do wyniku.
-- Nie wysyłaj sekretów, haseł, tokenów ani danych uwierzytelniających.
-- Korzystaj z dostawcy i planu, którego warunki nie pozwalają trenować modeli na danych przesyłanych przez API. Przy danych osobowych wymagana jest umowa powierzenia przetwarzania zgodna z RODO.
-- Polityka prywatności aplikacji informuje o przekazywaniu danych do dostawcy AI.
-- Nie loguj pełnej treści promptów i odpowiedzi zawierających dane użytkowników. Loguj identyfikator wywołania, model, liczbę tokenów, czas i koszt.
+- Send only data necessary for the task. Remove or mask personal data if it is unnecessary for the result.
+- Do not send secrets, passwords, tokens, or credentials.
+- Use a provider and plan whose terms prohibit training models on data sent through the API. Personal data requires a GDPR-compliant data processing agreement.
+- The application's privacy policy informs users about data transfers to the AI provider.
+- Do not log full prompts and responses containing user data. Log the call identifier, model, token count, duration, and cost.
 
-### Koszty i limity
+### Costs and limits
 
-- Stosuj limity wywołań na użytkownika i globalne, np. dzienne.
-- Ograniczaj długość danych wejściowych i maksymalną długość odpowiedzi.
-- Buforuj wyniki identycznych zapytań, gdy wynik nie zależy od użytkownika ani czasu.
-- Ustaw alert przy przekroczeniu budżetu miesięcznego, np. w panelu dostawcy i w monitoringu aplikacji.
-- Przy doborze technologii przygotuj szacunek miesięcznego kosztu AI przy przewidywanej skali.
+- Apply per-user and global call limits, e.g. daily limits.
+- Limit input length and maximum response length.
+- Cache results of identical queries when the result does not depend on the user or time.
+- Configure an alert when the monthly budget is exceeded, e.g. in the provider dashboard and application monitoring.
+- When selecting technology, prepare an estimate of monthly AI costs at the expected scale.
 
-### Bezpieczeństwo odpowiedzi
+### Response safety
 
-- Gdy aplikacja potrzebuje danych strukturalnych, żądaj odpowiedzi w zdefiniowanym schemacie, np. JSON Schema, i waliduj ją przed użyciem. Odpowiedź niezgodną ze schematem traktuj jako błąd.
-- Nie wykonuj treści odpowiedzi jako kodu, zapytania ani polecenia. Nie wstawiaj jej jako surowego HTML; koduj ją jak każdą treść od użytkownika.
-- Gdy model może wywoływać funkcje aplikacji (tools), aplikacja sprawdza uprawnienia użytkownika przy każdym wywołaniu. Model nie wykonuje działań o istotnych skutkach, np. płatności, usuwania danych, wysyłki wiadomości, bez potwierdzenia użytkownika.
-- Zakładaj, że dane od użytkownika i treści z zewnątrz, np. dokumenty, strony, e-maile, mogą zawierać instrukcje dla modelu (prompt injection). Instrukcje systemowe nie polegają na tym, że model je zignoruje; ograniczenia egzekwuje aplikacja.
+- When the application needs structured data, request a response in a defined schema, e.g. JSON Schema, and validate it before use. Treat a response that does not match the schema as an error.
+- Do not execute response content as code, a query, or a command. Do not insert it as raw HTML; encode it like any user content.
+- When a model can call application functions (tools), the application checks user permissions for every call. The model does not perform actions with significant consequences, e.g. payments, data deletion, or sending messages, without user confirmation.
+- Assume user input and external content, e.g. documents, websites, and emails, may contain instructions for the model (prompt injection). Do not rely on system instructions to make the model ignore injected instructions; the application enforces restrictions.
 
-### Odporność na awarie
+### Resilience
 
-- Stosuj zasady integracji z usługami zewnętrznymi ze standardu backendu: limity czasu, ponowienia tylko bezpieczne, kontrolowany wynik zamiast błędu `500`.
-- Zdefiniuj zachowanie funkcji bez AI, np. komunikat o chwilowej niedostępności, wersję uproszczoną lub wykonanie później w tle.
-- Długie wywołania wykonuj w tle albo przesyłaj odpowiedź strumieniowo, aby użytkownik nie czekał bez informacji.
+- Apply the backend standard's rules for external service integrations: timeouts, only safe retries, and controlled outcomes instead of `500` errors.
+- Define feature behavior without AI, e.g. a temporary unavailability message, a simplified version, or later background execution.
+- Run long calls in the background or stream responses so users do not wait without information.
 
-### Prompty
+### Prompts
 
-- Prompty są kodem: przechowuj je w plikach w repozytorium, w jednym miejscu, np. `prompts/`, i poddawaj przeglądowi jak kod.
-- Prompt zawiera rolę modelu, zadanie, ograniczenia, format odpowiedzi i przykłady, jeśli poprawiają wynik.
-- Nie składaj promptów z fragmentów rozproszonych po kodzie. Dane wstawiaj w jawnie oznaczone miejsca szablonu.
+- Prompts are code: store them in files in the repository, in one place, e.g. `prompts/`, and review them like code.
+- A prompt contains the model's role, task, constraints, response format, and examples if they improve the result.
+- Do not assemble prompts from fragments scattered across the code. Insert data into explicitly marked template locations.
 
-### Ocena jakości (ewaluacje)
+### Quality assessment (evaluations)
 
-- Każda funkcja z AI ma zestaw ewaluacyjny w repozytorium: przykładowe wejścia z oczekiwanymi cechami odpowiedzi, np. poprawna kategoria, obecność wymaganych pól, brak zakazanych treści.
-- Zestaw obejmuje przypadki typowe, brzegowe i próby nadużycia, np. prompt injection.
-- Uruchamiaj ewaluację przy każdej zmianie promptu, modelu lub parametrów, a nie przy każdym PR, ponieważ kosztuje.
-- Próg jakości, np. odsetek poprawnych odpowiedzi, jest kryterium akceptacji zadania. Wynik ewaluacji wpisz do raportu zadania.
-- Zwykłe testy automatyczne korzystają z atrapy dostawcy i nie wywołują prawdziwego modelu.
+- Every AI feature has an evaluation dataset in the repository: example inputs with expected response properties, e.g. a correct category, required fields, and absence of prohibited content.
+- The dataset includes typical cases, edge cases, and abuse attempts, e.g. prompt injection.
+- Run evaluations whenever a prompt, model, or parameters change, rather than on every PR, because evaluations incur costs.
+- The quality threshold, e.g. the proportion of correct responses, is a task acceptance criterion. Record the evaluation result in the task report.
+- Ordinary automated tests use a provider test double and do not call a real model.
 
-### Przejrzystość dla użytkowników
+### Transparency for users
 
-- Użytkownik wie, że rozmawia z AI, i wie, które treści wygenerowało AI, zgodnie z obowiązkami przejrzystości unijnego AI Act.
-- Przy treściach, od których mogą zależeć decyzje użytkownika, informuj, że odpowiedź może zawierać błędy.
+- Users know they are interacting with AI and which content AI generated, in accordance with the EU AI Act's transparency obligations.
+- For content that may influence user decisions, inform users that responses may contain errors.
 
-## Własne modele uczenia maszynowego
+## Custom machine learning models
 
-### Kiedy własny model
+### When to use a custom model
 
-Stosuj własny model tylko wtedy, gdy dla konkretnego, powtarzalnego zadania, np. klasyfikacji, model językowy jest za drogi, za wolny lub za mało dokładny. Decyzję zapisz z porównaniem.
+Use a custom model only when a language model is too expensive, too slow, or insufficiently accurate for a specific, repeatable task, e.g. classification. Record the decision with a comparison.
 
-### Dane i ocena
+### Data and evaluation
 
-- Podziel dane na zbiór treningowy i testowy przed treningiem. Zbiór testowy nie bierze udziału w treningu ani w doborze ustawień. Dobór ustawień wykonuj walidacją krzyżową na zbiorze treningowym.
-- Gdy dane mają strukturę, np. wiele wiadomości jednego zgłoszenia lub kolejność w czasie, dziel je tak, aby powiązane rekordy były w jednym zbiorze, a przy danych czasowych chronologicznie.
-- Porównuj model z prostym punktem odniesienia (baseline), np. zawsze najczęstszą klasą.
-- Metryki z progiem są kryterium akceptacji zadania. Raport oceny zawiera metryki ogólne, metryki dla każdej klasy i przykłady błędów.
-- Gdy model ma zwracać „nie wiem”, wybierz próg pewności na danych walidacyjnych i oceń także przykłady spoza znanych kategorii.
+- Split data into training and test sets before training. The test set participates in neither training nor parameter selection. Select parameters using cross-validation on the training set.
+- When data has structure, e.g. multiple messages from one ticket or a time sequence, split it so related records remain in one set; split time-based data chronologically.
+- Compare the model with a simple baseline, e.g. always predicting the most frequent class.
+- Metrics with thresholds are task acceptance criteria. The evaluation report contains overall metrics, per-class metrics, and examples of errors.
+- When the model is to return “I don't know,” choose a confidence threshold using validation data and also evaluate examples outside known categories.
 
-### Odtwarzalność i wersje
+### Reproducibility and versions
 
-- Trening wykonuje skrypt w repozytorium, z ustalonym ziarnem losowości i przypiętymi wersjami bibliotek.
-- Każdy wytrenowany model ma zapisaną wersję danych, np. skrót pliku, parametry i wyniki oceny.
-- Duże pliki modeli i danych przechowuj poza Git, np. w magazynie plików projektu, z wersją w nazwie.
-- Ponowny trening na nowych danych to osobne zadanie z porównaniem wyników do poprzedniej wersji.
+- Training runs through a script in the repository, with a fixed random seed and pinned library versions.
+- Every trained model has a recorded data version, e.g. a file hash, parameters, and evaluation results.
+- Store large model and data files outside Git, e.g. in the project's file storage, with a version in the name.
+- Retraining on new data is a separate task that compares results with the previous version.
 
-### Bezpieczeństwo modeli
+### Model security
 
-- Ładuj wyłącznie pliki modeli wytworzone przez własny trening. Formaty takie jak `pickle` i `joblib` mogą wykonać kod podczas odczytu.
-- Dane treningowe nie zawierają danych osobowych, chyba że projekt na to pozwala i zostały zabezpieczone według standardu bezpieczeństwa.
+- Load only model files produced by your own training. Formats such as `pickle` and `joblib` can execute code when loaded.
+- Training data contains no personal data unless the project permits it and it has been protected according to the security standard.

@@ -1,133 +1,133 @@
-# Standard infrastruktury (DevOps) dla agentów AI
+# Infrastructure (DevOps) standard for AI agents
 
-Wersja: 2.2.0  
-Data: 2026-11-15
+Version: 2.2.0  
+Date: 2026-11-15
 
-## Zakres i stosowanie
+## Scope and application
 
-Stosuj ten standard przy tworzeniu i zmianie środowiska lokalnego, obrazów Docker, CI, konfiguracji środowisk, infrastruktury i automatycznych aktualizacji zależności. Dokument określa, jak aplikacja jest uruchamiana, budowana i sprawdzana oraz jak przygotować ją do działania u dowolnego dostawcy.
+Apply this standard when creating or changing local environments, Docker images, CI, environment configuration, infrastructure, and automatic dependency updates. It defines how the application is run, built, and checked, and how to prepare it to operate with any provider.
 
-Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji określa [routing](../routing.md).
+Apply together with the [core](../core.md). [Routing](../routing.md) selects other instructions.
 
-## Zasady nadrzędne
+## Governing principles
 
-- **Wspólne komendy.** Każda operacja ma wspólną komendę dla człowieka, agenta i CI; kontrole mogą mieć warianty obszarowe zgodnie z wpływem zmiany.
-- **Wszystko w repozytorium.** Konfiguracja środowisk, CI i serwerów jest zapisana w repozytorium. Nie wprowadzaj ręcznych zmian na serwerach.
-- **Jeden artefakt.** Artefakt wydania budujesz raz i używasz tego samego w każdym środowisku. Środowiska różnią się tylko konfiguracją.
-- **Przenośność.** W nowym projekcie preferuj standardowe usługi i ogranicz zależności od dostawcy, gdy ułatwia to realne wdrożenie; nie buduj abstrakcji na hipotetyczną migrację.
+- **Shared commands.** Every operation has a shared command for humans, agents, and CI; checks may have area-specific variants according to change impact.
+- **Everything in the repository.** Environment, CI, and server configuration is recorded in the repository. Do not make manual server changes.
+- **One artifact.** Build a release artifact once and use the same artifact in every environment. Environments differ only in configuration.
+- **Portability.** In a new project, prefer standard services and limit provider dependencies where this facilitates actual deployment; do not build abstractions for a hypothetical migration.
 
-## Przenośność
+## Portability
 
-- Konfigurację przekazuj wyłącznie przez zmienne środowiskowe. Kod nie zawiera adresów, nazw hostów ani ustawień środowiska.
-- Kontener aplikacji nie przechowuje stanu. Uruchomienie kolejnej kopii lub wymiana kontenera nie traci danych.
-- Pliki użytkowników domyślnie zapisuj na dysku serwera, w trwałym wolumenie poza kontenerem, objętym kopiami zapasowymi.
-- Pliki obsługuj przez uznaną dla frameworka abstrakcję magazynu, bez bezpośrednich ścieżek dysku, aby przejście na magazyn obiektów wymagało tylko zmiany konfiguracji.
-- Przejdź na magazyn obiektów, gdy aplikacja działa na więcej niż jednym serwerze lub gdy wskazuje to projekt.
-- Sesje, blokady i kolejki trzymaj w bazie lub cache, nie w pamięci procesu ani w plikach lokalnych.
-- Korzystaj z usług standardowych, dostępnych jako usługi zarządzane u każdego dużego dostawcy: PostgreSQL, Redis lub Valkey, SMTP.
-- Funkcje specyficzne dla dostawcy umieszczaj w adapterach za interfejsem. Reszta aplikacji nie zależy od dostawcy.
-- Zadania cykliczne uruchamiaj jako proces lub kontener aplikacji, nie przez crona serwera.
-- Termin wyboru hostingu i stagingu określa [standard wdrożeń](deployment-setup.md#zakres-i-moment-uruchomienia). W istniejącym projekcie zgłaszaj tylko dodatkowe wymagania wynikające ze zlecenia.
+- Pass configuration exclusively through environment variables. Code contains no addresses, hostnames, or environment settings.
+- The application container is stateless. Starting another instance or replacing a container does not lose data.
+- By default, store user files on server disk, in a persistent volume outside the container, covered by backups.
+- Handle files through the framework's established storage abstraction, without direct disk paths, so switching to object storage requires only a configuration change.
+- Switch to object storage when the application runs on more than one server or the project specifies it.
+- Keep sessions, locks, and queues in a database or cache, not process memory or local files.
+- Use standard services available as managed services from every major provider: PostgreSQL, Redis or Valkey, SMTP.
+- Put provider-specific functionality in adapters behind an interface. The rest of the application does not depend on the provider.
+- Run scheduled jobs as an application process or container, not through server cron.
+- The [deployment standard](deployment-setup.md#scope-and-timing) defines hosting and staging selection timing. In an existing project, report only additional requirements arising from the assignment.
 
-## Środowisko lokalne
+## Local environment
 
-- W nowym projekcie domyślnie używaj Docker Compose dla aplikacji i potrzebnych usług. Nie uruchamiaj cache, kolejki ani atrap, których przyrost nie używa. Uzasadniony prostszy sposób, np. natywne narzędzie dla strony statycznej, zapisz w profilu. W istniejącym projekcie zachowaj jego sposób uruchamiania.
-- Porty udostępniane na komputerze użytkownika wiąż domyślnie z adresem loopback, np. `127.0.0.1:8080:80`, zamiast ze wszystkimi interfejsami sieciowymi.
-- Usług potrzebnych wyłącznie kontenerom, np. bazy lub cache, nie publikuj na hoście bez potrzeby.
-- Dostęp z sieci lokalnej lub przez publiczny tunel włączaj tylko na wyraźne polecenie użytkownika, z ochroną odpowiednią do sposobu udostępnienia.
-- W nowym projekcie domyślne wspólne komendy są w `Makefile`; istniejące równoważne skrypty projektu zachowaj:
+- In a new project, use Docker Compose for the application and required services by default. Do not start cache, queues, or stubs unused by the increment. Record a justified simpler approach, e.g. a native tool for a static site, in the profile. Preserve the startup method of an existing project.
+- Bind ports exposed on the user's computer to loopback by default, e.g. `127.0.0.1:8080:80`, rather than all network interfaces.
+- Do not publish services needed only by containers, e.g. database or cache, on the host without a need.
+- Enable local network access or a public tunnel only on the user's explicit instruction, with protection appropriate to the sharing method.
+- In a new project, default shared commands are in `Makefile`; preserve existing equivalent project scripts:
 
-| Komenda | Działanie |
+| Command | Action |
 |---|---|
-| `make up` | Uruchamia projekt od zera po sklonowaniu: tworzy `.env` z `.env.example`, buduje obrazy, wykonuje migracje i seed |
-| `make down` | Zatrzymuje środowisko |
-| `make test` | Uruchamia testy |
-| `make check` | Uruchamia pełny komplet kontroli: formater, linter, analizę statyczną, testy z pokryciem |
-| `make check-frontend` / `make check-backend` | Kontrole danego obszaru, jeśli projekt ma te warstwy; CI wybiera je według zależności zmiany |
-| `make migrate` | Wykonuje migracje |
-| `make seed` | Ładuje dane demonstracyjne i konta testowe |
+| `make up` | Starts the project from scratch after cloning: creates `.env` from `.env.example`, builds images, runs migrations and seed |
+| `make down` | Stops the environment |
+| `make test` | Runs tests |
+| `make check` | Runs the full set of checks: formatter, linter, static analysis, tests with coverage |
+| `make check-frontend` / `make check-backend` | Checks for the given area if the project has these layers; CI selects them according to change dependencies |
+| `make migrate` | Runs migrations |
+| `make seed` | Loads demonstration data and test accounts |
 
-- Komendy w `Makefile` wywołują narzędzia projektu, np. skrypty `composer` lub `npm`. Nie powielaj w nich logiki.
-- W wariancie kontenerowym lokalnie wystarczają Docker i `make`. W wariancie natywnym opisz minimalne wymagania bez dodawania drugiego sposobu uruchamiania.
+- `Makefile` commands call project tools, e.g. `composer` or `npm` scripts. Do not duplicate their logic.
+- With containers, Docker and `make` suffice locally. For native operation, document minimum requirements without adding a second startup method.
 
-## Dane testowe i konta
+## Test data and accounts
 
-- `make seed` tworzy dane demonstracyjne, które pokazują główne przepływy aplikacji, oraz konto testowe dla każdej roli.
-- Dane logowania kont testowych opisz w README, z zaznaczeniem, że dotyczą wyłącznie środowiska lokalnego.
-- Seed jest powtarzalny: ponowne uruchomienie daje ten sam stan.
-- Seed nie działa w środowisku produkcyjnym.
-- Zdalne środowiska testowe nie korzystają z publicznie opisanych haseł lokalnych. Dane dostępu do zdalnych kont testowych dostarczaj jako sekrety środowiska.
+- `make seed` creates demonstration data showing the main application flows and a test account for each role.
+- Document test account credentials in README, stating that they apply only to the local environment.
+- Seed is repeatable: rerunning it produces the same state.
+- Seed does not run in production.
+- Remote test environments do not use publicly documented local passwords. Supply remote test account credentials as environment secrets.
 
-## Obrazy Docker
+## Docker images
 
-- Stosuj build wieloetapowy. Obraz produkcyjny nie zawiera narzędzi deweloperskich, zależności testowych ani kodu źródłowego zbędnego do działania.
-- Przypinaj wersje obrazów bazowych, nigdy `latest`. Wybieraj obrazy oficjalne.
-- Proces w kontenerze działa jako użytkownik bez uprawnień root.
-- Każdy obraz ma `HEALTHCHECK` korzystający z punktu kontroli stanu aplikacji.
-- Plik `.dockerignore` wyklucza z obrazu m.in. `.git`, `.env` i katalogi zależności lokalnych.
-- Obraz oznaczaj identyfikatorem commita, z którego powstał. Sekretów nie umieszczaj w obrazie.
+- Use a multistage build. The production image contains no development tools, test dependencies, or source code unnecessary for operation.
+- Pin base image versions, never `latest`. Choose official images.
+- The container process runs as a non-root user.
+- Every image has a `HEALTHCHECK` using the application's health endpoint.
+- `.dockerignore` excludes, among other things, `.git`, `.env`, and local dependency directories from the image.
+- Tag the image with the identifier of the commit from which it was built. Do not put secrets in the image.
 
 ## CI
 
-- Domyślnie stosuj GitHub Actions.
-- **Na PR** CI wykonuje kontrole właściwe dla zakresu: testy i analizę, skan sekretów, zgodność API przy wpływie na kontrakt oraz build właściwego artefaktu. Audyt zależności wykonuj przy ich zmianie i cyklicznie. Zmiana wyłącznie dokumentacyjna może pomijać build aplikacji, ale wymagany check musi rzetelnie ocenić zakres. Nie pomijaj kontroli wspólnych zależności i konfiguracji na podstawie samego rozszerzenia pliku. Wymagany check podsumowujący ocenia wpływ i wynik właściwych kontroli; zakres niewymagany oznacza z uzasadnieniem jako nie dotyczy. Nie wymagaj uruchomienia pełnego `make check` dla każdej zmiany. Nieznany wpływ oznacza szersze kontrole. Mechanizm selekcji bierz ze szkieletu, jeśli go zapewnia; nie projektuj go od nowa. Konfigurację selekcji weryfikuj przy jej wprowadzaniu i zmianie.
-- **Po merge zmiany aplikacji do gałęzi głównej** CI publikuje niezmienny artefakt, domyślnie obraz kontenera, oznaczony commitem. Buduj go raz do promocji między środowiskami. Dla strony statycznej lub platformy z innym modelem wdrożenia profil określa równoważny artefakt. Sama dokumentacja nie wymaga nowego obrazu.
-- CI wykonuje te same komendy co środowisko lokalne, aby wynik był taki sam.
-- Buforuj zależności i warstwy obrazów, aby skrócić czas CI.
-- Przypinaj wersje akcji; akcje spoza GitHuba przypinaj do identyfikatora commita.
-- Nadawaj workflow minimalne uprawnienia.
+- Use GitHub Actions by default.
+- **On a PR**, CI runs checks appropriate to scope: tests and analysis, secret scanning, API compatibility when the contract is affected, and the relevant artifact build. Audit dependencies when they change and periodically. A documentation-only change may skip the application build, but a required check must assess scope honestly. Do not skip checks of shared dependencies and configuration based only on file extensions. A required summary check assesses impact and the outcome of relevant checks; it marks unneeded scope as not applicable with a reason. Do not require a full `make check` for every change. Unknown impact requires broader checks. Use the selection mechanism from the skeleton if provided; do not redesign it. Verify selection configuration when introducing or changing it.
+- **After an application change is merged into the main branch**, CI publishes an immutable artifact, by default a container image, tagged with the commit. Build it once for promotion between environments. For a static site or platform with a different deployment model, the profile defines an equivalent artifact. Documentation alone does not require a new image.
+- CI runs the same commands as the local environment so results are the same.
+- Cache dependencies and image layers to shorten CI time.
+- Pin action versions; pin actions not supplied by GitHub to a commit identifier.
+- Grant workflows minimal permissions.
 
-## CI i przygotowanie wdrożeń
+## CI and deployment preparation
 
-- Nowa aplikacja od fundamentu ma środowisko lokalne, wymagane CI i publikację artefaktu po merge; nie uzależniaj ich od wyboru hostingu.
-- CD stagingu, konfigurację docelowej infrastruktury, backupów, monitoringu i workflow wdrożeniowych przygotuj w zadaniach pierwszego wdrożenia, w terminie z [wdrożeń](deployment-setup.md#zakres-i-moment-uruchomienia). Brak jeszcze niewymaganego CD nie jest awarią CI; nie twórz fikcyjnych zielonych wdrożeń.
-- W istniejącym projekcie zachowaj działający CI/CD.
+- From its foundation, a new application has a local environment, required CI, and artifact publication after merge; do not make these depend on hosting selection.
+- Prepare staging CD, target infrastructure configuration, backups, monitoring, and deployment workflows in first-deployment tasks, at the time defined by [deployment](deployment-setup.md#scope-and-timing). Missing CD that is not yet required is not a CI failure; do not create fictitious successful deployments.
+- Preserve working CI/CD in an existing project.
 
-## Środowiska
+## Environments
 
-| Środowisko | Przeznaczenie |
+| Environment | Purpose |
 |---|---|
-| Lokalne | Praca i testy agenta oraz człowieka |
-| Zdalne develop lub podgląd PR, jeśli występuje | Weryfikacja zmian przed integracją lub stagingiem |
-| Staging | Zdalna weryfikacja kandydata; termin według [wdrożeń](deployment-setup.md#zakres-i-moment-uruchomienia) |
-| Produkcja | Użytkownicy |
+| Local | Agent and human work and tests |
+| Remote develop or PR preview, if present | Verification of changes before integration or staging |
+| Staging | Remote candidate verification; timing under [deployment](deployment-setup.md#scope-and-timing) |
+| Production | Users |
 
-- Staging korzysta z tej samej wersji aplikacji i możliwie zbliżonej konfiguracji działania co produkcja, z własnymi danymi i sekretami. Różnice dotyczą m.in. dostępu, domen, integracji testowych i skali zasobów.
-- Nie kopiuj danych produkcyjnych na staging ani lokalnie. Jeśli są potrzebne, używaj danych zanonimizowanych. Jedynym wyjątkiem jest środowisko testu odtworzenia według [wdrożeń](operations.md#kopie-zapasowe).
-- Zdalne środowisko develop nie jest wymagane. Nie twórz go wyłącznie dlatego, że projekt ma branch o tej nazwie.
+- Staging uses the same application version and operational configuration as close as possible to production, with its own data and secrets. Differences include access, domains, test integrations, and resource scale.
+- Do not copy production data to staging or local environments. If needed, use anonymized data. The sole exception is the restoration test environment under [deployment](operations.md#backups).
+- A remote develop environment is not required. Do not create one solely because the project has a branch with that name.
 
-## Dostęp do zdalnych środowisk testowych
+## Access to remote test environments
 
-- Staging, zdalne develop i podglądy PR są domyślnie niedostępne dla osób postronnych, także gdy aplikacja zawiera publiczne strony lub rejestrację.
-- Ograniczenie dostępu do środowiska jest dodatkowe względem logowania i uprawnień samej aplikacji. Nie zastępuje ich.
-- Preferuj bramkę dostępu z uwierzytelnianiem i listą uprawnionych osób albo dostęp przez prywatną sieć, np. VPN.
-- W prostym wdrożeniu dopuszczalny jest HTTP Basic Auth przez HTTPS na reverse proxy, z silnymi danymi dostępu przeznaczonymi wyłącznie dla danego środowiska.
-- Mechanizm dobierz do hostingu, istniejących narzędzi i zatwierdzonych kosztów. Nie wprowadzaj płatnej usługi bez zatwierdzenia kosztu.
-- Ochroną obejmij wszystkie adresy i komponenty środowiska: frontend, API, dokumentację, pliki i narzędzia diagnostyczne.
-- Uniemożliwiaj ominięcie ochrony przez bezpośredni adres serwera, alternatywną domenę, adres dostawcy hostingu lub opublikowany port aplikacji. Usługa źródłowa przyjmuje ruch tylko przez zabezpieczoną drogę dostępu.
-- Baz danych, cache, kolejek i paneli technicznych nie udostępniaj publicznie.
-- Konfigurację ochrony zapisuj jako kod w repozytorium. Hasła, klucze i tokeny dostarczaj mechanizmem sekretów; nie umieszczaj ich w repozytorium, adresach URL ani logach.
-- Awaria bramki lub brak wymaganej konfiguracji nie może przełączać środowiska w dostęp publiczny.
-- Dodaj `noindex` dla środowisk testowych jako uzupełnienie. Nie traktuj go, pliku `robots.txt` ani trudnego do odgadnięcia adresu jako zabezpieczenia.
+- Staging, remote develop, and PR previews are inaccessible to outsiders by default, even when the application includes public pages or registration.
+- Environment access restrictions are additional to the application's own login and permissions. They do not replace them.
+- Prefer an access gateway with authentication and an authorized-user list, or access through a private network, e.g. VPN.
+- In a simple deployment, HTTP Basic Auth over HTTPS on the reverse proxy is permitted, with strong credentials dedicated to that environment.
+- Choose a mechanism suited to hosting, existing tools, and approved costs. Do not introduce a paid service without cost approval.
+- Protect every environment address and component: frontend, API, documentation, files, and diagnostic tools.
+- Prevent bypassing protection through the direct server address, an alternative domain, a hosting provider address, or an exposed application port. The origin service accepts traffic only through the protected access route.
+- Do not expose databases, cache, queues, or technical panels publicly.
+- Record protection configuration as code in the repository. Supply passwords, keys, and tokens through the secrets mechanism; do not put them in the repository, URLs, or logs.
+- Gateway failure or missing required configuration must not switch the environment to public access.
+- Add `noindex` to test environments as a supplement. Do not treat it, `robots.txt`, or a hard-to-guess address as protection.
 
-### Dostęp techniczny i wyjątki
+### Technical access and exceptions
 
-- CI, testy E2E i monitoring korzystają z osobnego dostępu technicznego o minimalnych uprawnieniach.
-- Nie wyłączaj ochrony całego środowiska na czas testów lub monitoringu.
-- Kontrole stanu wykonywane wewnątrz infrastruktury nie wymagają publicznego dostępu do aplikacji.
-- Wyjątki wymagane przez integracje, np. webhook dostawcy, ograniczaj do konkretnych ścieżek i metod. Stosuj właściwe zabezpieczenia, np. weryfikację podpisu, ochronę przed powtórzeniem i limity żądań.
-- Wyjątek od ochrony środowiska nie wyłącza uwierzytelniania i autoryzacji wymaganych przez aplikację.
-- Zapisz w dokumentacji technicznej mechanizm dostępu, sposób nadawania i odbierania uprawnień oraz każdy wyjątek z uzasadnieniem. Nie zapisuj wartości sekretów.
+- CI, E2E tests, and monitoring use separate technical access with minimal permissions.
+- Do not disable protection for the entire environment during tests or monitoring.
+- Health checks performed inside infrastructure do not require public application access.
+- Restrict integration exceptions, e.g. provider webhooks, to specific paths and methods. Apply appropriate safeguards, e.g. signature verification, replay protection, and request limits.
+- An exception to environment protection does not disable application-required authentication and authorization.
+- Document the access mechanism, how permissions are granted and revoked, and every exception with its rationale in technical documentation. Do not record secret values.
 
-## Aktualizacje zależności
+## Dependency updates
 
-- Renovate lub Dependabot otwiera PR z aktualizacjami zależności, obrazów bazowych i akcji CI.
-- Aktualizacje drobne grupuj i otwieraj najwyżej raz w tygodniu. Poprawki bezpieczeństwa otwieraj od razu.
-- Aktualizacja wersji głównej, np. frameworka, ma osobny PR.
-- PR z aktualizacją przechodzi zwykłą drogę: kontrole, przegląd i integrację.
+- Renovate or Dependabot opens PRs updating dependencies, base images, and CI actions.
+- Group minor updates and open them at most weekly. Open security fixes immediately.
+- A major version update, e.g. of the framework, has a separate PR.
+- An update PR follows the normal process: checks, review, and integration.
 
-## Infrastruktura jako kod
+## Infrastructure as code
 
-- Konfiguracja środowisk jest w repozytorium. Konfiguracja stagingu i produkcji, np. Compose i skrypt przygotowania serwera, powstaje w zadaniach pierwszego wdrożenia.
-- W większych projektach lub w chmurze opisuj infrastrukturę narzędziem infrastruktury jako kodu, np. Terraform lub OpenTofu.
-- Proces przygotowania nowego serwera lub środowiska jest powtarzalny i opisany w runbooku według [dokumentacji](documentation.md#podział-dokumentacji).
+- Environment configuration is in the repository. Staging and production configuration, e.g. Compose and a server setup script, is created in first-deployment tasks.
+- In larger projects or in the cloud, describe infrastructure using an infrastructure-as-code tool, e.g. Terraform or OpenTofu.
+- Preparing a new server or environment is repeatable and documented in the runbook under [documentation](documentation.md#documentation-responsibilities).
