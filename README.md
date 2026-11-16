@@ -67,3 +67,9 @@ Each rule has one source. Before adding or removing a rule, check whether it cha
 The agent does not modify the project's copy of the standards. It records a gap, contradiction, or rule that is unhelpful in practice in the project's `docs/standards-feedback.md`: date, standard and section, problem, evidence, and proposal. The human transfers the conclusions to the standards repository.
 
 Evaluate changes on representative work: a new application, a feature in an existing project, and a legacy fix. Compare human interventions, delivery time, fixes following review, missed requirements, and available usage metrics. A lower token count does not prove that quality has been preserved; word count is not a measurement of tokens or cost.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Michał Wrzesiński.
