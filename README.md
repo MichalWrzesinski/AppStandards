@@ -54,7 +54,7 @@ After each iteration, the human receives a brief, nonblocking review of the incr
 
 Example prompts:
 
-- “Using the standards at `~/Documents/AI/AppStandards`, design and build an application: …”
+- “Using the standards at https://github.com/MichalWrzesinski/AppStandards, design and build an application: …”
 - “Learn the project within the scope of this assignment: … and complete it according to the specified standards.”
 - “Assignment: … Follow the project's standards.”
 
