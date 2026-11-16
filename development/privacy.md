@@ -1,51 +1,51 @@
-# Prywatność i wymagania prawne produktu
+# Product privacy and legal requirements
 
-Wersja: 1.2.1  
-Data: 2026-11-10
+Version: 1.2.2  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), gdy aplikacja przetwarza dane osobowe, używa ciasteczek lub analityki, przekazuje dane dostawcom albo przygotowuje pierwsze wydanie publiczne. Techniczną ochronę danych opisuje [bezpieczeństwo](security.md); ten standard dotyczy obowiązków produktu i ich dowodów.
+Apply with the [core](../core.md) when the application processes personal data, uses cookies or analytics, sends data to providers, or prepares its first public release. [Security](security.md) covers technical data protection; this standard covers product obligations and their evidence.
 
-## Granice roli agenta
+## Limits of the agent's role
 
-- Agent identyfikuje obowiązki, przygotowuje mechanizmy w aplikacji i projekty dokumentów. Nie udziela porady prawnej i nie deklaruje zgodności.
-- Podstawę prawną przetwarzania, administratora danych, okres retencji i ostateczną treść dokumentów prawnych rozstrzyga człowiek. Projekty dokumentów oznacz jako wymagające przeglądu przed publikacją.
-- Nowy cel przetwarzania, nowa kategoria danych lub nowy odbiorca danych to decyzja według rdzenia.
+- The agent identifies obligations, prepares application mechanisms and draft documents. It does not provide legal advice or declare compliance.
+- A human decides the legal basis for processing, the data controller, retention period, and final wording of legal documents. Mark drafts as requiring review before publication.
+- A new processing purpose, data category, or data recipient is a decision under the core.
 
-## Inwentaryzacja danych
+## Data inventory
 
-W `docs/architecture.md`, w sekcji danych wrażliwych, utrzymuj krótki rejestr: kategoria danych, cel, moduł i tabela, odbiorcy, w tym dostawcy, lokalizacja przetwarzania, okres przechowywania i sposób usunięcia. Aktualizuj go w zmianie, która wprowadza nowe dane lub nowego dostawcę. To źródło dla polityki prywatności i umów powierzenia.
+Maintain a brief register in the sensitive data section of `docs/architecture.md`: data category, purpose, module and table, recipients including providers, processing location, retention period, and deletion method. Update it in the change that introduces new data or a new provider. This is the source for the privacy policy and data processing agreements.
 
-## Dostawcy
+## Providers
 
-- Dla każdego dostawcy przetwarzającego dane osobowe zapisz: rolę, lokalizację przetwarzania, dostępność umowy powierzenia (DPA) i podstawę transferu poza EOG, jeśli występuje.
-- Preferuj dostawców przetwarzających dane w EOG. Zawarcie umowy wykonuje człowiek; agent przygotowuje listę i odnośniki.
+- For each provider processing personal data, record its role, processing location, availability of a data processing agreement (DPA), and the basis for transfers outside the EEA, if any.
+- Prefer providers processing data in the EEA. A human concludes the agreement; the agent prepares the list and links.
 
-## Mechanizmy w aplikacji
+## Application mechanisms
 
-- **Prawa osób:** użytkownik może zobaczyć i poprawić swoje dane, usunąć konto oraz otrzymać kopię danych w czytelnym formacie, jeśli projekt nie ustalił innego procesu obsługi żądań. Usunięcie obejmuje kopie pochodne, np. pliki i cache; kopie zapasowe wygasają według retencji. Implementacja usuwania lub anonimizacji od pierwszej wersji zapisuje rejestr operacji potrzebny przy [odtworzeniu](#odtworzenie-po-usunięciu-danych).
-- **Retencja:** dane bez celu, np. niepotwierdzone konta, porzucone pliki, stare logi, są usuwane lub anonimizowane zadaniem cyklicznym, z wpisem w tym samym rejestrze operacji.
-- **Ciasteczka i analityka:** ciasteczka niezbędne do działania nie wymagają zgody. Analityka, marketing i zewnętrzne osadzenia śledzące wymagają uprzedniej zgody, chyba że rozwiązanie nie używa identyfikatorów urządzenia ani danych osobowych. Preferuj analitykę bez ciasteczek. Odmowa jest równie łatwa jak zgoda.
-- **Formularze:** zbieraj tylko pola potrzebne do celu; informacja o przetwarzaniu przy formularzu odsyła do polityki prywatności.
-- **AI:** obowiązki przejrzystości i przekazywania danych dostawcy modeli opisuje [AI aplikacji](ai.md).
+- **Data subject rights:** users can view and correct their data, delete their account, and receive a copy of their data in a readable format, unless the project has established another request-handling process. Deletion includes derived copies, e.g. files and cache; backups expire under retention rules. From the first version, deletion or anonymization implementations keep the operation register needed for [restoration](#restoration-after-data-deletion).
+- **Retention:** data without a purpose, e.g. unconfirmed accounts, abandoned files, or old logs, is deleted or anonymized by a scheduled job, with an entry in the same operation register.
+- **Cookies and analytics:** cookies necessary for operation do not require consent. Analytics, marketing, and third-party tracking embeds require prior consent unless the solution uses neither device identifiers nor personal data. Prefer cookieless analytics. Refusal is as easy as consent.
+- **Forms:** collect only fields needed for the purpose; processing information next to the form links to the privacy policy.
+- **AI:** [application AI](ai.md) covers transparency obligations and data transfers to model providers.
 
-### Odtworzenie po usunięciu danych
+### Restoration after data deletion
 
-Odtworzenie starszej kopii nie może przywrócić do użycia danych wcześniej usuniętych lub zanonimizowanych. Przed udostępnieniem systemu odtwórz także aktualny stan wykonanych usunięć i anonimizacji, obejmując dane pochodne, albo użyj równoważnej procedury zapewniającej ten sam wynik.
+Restoring an older backup must not return previously deleted or anonymized data to use. Before making the system available, also restore the current state of completed deletions and anonymizations, including derived data, or use an equivalent procedure ensuring the same result.
 
-Jeśli realizujesz to rejestrem operacji, utrzymuj go poza zbiorem cofanym do starej kopii, z minimalnymi identyfikatorami, kontrolą dostępu i uzgodnioną retencją wystarczającą dla zachowanych backupów. Nie przechowuj w nim usuniętych treści. Wykonanie ponowne musi być bezpieczne. Brak wiarygodnej informacji o tych operacjach blokuje ponowne udostępnienie przywróconego systemu do czasu rozstrzygnięcia przez odpowiedzialną osobę. Procedurę i test opisuje runbook według [utrzymania](operations.md#kopie-zapasowe).
+If using an operation register, keep it outside the dataset reverted to the old backup, with minimal identifiers, access control, and agreed retention sufficient for retained backups. Do not store deleted content in it. Re-execution must be safe. Missing reliable information about these operations blocks making the restored system available again until the responsible person decides how to proceed. The runbook describes the procedure and test under [operations](operations.md#backups).
 
-## Dokumenty przed wydaniem publicznym
+## Documents before public release
 
-| Dokument | Kiedy | Źródło treści |
+| Document | When | Content source |
 |---|---|---|
-| Polityka prywatności | Przetwarzanie danych osobowych | Rejestr danych, lista dostawców |
-| Regulamin | Konta użytkowników, usługa świadczona drogą elektroniczną, płatności | Reguły produktu |
-| Informacja o ciasteczkach | Ciasteczka inne niż niezbędne lub analityka | Konfiguracja aplikacji |
-| Deklaracja dostępności | Gdy obowiązek wynika z rodzaju usługi lub klienta, np. European Accessibility Act, sektor publiczny | Wynik kontroli dostępności |
-| Dane usługodawcy i kontakt | Każda usługa publiczna | Dane od człowieka |
+| Privacy policy | Processing personal data | Data register, provider list |
+| Terms of service | User accounts, electronically supplied services, payments | Product rules |
+| Cookie notice | Non-essential cookies or analytics | Application configuration |
+| Accessibility statement | When required by the service or customer type, e.g. European Accessibility Act, public sector | Accessibility check results |
+| Service provider details and contact | Every public service | Information from a human |
 
-Strony prawne mają stałe adresy, są dostępne bez logowania i podlinkowane w stopce oraz przy rejestracji. Wersję regulaminu zaakceptowaną przez użytkownika zapisuj, jeśli jego akceptacja jest wymagana.
+Legal pages have stable URLs, are available without login, and are linked in the footer and during registration. Record the version of the terms accepted by the user when acceptance is required.
 
-## Naruszenie ochrony danych
+## Personal data breach
 
-Podejrzenie wycieku lub nieuprawnionego dostępu do danych osobowych zgłoś człowiekowi natychmiast, z zakresem, czasem i dotkniętymi danymi. Ocena obowiązku zgłoszenia organowi nadzorczemu, w UE zwykle w ciągu 72 godzin od stwierdzenia, należy do człowieka. Obsługę techniczną prowadź według [procedury awarii](incidents.md#awaria-produkcji).
+Report a suspected leak or unauthorized access to personal data to a human immediately, including scope, timing, and affected data. A human assesses the obligation to notify the supervisory authority, usually within 72 hours of becoming aware of the breach in the EU. Handle technical work under the [incident procedure](incidents.md#production-incident).

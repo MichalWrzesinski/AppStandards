@@ -1,45 +1,45 @@
-# Praca z Git
+# Working with Git
 
-Wersja: 3.0.0  
-Data: 2026-11-10
+Version: 3.1.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
+Use with the [core](../core.md), following [routing](../routing.md).
 
-## Uprawnienia i bezpieczeństwo
+## Permissions and safety
 
-W ramach uzgodnionego zadania wykonuj bez pytania branch roboczy, commity, push, PR, aktualizację względem celu, merge po spełnieniu warunków oraz bezpieczne usunięcie zintegrowanego brancha. Ograniczenia projektu mają pierwszeństwo.
+Within an agreed task, create a working branch, commit, push, create PRs, update against the target, merge once conditions are met, and safely delete an integrated branch without asking. Project restrictions take precedence.
 
-- Nie zmieniaj ochrony repozytorium ani uprawnień przy okazji zadania. Nie omijaj hooków i wymaganego podpisywania; usuń przyczynę blokady albo ją zgłoś.
-- Nie nadpisuj, nie cofaj i nie dołączaj niepowiązanych wcześniejszych zmian. Respektuj staging użytkownika; nie używaj bezrefleksyjnie `git add .` ani `git add -A`.
-- Nie przepisuj historii gałęzi docelowej, chronionej ani współdzielonej. Własny opublikowany branch możesz przepisać tylko, gdy nikt inny na nim nie pracuje, z kontrolą oczekiwanego stanu (`--force-with-lease`, nigdy zwykły force push).
-- Nie usuwaj `main`, `master`, `stage`, `develop` ani innych chronionych branchy. Revert kodu nie gwarantuje odwrócenia danych i skutków zewnętrznych.
+- Do not change repository protection or permissions as a side effect of a task. Do not bypass hooks or required signing; resolve the blocker or report it.
+- Do not overwrite, revert, or include unrelated existing changes. Respect the user's staged changes; do not use `git add .` or `git add -A` indiscriminately.
+- Do not rewrite the history of a target, protected, or shared branch. You may rewrite your own published branch only if nobody else is working on it, checking the expected state (`--force-with-lease`, never a plain force push).
+- Do not delete `main`, `master`, `stage`, `develop`, or other protected branches. Reverting code does not guarantee reversal of data changes and external effects.
 
-## Branche i zakres
+## Branches and scope
 
-Przed zmianą sprawdź branch, stan staged/unstaged i istotne pliki untracked. Odczytaj z projektu gałąź docelową, wymagane kontrole, konwencje i obszary. Domyślnie nazwa brancha to `<type>/<task-id>-<short-description>`; bez istniejącego ID pomiń je. Typy: `feat`, `fix`, `refactor`, `chore`, `docs`. Opis po angielsku, małymi literami i z myślnikami.
+Before making changes, check the branch, staged/unstaged state, and relevant untracked files. Read the target branch, required checks, conventions, and areas from the project. The default branch name is `<type>/<task-id>-<short-description>`; omit the ID if none exists. Types: `feat`, `fix`, `refactor`, `chore`, `docs`. Use an English, lowercase, hyphenated description.
 
-Pracuj na branchu roboczym; przy zastanych zmianach na gałęzi głównej zachowaj je podczas tworzenia brancha. PR obejmuje jedno spójne zadanie lub przyrost. Opis PR zawiera problem, wynik, istotne decyzje, dowody kontroli i ograniczenia, bez transkrypcji pracy.
+Work on a working branch; if existing changes are on the main branch, preserve them when creating the branch. A PR covers one coherent task or increment. Its description includes the problem, outcome, significant decisions, check evidence, and limitations, without a transcript of the work.
 
-## Commity
+## Commits
 
-Commit ma jeden logiczny cel, z bezpośrednio związanymi testami i dokumentacją. Domyślnie w monorepo rozdzielaj zmiany API, klienta i panelu na powiązane commity tego samego PR. Gdy rozdział tworzyłby uszkodzony stan, zachowaj spójność i krótko opisz wyjątek. Najpierw preferuj kompatybilne rozszerzenie API, następnie klienta.
+A commit has one logical purpose, with directly related tests and documentation. In a monorepo, separate API, client, and admin changes into related commits within the same PR by default. If separation would create a broken state, preserve consistency and briefly explain the exception. Prefer a compatible API extension first, followed by the client.
 
-Nie zachowuj uszkodzonych stanów i roboczych checkpointów w historii integracji bez jawnego uzasadnienia. Niezależną poprawkę lub porządkowanie oddziel od funkcji. Raport i status zadania zapisuj według [planowania](../planning/task-planning.md#plik-zadania), bez commitów wyłącznie do relacjonowania rund review.
+Do not retain broken states or working checkpoints in the integrated history without explicit justification. Separate an independent fix or cleanup from the feature. Record the task report and status according to [planning](../planning/task-planning.md#task-file), without commits solely to recount review rounds.
 
-Przed commitem dodaj wybrane pliki lub fragmenty i przejrzyj staged diff: zakres, kompletność, sekrety, pliki generowane i cudzą pracę. Wykonaj właściwe kontrole, utwórz commit i sprawdź jego zawartość oraz pozostały stan. Nie deklaruj lokalnego commita jako opublikowanego.
+Before committing, stage selected files or hunks and inspect the staged diff: scope, completeness, secrets, generated files, and other people's work. Run appropriate checks, create the commit, and check its content and remaining state. Do not claim that a local commit has been published.
 
-## Wiadomości commitów
+## Commit messages
 
-Format: `[area][task-or-iteration] Short change description`. Tag obszaru jest wymagany w monorepo, w pojedynczej aplikacji według projektu. Domyślne obszary: `api`, `client`, `admin`; dodatkowe muszą mieć określony zakres. Nie wymyślaj ID; pomiń drugi tag, gdy go brak.
+Format: `[area][task-or-iteration] Short change description`. The area tag is required in a monorepo; for a single application, follow the project. Default areas: `api`, `client`, `admin`; additional areas must have a defined scope. Do not invent IDs; omit the second tag if none exists.
 
-Tytuł: po angielsku, czasownik w trybie rozkazującym, wielka litera po tagach, do 72 znaków, bez kropki. Treść dodawaj dla istotnego „dlaczego” i ograniczeń, z pustą linią i zawijaniem do 72 znaków. Nie powtarzaj ID z tytułu. Nie narzucaj Conventional Commits, chyba że wymaga tego automatyzacja projektu.
+Title: English, imperative verb, initial capital after the tags, up to 72 characters, no final period. Add a body for significant rationale and limitations, separated by a blank line and wrapped at 72 characters. Do not repeat the ID from the title. Do not impose Conventional Commits unless project automation requires them.
 
-Nie dodawaj `Co-Authored-By` ani innej atrybucji AI, również automatycznie przez narzędzie, chyba że użytkownik lub projekt tego wymaga.
+Do not add `Co-Authored-By` or other AI attribution, including automatic tool attribution, unless the user or project requires it. Record the prohibition according to [agent instructions](documentation.md#instructions-for-ai-agents) so that it takes precedence over the tool's default setting.
 
-## Integracja i historia
+## Integration and history
 
-Domyślnie integruj przez merge commit zachowujący granicę zadania i logiczne commity, także przy możliwym fast-forward. Tytuł: `Merge TASK-142: Order cancellation`, a bez ID: `Merge: Invoice date validation`. Nie zostawiaj przypadkowego tytułu platformy. Squash lub rebase merge wymagają jawnej polityki projektu albo uzasadnionego wyjątku; robocze poprawki jednego kroku można połączyć przed review.
+By default, integrate with a merge commit that preserves the task boundary and logical commits, even when fast-forward is possible. Title: `Merge TASK-142: Order cancellation`, or without an ID: `Merge: Invoice date validation`. Do not leave an arbitrary platform-generated title. Squash or rebase merge requires explicit project policy or a justified exception; working fixes for a single step may be combined before review.
 
-Przed integracją zaktualizuj branch względem celu: niewspółdzielony domyślnie przez rebase, współdzielony przez merge. Po zmianie historii lub rozwiązaniu konfliktów ponów odpowiednie kontrole i review. Merge jest dozwolony tylko przy aktualnym branchu, niezależnym zatwierdzeniu i wymaganym zielonym CI dla tego samego końcowego commita. Nie obchodź niespełnionego warunku.
+Before integration, update the branch against the target: rebase by default for an unshared branch, merge for a shared one. After history changes or conflict resolution, rerun appropriate checks and review. Merge is allowed only with an up-to-date branch, independent approval, and required passing CI for the same final commit. Do not bypass an unmet condition.
 
-Po merge usuń branch lokalnie i zdalnie dopiero po potwierdzeniu integracji, braku nieprzeniesionych commitów i niezapisanej pracy oraz potrzeb innych zadań, worktree i osób. Nie wymuszaj usunięcia po błędzie bez wyjaśnienia przyczyny.
+After merge, delete the branch locally and remotely only after confirming integration, the absence of untransferred commits and uncommitted work, and the needs of other tasks, worktrees, and people. Do not force deletion after an error without establishing its cause.

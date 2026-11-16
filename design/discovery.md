@@ -1,53 +1,53 @@
-# Analiza produktu
+# Product discovery
 
-Wersja: 3.0.0  
-Data: 2026-11-10
+Version: 3.1.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
+Use with the [core](../core.md), following [routing](../routing.md).
 
-Stosuj do nowego produktu lub tylko nowego obszaru, którego nie rozstrzygają wzorce aplikacji. Wynikiem jest wiedza potrzebna do najbliższego przyrostu oraz uzgodniona granica pierwszej wersji, nie kompletna specyfikacja przyszłego produktu.
+Apply to a new product or only a new area that the application's patterns do not resolve. The outcome is the knowledge needed for the next increment and an agreed boundary for the first release, rather than a complete specification of the future product.
 
-## Rozpoznanie i decyzje
+## Exploration and decisions
 
-Odczytaj opis i materiały, ustal problem, użytkowników, ich główny przepływ i oczekiwany efekt. Przy szczegółowym opisie sprawdź luki zamiast ponawiać wywiad. Przy luźnym pomyśle zaproponuj najmniejszy sprawdzalny zakres z przykładami.
+First apply the [initial assessment of the description](../planning/input-readiness.md#initial-assessment-of-a-new-product-description). Reuse its findings and answers without repeating the same questions. Read the description and materials; identify the problem, users, their main flow and expected outcome. For a detailed description, check for gaps instead of repeating the interview. For a loose idea, propose the smallest verifiable scope with examples.
 
-Zachowaj nazwę użytkownika. Brak nazwy docelowej nie blokuje analizy i prototypu; użyj jawnej roboczej i ustal docelową przed utworzeniem trwałych identyfikatorów. W istniejącym projekcie zachowaj nazwę i pojęcia.
+Keep the name provided by the user. The absence of a final name does not block discovery or a prototype; use an explicit working name and establish the final name before creating persistent identifiers. In an existing project, keep its name and terminology.
 
-Pytania dotyczą tylko nierozstrzygniętych istotnych decyzji z rdzenia. Zbierz je w krótkie rundy z rekomendacją i konkretnym przykładem; odpowiedzi zapisuj w źródle produktu. Odwracalne szczegóły uzupełnia agent. Nie wymagaj rundy pytań, gdy materiał wystarcza.
+Questions concern only unresolved material decisions reserved by the core. Group them into short rounds with a recommendation and a concrete example; record answers in the product source. The agent fills in reversible details. Do not require a question round when the material is sufficient.
 
-## Sprawdzenie logiki produktu
+## Checking product logic
 
-W zakresie najbliższego przyrostu sprawdź:
+Within the next increment, check:
 
-- role, granice dostępu i sposób nadawania uprawnień;
-- cykl życia ważnych obiektów, statusy, dozwolone przejścia i skutki usuwania;
-- przepływy pieniędzy, waluty, zaokrąglenia i zwroty, jeśli występują;
-- terminy, wygasanie i strefy czasu;
-- istotne odmowy, błędy, współbieżność i awarie integracji;
-- znane ograniczenia prawne, danych, języków i usług.
+- roles, access boundaries and how permissions are granted;
+- the lifecycle of important objects, statuses, allowed transitions and the effects of deletion;
+- money flows, currencies, rounding and refunds, where applicable;
+- deadlines, expiration and time zones;
+- material refusals, errors, concurrency and integration failures;
+- known legal, data, language and service constraints.
 
-Wykrytej sprzeczności towarzyszy propozycja rozstrzygnięcia. Typowe domyślne uzupełnienia określa [bramka wejścia](../planning/input-readiness.md#typowe-braki), obowiązki danych [prywatność](../development/privacy.md). Pytania późniejszego niezależnego zakresu mogą pozostać otwarte.
+Accompany each identified contradiction with a proposed resolution. The [input gate](../planning/input-readiness.md#common-gaps) defines common defaults, and [privacy](../development/privacy.md) defines data obligations. Questions about later independent scope may remain open.
 
-## Zakres pierwszej wersji
+## First release scope
 
-Zaproponuj najprostszy główny przepływ od początku do końca, z kryteriami akceptacji i niezbędnym bezpieczeństwem. Człowiek ustala granicę wersji. Nie dodawaj raportów, eksportów i ustawień bez potrzeby; pomysły późniejsze zapisz krótko poza zakresem.
+Propose the simplest main flow from beginning to end, with acceptance criteria and necessary security. A human sets the release boundary. Do not add reports, exports or settings without a need; briefly record later ideas as out of scope.
 
-Historie użytkownika, story mapping i MoSCoW są opcjonalnymi narzędziami porządkowania. Używaj ich, gdy pomagają rozstrzygnąć zakres, nie jako trzech wymaganych reprezentacji tych samych informacji. Cel funkcji i obserwowalny wynik muszą pozostać zrozumiałe bez wybranego formatu.
+User stories, story mapping and MoSCoW are optional organizing tools. Use them when they help resolve scope, rather than as three required representations of the same information. The purpose of a feature and its observable outcome must remain understandable without the chosen format.
 
-## Ścieżki krytyczne produktu
+## Product critical paths
 
-Wskaż procesy krytyczne i opisz je zgodnie z [jednym standardem ścieżek](../development/critical-paths.md#definicja). Szczegóły weryfikacji uzupełnia planowanie.
+Identify critical processes and describe them according to the [single critical path standard](../development/critical-paths.md#definition). Planning adds verification details.
 
-## Dokumentacja produktu
+## Product documentation
 
-Domyślnie mały produkt ma jeden `docs/product/overview.md`: problem i cel, użytkownicy i role, zakres pierwszej wersji, istotne reguły i kryteria, ścieżki krytyczne, ograniczenia oraz późniejsze pomysły i otwarte pytania. Pomijaj sekcje bez zastosowania.
+By default, a small product has one `docs/product/overview.md`: problem and goal, users and roles, first release scope, material rules and criteria, critical paths, constraints, and later ideas and open questions. Omit sections that do not apply.
 
-Gdy obszary rosną, wydzielaj je do `docs/product/areas/`, a nieoczywiste pojęcia do słownika. Reguły i historie, do których odwołują się zadania i testy, otrzymują stałe identyfikatory. Dla złożonych stanów użyj tabeli przejść albo diagramu, bez obowiązkowego dublowania. Nie odtwarzaj całej dokumentacji istniejącej aplikacji przy nowym module; uzupełnij jej źródła w potrzebnym zakresie.
+As areas grow, extract them into `docs/product/areas/`, and place non-obvious terms in a glossary. Rules and stories referenced by tasks and tests receive stable identifiers. For complex states, use a transition table or diagram without mandatory duplication. Do not recreate all documentation of an existing application for a new module; extend its sources only as needed.
 
-## Analiza biznesowa rozszerzona
+## Extended business analysis
 
-Analizę konkurencji, modelu biznesowego, przychodów lub rynku wykonuj na wyraźną prośbę. Komercyjność produktu sama jej nie uruchamia. Nie wymagaj biznesplanu i prognoz ruchu; uwzględnij podane ograniczenia.
+Analyze competitors, the business model, revenue or the market only on explicit request. A commercial product does not trigger this by itself. Do not require a business plan or traffic forecasts; account for the constraints provided.
 
-## Wynik i przejście
+## Outcome and transition
 
-Gdy zakres pierwszej wersji jest ustalony, a najbliższy przyrost ma cel, krytyczne reguły i kryteria bez blokujących decyzji, przejdź do [prototypu](ux-ui.md). Oceniaj rozumienie produktu na konkretnym przepływie przed szczegółowym planowaniem dalszych przyrostów.
+When the first release scope is established and the next increment has a goal, critical rules and criteria without blocking decisions, proceed to the [prototype](ux-ui.md). Assess product understanding through a concrete flow before planning later increments in detail.

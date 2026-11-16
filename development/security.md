@@ -1,127 +1,139 @@
-# Standard bezpieczeństwa kodu dla agentów AI
+# Code security standard for AI agents
 
-Wersja: 2.0.0  
-Data: 2026-11-10
+Version: 2.1.0  
+Date: 2026-11-15
 
-## Zakres i stosowanie
+## Scope and application
 
-Stosuj ten standard przy pisaniu i zmianie kodu, który przetwarza dane wejściowe, uwierzytelnia użytkowników, kontroluje dostęp, przechowuje dane osobowe, obsługuje sekrety lub udostępnia API. Dokument określa, jak budować zabezpieczenia w kodzie i konfiguracji aplikacji.
+Apply this standard when writing or changing code that processes input, authenticates users, controls access, stores personal data, handles secrets, or exposes APIs. This document defines how to build safeguards into application code and configuration.
 
-Stosuj łącznie z [rdzeniem zasad](../core.md). Dobór pozostałych instrukcji określa [routing](../routing.md).
+Apply together with the [core principles](../core.md). [Routing](../routing.md) determines the other instructions to use.
 
-## Zasady nadrzędne
+Always read the governing principles and the section on security changes outside the task; read other sections according to the change:
 
-- **Bezpieczeństwo ma pierwszeństwo przed wygodą i szybkością realizacji.** Konwencje projektu nie usprawiedliwiają podatności.
-- **Domyślnie zabronione.** Dostęp, dane i operacje są niedostępne, dopóki kod jawnie na nie nie zezwoli.
-- **Nie ufaj klientowi.** Frontend, aplikacja mobilna i każdy klient API mogą zostać obejściem. Każde zabezpieczenie działa po stronie serwera.
-- **Mniej znaczy bezpieczniej.** Zbieraj, przechowuj, zwracaj i loguj tylko dane niezbędne do działania funkcji.
-- **Stosuj sprawdzone rozwiązania.** Używaj mechanizmów frameworka i uznanych bibliotek. Nie implementuj własnej kryptografii, hashowania haseł ani obsługi tokenów.
+| Change | Sections |
+|---|---|
+| New or changed input: endpoint, form, webhook, file, queue | Validation; injection; HTTP configuration for files and headers |
+| Login, session, tokens, passwords | Authentication; enumeration protection; HTTP configuration |
+| Data access, roles, new response fields | Access control |
+| Personal data | Personal and sensitive data |
+| Keys, service accounts, environment configuration | Secrets |
 
-## Sekrety
+A change affecting several rows requires the sections from each of them.
 
-- Nie commituj plików z sekretami, np. `.env`. Commituj tylko szablon, np. `.env.example`, z nazwami zmiennych i wartościami zastępczymi.
-- Lokalnie wczytuj sekrety z pliku `.env` wykluczonego w `.gitignore`.
-- W CI przechowuj sekrety w mechanizmie sekretów platformy, np. GitHub Actions Secrets, z podziałem na środowiska.
-- Na serwerze dostarczaj sekrety jako zmienne środowiskowe lub sekrety platformy hostingowej. Jeśli projekt używa menedżera sekretów, np. Doppler, Infisical, HashiCorp Vault, AWS Secrets Manager, korzystaj z niego.
-- Każde środowisko ma własne sekrety. Nie używaj sekretów produkcyjnych lokalnie ani w testach.
-- Nie umieszczaj sekretów w kodzie, logach, komunikatach błędów, adresach URL, obrazach Docker ani w kodzie frontendu. Zmienne publiczne frontendu, np. z prefiksem `VITE_` lub `NEXT_PUBLIC_`, są jawne dla każdego użytkownika.
-- Klucze i konta techniczne mają minimalne uprawnienia potrzebne do ich zadania.
-- Brak sekretu, np. klucza API nowej integracji, nie wstrzymuje pracy. Lokalnie i w testach używaj atrap lub środowiska testowego dostawcy, dodaj zmienną do `.env.example` i wymień sekrety wymagane na stagingu i produkcji w raporcie. Nie proś o sekrety produkcyjne i nie przyjmuj ich w treści rozmowy.
-- Sekret, który trafił do repozytorium, logu lub innego niezabezpieczonego miejsca, traktuj jako ujawniony: zgłoś to i zaproponuj rotację. Usunięcie go z historii nie wystarcza.
+## Governing principles
 
-## Walidacja i spójność danych
+- **Security takes precedence over convenience and speed of delivery.** Project conventions do not justify vulnerabilities.
+- **Deny by default.** Access, data, and operations remain unavailable until code explicitly allows them.
+- **Do not trust the client.** The frontend, mobile application, and any API client can be bypassed. Every safeguard operates on the server.
+- **Less data means greater safety.** Collect, store, return, and log only the data necessary for the feature.
+- **Use proven solutions.** Use framework mechanisms and established libraries. Do not implement custom cryptography, password hashing, or token handling.
 
-- Waliduj wszystkie dane wejściowe na granicy systemu, mechanizmem właściwym dla frameworka, np. DTO z walidatorem, schemat Pydantic, Zod. Dotyczy to żądań HTTP, plików, wiadomości z kolejek, webhooków, odpowiedzi usług zewnętrznych i zmiennych środowiskowych.
-- Waliduj według listy dozwolonych wartości: typ, format, długość, zakres i zbiór dopuszczalnych wartości. Odrzucaj nieznane pola zamiast je ignorować lub zapisywać.
-- Nie przypisuj danych z żądania bezpośrednio do encji ani modelu (mass assignment). Mapuj jawnie tylko pola, które użytkownik może zmienić.
-- Wartości wpływające na uprawnienia lub pieniądze wyznaczaj po stronie serwera, np. właściciel zasobu, rola, cena, rabat, status. Nie przyjmuj ich od klienta.
-- Reguły biznesowe sprawdzaj w logice domeny lub aplikacji, niezależnie od walidacji formularza.
+## Secrets
 
-## Wstrzykiwanie i obsługa danych niezaufanych
+- Do not commit files containing secrets, e.g. `.env`. Commit only a template, e.g. `.env.example`, with variable names and placeholder values.
+- Locally, load secrets from an `.env` file excluded in `.gitignore`.
+- In CI, store secrets in the platform's secrets mechanism, e.g. GitHub Actions Secrets, separated by environment.
+- On the server, supply secrets as environment variables or hosting platform secrets. If the project uses a secrets manager, e.g. Doppler, Infisical, HashiCorp Vault, or AWS Secrets Manager, use it.
+- Every environment has its own secrets. Do not use production secrets locally or in tests.
+- Do not put secrets in code, logs, error messages, URLs, Docker images, or frontend code. Public frontend variables, e.g. those prefixed with `VITE_` or `NEXT_PUBLIC_`, are visible to every user.
+- Keys and service accounts have only the permissions necessary for their task.
+- A missing secret, e.g. an API key for a new integration, does not stop work. Locally and in tests, use test doubles or the provider's test environment, add the variable to `.env.example`, and list secrets required on staging and production in the report. Do not request production secrets or accept them in conversation text.
+- Treat a secret that reached a repository, log, or another unsecured location as exposed: report it and propose rotation. Removing it from history is insufficient.
 
-- Zapytania do bazy wykonuj przez ORM lub zapytania parametryzowane. Nigdy nie sklejaj zapytań z danymi wejściowymi.
-- Dane wyświetlane w HTML koduj przez mechanizm szablonów lub frameworka frontendu z automatycznym escapowaniem. Nie wstawiaj surowego HTML pochodzącego od użytkownika; jeśli jest konieczny, oczyść go uznaną biblioteką.
-- Nie uruchamiaj poleceń systemowych z danymi wejściowymi. Jeśli jest to konieczne, przekazuj argumenty jako listę, bez powłoki.
-- Ścieżki plików budowane z danych wejściowych ograniczaj do dozwolonego katalogu i normalizuj przed użyciem.
-- Przy pobieraniu zasobów z adresów podanych przez użytkownika ograniczaj dozwolone hosty i blokuj adresy wewnętrzne (SSRF).
-- Nie deserializuj niezaufanych danych mechanizmami, które mogą tworzyć dowolne obiekty, np. `unserialize` w PHP, `pickle` w Pythonie.
+## Validation and data integrity
 
-## Uwierzytelnianie
+- Validate all input at the system boundary using a mechanism appropriate to the framework, e.g. a DTO with a validator, a Pydantic schema, or Zod. This includes HTTP requests, files, queue messages, webhooks, external service responses, and environment variables.
+- Validate against an allowlist: type, format, length, range, and permitted values. Reject unknown fields instead of ignoring or storing them.
+- Do not assign request data directly to an entity or model (mass assignment). Explicitly map only fields the user may change.
+- Determine values affecting permissions or money on the server, e.g. resource owner, role, price, discount, and status. Do not accept them from the client.
+- Check business rules in domain or application logic, independently of form validation.
 
-### Wybór mechanizmu
+## Injection and untrusted data handling
 
-- **Domyślnie, dla własnej aplikacji przeglądarkowej w tym samym serwisie co API,** np. API pod tą samą domeną za reverse proxy: sesja po stronie serwera. Losowy, nieprzezroczysty identyfikator sesji w ciasteczku `HttpOnly`, `Secure`, `SameSite=Lax` lub `Strict`; serwer przechowuje sesję lub jej skrót, np. w bazie lub cache. Stosuj mechanizm frameworka albo uznaną bibliotekę.
-- **JWT z tokenem odświeżającym** stosuj, gdy API obsługuje klientów spoza przeglądarki, np. aplikację mobilną lub integracje, albo gdy tożsamość musi być weryfikowana przez wiele niezależnych usług. Wybór zapisz w profilu technicznym.
-- W istniejącym projekcie zachowaj obecny mechanizm; jego zmiana podlega sekcji o zmianach zabezpieczeń poza zadaniem.
+- Query the database through an ORM or parameterized queries. Never concatenate queries with input data.
+- Encode data displayed in HTML through a template engine or frontend framework with automatic escaping. Do not insert raw user-provided HTML; if necessary, sanitize it with an established library.
+- Do not run system commands with input data. If necessary, pass arguments as a list, without a shell.
+- Restrict file paths constructed from input to an allowed directory and normalize them before use.
+- When fetching resources from user-provided URLs, restrict permitted hosts and block internal addresses (SSRF).
+- Do not deserialize untrusted data using mechanisms that can create arbitrary objects, e.g. PHP's `unserialize` or Python's `pickle`.
 
-### Sesja serwerowa
+## Authentication
 
-- Nadaj nowy identyfikator sesji po zalogowaniu i po zmianie uprawnień.
-- Stosuj limit bezczynności, np. 30 minut do kilku dni zależnie od ryzyka, oraz limit bezwzględny. Opcja „zapamiętaj mnie” wydłuża sesję jawnie.
-- Unieważniaj sesję po stronie serwera przy wylogowaniu, zmianie hasła i podejrzeniu przejęcia; zmiana hasła może unieważnić pozostałe sesje użytkownika.
-- Stosuj ochronę CSRF według sekcji konfiguracji HTTP.
+### Choosing a mechanism
+
+- **By default, for your own browser application on the same site as the API,** e.g. an API under the same domain behind a reverse proxy: use a server-side session. Store a random, opaque session identifier in an `HttpOnly`, `Secure`, `SameSite=Lax` or `Strict` cookie; the server stores the session or its hash, e.g. in a database or cache. Use the framework's mechanism or an established library.
+- Use **JWT with a refresh token** when the API serves non-browser clients, e.g. a mobile application or integrations, or when multiple independent services must verify identity. Record the choice in the technical profile.
+- In an existing project, preserve the current mechanism; changing it follows the section on security changes outside the task.
+
+### Server-side sessions
+
+- Assign a new session identifier after login and permission changes.
+- Apply an idle timeout, e.g. 30 minutes to several days depending on risk, and an absolute timeout. A “remember me” option explicitly extends the session.
+- Invalidate the session on the server at logout, password changes, and suspected compromise; a password change may invalidate the user's other sessions.
+- Apply CSRF protection according to the HTTP configuration section.
 
 ### JWT
 
-- Token dostępowy jest krótkotrwały, np. 15 minut. Token odświeżający jest jednorazowy, rotowany przy każdym użyciu i zapisany po stronie serwera, aby można go było unieważnić.
-- W przeglądarce token odświeżający jest w ciasteczku `HttpOnly`, `Secure`, `SameSite`, a token dostępowy w pamięci aplikacji, nie w `localStorage`.
-- Weryfikuj podpis, stały algorytm (odrzucaj `none` i nieoczekiwane), czas ważności, wystawcę i odbiorcę. Token zawiera tylko niezbędne dane, np. identyfikator użytkownika; jego treść jest czytelna dla każdego.
+- Access tokens are short-lived, e.g. 15 minutes. Refresh tokens are single-use, rotated on every use, and stored on the server so they can be revoked.
+- In a browser, store the refresh token in an `HttpOnly`, `Secure`, `SameSite` cookie and the access token in application memory, not `localStorage`.
+- Verify the signature, a fixed algorithm (reject `none` and unexpected algorithms), expiry, issuer, and audience. A token contains only necessary data, e.g. a user identifier; anyone can read its contents.
 
-### Hasła i tokeny jednorazowe
+### Passwords and single-use tokens
 
-- Hasła hashuj algorytmem przeznaczonym do haseł, np. Argon2id lub bcrypt, przez mechanizm frameworka. Nigdy nie przechowuj haseł jawnie ani nie szyfruj ich odwracalnie.
-- Tokeny jednorazowe, np. reset hasła, potwierdzenie adresu e-mail, są losowe, krótkotrwałe, jednorazowe i przechowywane w bazie jako skrót.
+- Hash passwords with a password-specific algorithm, e.g. Argon2id or bcrypt, through the framework's mechanism. Never store plaintext passwords or encrypt them reversibly.
+- Single-use tokens, e.g. password reset or email confirmation tokens, are random, short-lived, single-use, and stored in the database as hashes.
 
-## Kontrola dostępu
+## Access control
 
-- Sprawdzaj uprawnienia po stronie serwera przy każdym żądaniu, także gdy interfejs nie pokazuje danej funkcji.
-- Sprawdzaj dostęp do konkretnego zasobu, a nie tylko do typu operacji. Użytkownik z prawem odczytu faktur może czytać tylko faktury, do których ma dostęp.
-- Ograniczaj zapytania do danych użytkownika lub organizacji już na poziomie zapytania, np. filtr po właścicielu w repozytorium. Nie pobieraj wszystkiego, aby filtrować później.
-- Stosuj centralny mechanizm uprawnień frameworka, np. Voters w Symfony, Policies w Laravel, zależności w FastAPI. Nie rozpraszaj warunków uprawnień po kontrolerach.
-- Zwracaj tylko pola, które użytkownik może zobaczyć, przez jawny obiekt odpowiedzi (DTO, serializer z listą pól). Nie serializuj całych encji ani modeli. Dane ukryte w interfejsie, ale obecne w odpowiedzi API, są ujawnione.
-- Funkcje administracyjne chroń osobnymi uprawnieniami i nie udostępniaj ich przez te same punkty końcowe bez kontroli roli.
-- Dla każdego punktu końcowego z danymi użytkownika napisz test odmowy dostępu dla innego użytkownika i dla użytkownika bez uprawnień.
+- Check permissions on the server for every request, even when the interface does not show the feature.
+- Check access to the specific resource, not just the operation type. A user allowed to read invoices may read only invoices they have access to.
+- Scope queries to the user's or organization's data at query level, e.g. with an owner filter in the repository. Do not fetch everything to filter it later.
+- Use the framework's central authorization mechanism, e.g. Symfony Voters, Laravel Policies, or FastAPI dependencies. Do not scatter permission conditions across controllers.
+- Return only fields the user may see through an explicit response object (DTO, serializer with a field list). Do not serialize entire entities or models. Data hidden in the interface but present in an API response is disclosed.
+- Protect administrative functions with separate permissions and do not expose them through the same endpoints without role checks.
+- For every endpoint with user data, write access-denial tests for another user and for a user without permissions.
 
-## Ochrona przed enumeracją i nadużyciami
+## Protection against enumeration and abuse
 
-- Logowanie, przypomnienie hasła i podobne procesy zwracają taki sam status HTTP, taką samą treść odpowiedzi i zbliżony czas odpowiedzi niezależnie od tego, czy adres e-mail lub login istnieje w systemie. Przykłady: „Nieprawidłowy e-mail lub hasło”, „Jeśli konto istnieje, wysłaliśmy wiadomość z instrukcją”.
-- Rejestracja może informować, że konto z danym adresem już istnieje, i wskazywać logowanie oraz reset hasła. Ponieważ pozwala to sprawdzać istnienie adresów, chroń ją wzmocnionymi zabezpieczeniami: niskim limitem prób według adresu IP i urządzenia, weryfikacją przeciw botom, np. CAPTCHA, po przekroczeniu progu oraz monitorowaniem nietypowej liczby prób.
-- Dla zasobu, do którego użytkownik nie ma dostępu, zwracaj taki sam wynik jak dla zasobu nieistniejącego, np. `404`, jeśli ujawnienie istnienia zasobu jest ryzykiem.
-- Publiczne identyfikatory zasobów są nieprzewidywalne, np. UUID, a nie kolejne liczby. Nie zastępuje to kontroli dostępu.
-- Stosuj limity żądań (rate limiting) dla logowania, rejestracji, resetu hasła, weryfikacji kodów, wysyłki wiadomości i kosztownych operacji: według adresu IP oraz według konta lub adresu e-mail.
-- Po serii nieudanych prób logowania stosuj rosnące opóźnienie lub czasową blokadę.
-- Eksport i operacje masowe są ograniczone uprawnieniami i limitami.
+- Login, password recovery, and similar processes return the same HTTP status, the same response body, and similar response times regardless of whether the email address or username exists in the system. Examples: “Invalid email or password,” “If the account exists, we have sent a message with instructions.”
+- Registration may state that an account with the address already exists and point to login and password reset. Because this allows checking whether addresses exist, protect it with stronger safeguards: a low attempt limit per IP address and device, anti-bot verification, e.g. CAPTCHA, after a threshold, and monitoring for unusual numbers of attempts.
+- For a resource the user cannot access, return the same result as for a nonexistent resource, e.g. `404`, if disclosing its existence poses a risk.
+- Public resource identifiers are unpredictable, e.g. UUIDs rather than sequential numbers. This does not replace access control.
+- Apply rate limiting to login, registration, password resets, code verification, message sending, and expensive operations: by IP address and by account or email address.
+- After a series of failed login attempts, apply increasing delays or a temporary lockout.
+- Exports and bulk operations are restricted by permissions and limits.
 
-## Dane osobowe i wrażliwe
+## Personal and sensitive data
 
-Obowiązki produktu, takie jak rejestr danych, prawa osób, ciasteczka i dokumenty prawne, opisuje [prywatność](privacy.md). Ta sekcja dotyczy ochrony technicznej.
+[Privacy](privacy.md) describes product obligations such as the data register, data subject rights, cookies, and legal documents. This section concerns technical protection.
 
-- Zbieraj tylko dane niezbędne do działania funkcji. Jeśli funkcja może działać bez danej lub z jej częścią, nie zbieraj jej w całości.
-- Tam, gdzie dane nie są potrzebne w całości, stosuj maskowanie, np. ostatnie cyfry numeru, część adresu e-mail, w interfejsie, odpowiedziach API i raportach.
-- Szczególnie wrażliwe dane szyfruj w bazie na poziomie pól, jeśli ich wyciek byłby poważny, np. numery dokumentów, dane zdrowotne.
-- Projektuj model danych tak, aby dane osobowe można było usunąć lub zanonimizować bez naruszenia spójności pozostałych danych, np. przez wydzielenie danych osobowych i zastąpienie ich wartościami anonimowymi.
-- Określ czas przechowywania danych osobowych i usuwaj lub anonimizuj je po jego upływie, jeśli projekt to przewiduje.
-- Nie umieszczaj danych osobowych w logach, adresach URL, narzędziach analitycznych ani systemach raportowania błędów. Jeśli identyfikacja jest potrzebna do diagnozy, loguj identyfikator, a nie dane.
+- Collect only data necessary for the feature. If it can work without a data item or with only part of it, do not collect the entire item.
+- Where full data is unnecessary, apply masking, e.g. the last digits of a number or part of an email address, in the interface, API responses, and reports.
+- Encrypt particularly sensitive data at field level in the database if its disclosure would be serious, e.g. identity document numbers or health data.
+- Design the data model so personal data can be deleted or anonymized without compromising the integrity of other data, e.g. by separating personal data and replacing it with anonymous values.
+- Define a retention period for personal data and delete or anonymize it after that period if the project provides for this.
+- Do not put personal data in logs, URLs, analytics tools, or error reporting systems. If identification is needed for diagnosis, log an identifier rather than the data.
 
-## Konfiguracja HTTP i API
+## HTTP and API configuration
 
-- Aplikacja działa wyłącznie przez HTTPS, z nagłówkiem `Strict-Transport-Security`.
-- Ustawiaj nagłówki bezpieczeństwa: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, ochronę przed osadzaniem w ramkach (`frame-ancestors`).
-- CORS dopuszcza tylko jawnie wymienione domeny. Nie łącz `*` z obsługą poświadczeń.
-- Gdy uwierzytelnianie korzysta z ciasteczek, stosuj ochronę CSRF.
-- Ciasteczka z danymi sesji lub tokenami mają flagi `HttpOnly`, `Secure` i właściwe `SameSite`.
-- Przesyłane pliki sprawdzaj pod kątem typu na podstawie zawartości i rozmiaru, zapisuj pod losowymi nazwami poza katalogiem publicznym i udostępniaj przez kontrolowany punkt końcowy.
-- W środowisku produkcyjnym wyłącz tryb debugowania. Odpowiedzi błędów nie zawierają śladów stosu, zapytań ani ścieżek.
-- Loguj zdarzenia bezpieczeństwa: nieudane logowania, odmowy dostępu, przekroczenia limitów, zmiany haseł i uprawnień, bez haseł, tokenów i danych osobowych.
+- The application operates exclusively over HTTPS, with the `Strict-Transport-Security` header.
+- Set security headers: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, and protection against framing (`frame-ancestors`).
+- CORS allows only explicitly listed domains. Do not combine `*` with credentials support.
+- When authentication uses cookies, apply CSRF protection.
+- Cookies containing session data or tokens have `HttpOnly`, `Secure`, and appropriate `SameSite` flags.
+- Check uploaded file types based on content and check their size; store files under random names outside the public directory and serve them through a controlled endpoint.
+- Disable debug mode in production. Error responses contain no stack traces, queries, or paths.
+- Log security events: failed logins, access denials, exceeded limits, password and permission changes, without passwords, tokens, or personal data.
 
-## Zmiany zabezpieczeń poza zadaniem
+## Security changes outside the task
 
-Zmianę z poniższej listy wykonuj tylko wtedy, gdy zadanie wprost ją zleca i określa. W przeciwnym razie jej nie wykonuj, tylko zapisz jako propozycję nowego zadania z uzasadnieniem. Jeśli bez niej zadania nie da się zrealizować, zatrzymaj zależną część i zgłoś sytuację z propozycją rozwiązania.
+Make a change from the following list only when the task explicitly requests and defines it. Otherwise, do not make it; record it as a proposal for a new task with a rationale. If the task cannot be completed without it, stop the dependent part and report the situation with a proposed solution.
 
-- zmienia mechanizm uwierzytelniania, czas życia tokenów lub sposób ich przechowywania;
-- zmienia model ról i uprawnień albo zasady dostępu do danych;
-- osłabia lub wyłącza zabezpieczenie, np. CORS, CSP, CSRF, limity żądań, walidację;
-- zmienia algorytmy kryptograficzne, hashowanie haseł lub klucze;
-- zmienia sposób przechowywania i dostarczania sekretów;
-- wprowadza zbieranie nowych danych osobowych lub przekazywanie danych do usług zewnętrznych;
-- zmienia zasady przechowywania, usuwania lub anonimizacji danych osobowych.
+- changes the authentication mechanism, token lifetimes, or token storage;
+- changes the role and permission model or data access rules;
+- weakens or disables a safeguard, e.g. CORS, CSP, CSRF, rate limits, or validation;
+- changes cryptographic algorithms, password hashing, or keys;
+- changes how secrets are stored and supplied;
+- introduces collection of new personal data or transfers to external services;
+- changes personal data retention, deletion, or anonymization rules.

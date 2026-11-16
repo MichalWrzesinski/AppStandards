@@ -1,68 +1,76 @@
-# Kontrola jakości
+# Quality checks
 
-Wersja: 3.1.0  
-Data: 2026-11-10
+Version: 3.2.0  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md).
+Apply with the [core](../core.md), according to [routing](../routing.md).
 
-## Zakres kontroli
+## Scope of checks
 
-Przed implementacją określ obserwowalne kryteria i sposób ich sprawdzenia. Dobierz kontrole do zmiany i jej zależności, nie liczby linii. Używaj komend projektu; wynik testów nie zastępuje buildu, analizy typów, kontroli kontraktu lub obserwacji UI, gdy są wymagane dla zmiany.
+Before implementation, define observable criteria and how to verify them. Select checks based on the change and its dependencies, not line count. Use project commands; test results do not replace a build, type analysis, contract checks, or UI observation when the change requires them.
 
-Zaczynaj od ukierunkowanych kontroli. Przed commitem sprawdź dotknięty obszar, przed końcowym review komplet wymagany dla zakresu, a przed merge aktualne wymagane CI. Nie powtarzaj ważnego wyniku bez przesłanki; nowa zmiana wymaga ponowienia kontroli, na które mogła wpłynąć. Powiąż dowód z wersją, zakresem i środowiskiem.
+Start with targeted checks. Before committing, check the affected area; before final review, run the complete set required for the scope; before merging, obtain current required CI results. Do not repeat valid results without a reason; a new change requires rerunning checks it may have affected. Associate evidence with the version, scope, and environment.
 
-Ograniczaj wyjście narzędzi do potrzebnego: status zakończenia, podsumowanie, błędy i ostrzeżenia istotne dla oceny. Pełny log czytaj tylko przy diagnozie; nie wklejaj logów sukcesu do kontekstu i raportów.
+Limit tool output to what is needed: exit status, summary, errors, and warnings relevant to assessment. Read full logs only for diagnosis; do not paste success logs into context or reports.
 
-Nie twórz obowiązkowych testów kodu do zmiany pisowni lub formatowania. Właściwa kontrola diffu, dokumentu lub podglądu nadal obowiązuje. Zasady całych procesów produktu określają [ścieżki krytyczne](critical-paths.md).
+Do not require code tests for spelling or formatting changes. Appropriate diff, document, or preview checks still apply. [Critical paths](critical-paths.md) define the rules for complete product processes.
 
-## Analiza statyczna, formater i linter
+## Checks based on impact
 
-Nowy projekt ma automatyczny formater, lint i ścisłą kontrolę typów właściwą dla ekosystemu, wykonywane lokalnie i w CI. W istniejącym projekcie zachowaj narzędzia, poziomy i uzgodniony baseline; nowy kod nie może dopisywać błędów do baseline'u.
+A CSS-only change with no impact on contracts, server logic, dependencies, or backend configuration does not require analysis of all Python/PHP code or backend tests. Check the diff, relevant style checks or frontend build, and the affected view at appropriate sizes, accounting for accessibility impact. Match UI verification depth to the actual change; do not run complete application processes for a local visual fix that does not affect their behavior.
 
-Drobne uzupełnienie narzędzi wykonaj w zakresie zadania. Istotną zmianę infrastruktury jakości zapisz osobno; brak wymaganej kontroli blokuje odpowiednie przejście, nie niezależną pracę. W legacy bez ustalonego poziomu wyznacz wykonalny punkt wyjścia zamiast wymuszać naprawę całego projektu.
+Shared styles may affect many views. Configuration, dependency, or build process changes may require broader checks despite a small diff. Determine scope from dependencies, not file extensions alone.
 
-## Pokrycie kodu
+Narrow the agent's local checks according to impact. Required CI runs according to its configuration: do not disable or manually skip it. If CI has no selection mechanism, the full run remains required; you may propose selection as a separate change according to [DevOps](devops.md#ci).
 
-Zachowaj próg i politykę projektu. Nowy projekt dobiera je do ryzyka, bez uniwersalnego progu dla każdej warstwy. Wymagane są testy istotnych reguł, granic danych, pieniędzy i odmów dostępu. Samo wykonanie linii bez asercji zachowania nie wystarcza.
+## Static analysis, formatter, and linter
 
-Wykluczenia muszą być wąskie, merytorycznie uzasadnione i zgodne z polityką; ocenia je recenzent. Trudność osiągnięcia progu nie uzasadnia wykluczenia. Nie naprawiaj historycznego pokrycia legacy przy okazji zadania, ale nie pogarszaj ochrony przed regresją.
+A new project has an automatic formatter, linting, and strict type checking appropriate to its ecosystem, run locally and in CI. In an existing project, preserve its tools, levels, and agreed baseline; new code must not add errors to the baseline.
 
-## Tworzenie i utrzymanie testów
+Make small tooling additions within the task's scope. Record a significant change to quality infrastructure separately; a missing required check blocks the relevant transition, not independent work. In legacy code without an established level, define a feasible starting point rather than forcing repairs across the entire project.
 
-- Przy poprawce dodaj test regresyjny, jeśli to wykonalne: odtwarza błąd przed zmianą i przechodzi po niej. Brak możliwości tego sprawdzenia zapisz.
-- Przed zmianą nieoczywistego kodu legacy bez testów dodaj testy charakteryzujące w zakresie zmiany. Nie utrwalaj rozpoznanego błędu jako oczekiwanego wyniku.
-- Testuj zachowanie wynikające z wymagań, ważne granice i błędy. Dobieraj poziom jednostkowy, integracyjny lub E2E do ryzyka; TDD jest domyślną pomocą przy logice i błędach, nie obowiązkiem przy każdej zmianie.
-- Testy muszą być niezależne i powtarzalne. Zastępuj czas i losowość, unikaj stałych opóźnień. Nie twórz testów jedynie dla struktury implementacji, potwierdzenia mocków lub wyniku pokrycia.
-- Atrapy stosuj na granicach systemu, nie do ukrywania problemów własnej integracji. Integracje danych sprawdzaj na rzeczywistej usłudze tego samego typu co produkcja; dostawców na sandboxach lub kontrolowanych atrapach.
+## Code coverage
 
-## Integralność kontroli jakości
+Preserve the project's threshold and policy. A new project selects them according to risk, without a universal threshold for every layer. Tests of significant rules, data boundaries, money, and access denials are required. Executing lines without assertions about behavior is insufficient.
 
-Nie usuwaj i nie pomijaj testów, nie osłabiaj asercji, poziomu analizy, progów ani wymaganych kontroli CI oraz nie rozszerzaj baseline'u i wykluczeń wyłącznie dla zielonego wyniku. Zmiana testu musi wynikać z uzgodnionej zmiany wymagań. Sama implementacja nie uzasadnia nowego oczekiwanego wyniku.
+Exclusions must be narrow, substantively justified, and consistent with policy; the reviewer assesses them. Difficulty reaching a threshold does not justify an exclusion. Do not fix historical legacy coverage incidentally to a task, but do not reduce regression protection.
 
-Uzasadniony wyjątek wymaga merytorycznej przyczyny, wąskiego zakresu i zgodności z polityką projektu. Nie zmieniaj tej polityki samodzielnie. Niestabilnego testu nie ponawiaj do pierwszego sukcesu z pominięciem wcześniejszych porażek; zapisz niestabilność i oceń wpływ.
+## Creating and maintaining tests
 
-## Błędy wcześniejsze i blokady
+- For a fix, add a regression test where feasible: it reproduces the error before the change and passes afterward. Record if this cannot be verified.
+- Before changing non-obvious legacy code without tests, add characterization tests within the change's scope. Do not encode a recognized bug as the expected result.
+- Test behavior derived from requirements, important boundaries, and errors. Choose unit, integration, or E2E tests according to risk; TDD is a default aid for logic and bugs, not a requirement for every change.
+- Tests must be independent and repeatable. Substitute time and randomness; avoid fixed delays. Do not create tests solely for implementation structure, confirming mocks, or coverage results.
+- Use test doubles at system boundaries, not to hide problems in your own integration. Verify data integrations against a real service of the same type as production; verify providers using sandboxes or controlled test doubles.
 
-Odróżnij regresję, problem wcześniejszy i awarię środowiska na podstawie dowodów. Korzystaj z CI lub bezpiecznego, izolowanego porównania wersji bazowej; nie cofaj cudzych ani bieżących zmian. Przy braku rozstrzygnięcia przyczyna jest nieustalona.
+## Integrity of quality checks
 
-Niedostępne narzędzie, baza lub przeglądarka nie dowodzą błędu kodu, ale nie pozwalają deklarować sukcesu. Niewykonaną wymaganą kontrolę oznacz jako zablokowaną i kontynuuj niezależne sprawdzenia.
+Do not remove or skip tests, weaken assertions, analysis levels, thresholds, or required CI checks, or expand the baseline and exclusions merely to obtain a passing result. A test change must follow an agreed requirements change. The implementation alone does not justify a new expected result.
 
-## Weryfikacja frontendu
+A justified exception requires a substantive reason, narrow scope, and consistency with project policy. Do not change that policy independently. Do not rerun a flaky test until its first success while ignoring previous failures; record the instability and assess its impact.
 
-Zmianę interakcji lub układu sprawdź w przeglądarce: główny przepływ, istotne alternatywy i stany, właściwe rozmiary ekranu, klawiaturę i fokus oraz konsolę i żądania. Użyj dostępnego skanera dostępności, bez traktowania go jako pełnego audytu.
+## Pre-existing errors and blocking issues
 
-Aktualny test E2E może dostarczyć dowodu objętych nim aspektów; screenshot nie dowodzi działania procesu, a build nie dowodzi interakcji. Bez przeglądarki wykonaj dostępne kontrole i jawnie wskaż brak weryfikacji wizualnej i interakcyjnej.
+Distinguish regressions, pre-existing issues, and environment failures based on evidence. Use CI or a safe, isolated comparison with the baseline version; do not revert others' or current changes. Without a determination, the cause remains unknown.
 
-## Zmiany podwyższonego ryzyka
+An unavailable tool, database, or browser does not prove a code error, but prevents claiming success. Mark an unperformed required check as blocked and continue independent checks.
 
-Dla uprawnień, izolacji klientów, pieniędzy, danych osobowych, migracji, usuwania danych, sekretów i kontraktów rozszerz sprawdzenia odpowiednio o odmowy, zgodność wsteczną, współbieżność, transakcje, idempotencję, timeouty i częściowe niepowodzenia. Oceń bezpieczne wdrożenie i odwracalność skutków; zielone testy nie są zgodą na nieodwracalną operację produkcyjną.
+## Frontend verification
 
-## Bezpieczeństwo środowiska weryfikacji
+Verify interaction or layout changes in a browser: the main flow, significant alternatives and states, appropriate screen sizes, keyboard and focus, console, and requests. Use an available accessibility scanner without treating it as a complete audit.
 
-Potwierdź środowisko przed destrukcyjną komendą. Testy używają izolowanych danych i usług bez realnych płatności, wysyłek i usuwania cudzych zasobów. Nie testuj na danych produkcyjnych; kontrolowany test backupu podlega [utrzymaniu](operations.md#kopie-zapasowe). Sprzątaj tylko własne zasoby.
+A current E2E test may provide evidence for aspects it covers; a screenshot does not prove a process works, and a build does not prove interactions work. Without a browser, perform available checks and explicitly state the lack of visual and interaction verification.
 
-## Procedura zakończenia weryfikacji
+## Higher-risk changes
 
-Każde kryterium ma status: **spełnione** z dowodem, **niespełnione**, **niezweryfikowane** z brakiem lub **nie dotyczy** z uzasadnieniem. Nie zmieniaj sam kryteriów. Raport przy zadaniu odsyła do wyników, wskazuje ograniczenia, problemy wcześniejsze i błędy zmiany; bez pełnych logów sukcesu i ukrywania istotnych ostrzeżeń.
+For permissions, tenant isolation, money, personal data, migrations, data deletion, secrets, and contracts, extend checks as appropriate to include denials, backward compatibility, concurrency, transactions, idempotency, timeouts, and partial failures. Assess safe deployment and reversibility of effects; passing tests do not authorize an irreversible production operation.
 
-Brak budżetu lub czasu nie upoważnia do cichego pominięcia kontroli. Nieukończona weryfikacja pozwala zachować pracę, lecz blokuje deklarację gotowości do integracji. Wynik, aktualny review i CI muszą spełnić [warunki workflow](../workflow.md).
+## Verification environment safety
+
+Confirm the environment before a destructive command. Tests use isolated data and services without real payments, messages, or deletion of others' resources. Do not test on production data; a controlled backup test follows [operations](operations.md#backups). Clean up only your own resources.
+
+## Verification completion procedure
+
+Every criterion has a status: **met** with evidence, **unmet**, **unverified** with the missing evidence, or **not applicable** with a rationale. Do not change criteria independently. The task report links to results and identifies limitations, pre-existing issues, and errors introduced by the change, without full success logs or concealing significant warnings.
+
+A lack of budget or time does not authorize silently skipping checks. Incomplete verification allows preserving work but blocks a declaration of readiness for integration. The result, current review, and CI must meet the [workflow conditions](../workflow.md).

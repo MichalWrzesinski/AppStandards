@@ -1,99 +1,99 @@
-# Rutynowe wdrożenia i wydania
+# Routine deployments and releases
 
-Wersja: 3.3.1  
-Data: 2026-11-10
+Version: 3.3.2  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md). Używaj przy wydaniu na przygotowane środowisko. [Setup](deployment-setup.md) czytaj przy przygotowaniu lub istotnej zmianie infrastruktury, [utrzymanie](operations.md) przy konfiguracji lub kontroli operacyjnej, [awarie](incidents.md) przy rollbacku i incydencie. Nie wczytuj tych instrukcji do każdego wydania, jeśli aktualny profil i runbook rozstrzygają potrzebne warunki.
+Apply with the [core](../core.md), following [routing](../routing.md). Use when releasing to a prepared environment. Read [setup](deployment-setup.md) when preparing or materially changing infrastructure, [operations](operations.md) for operational configuration or checks, and [incidents](incidents.md) for rollback and incidents. Do not load these instructions for every release if the current profile and runbook resolve the necessary conditions.
 
-Wdrażaj tylko niezmienny artefakt opublikowany przez CI, domyślnie obraz z gałęzi głównej. „Obraz” w tym standardzie obejmuje równoważny artefakt zapisany w profilu. Każde wydanie ma bezpieczny plan niepowodzenia; cofnięcie kodu nie odwraca automatycznie danych i skutków zewnętrznych.
+Deploy only an immutable artifact published by CI, by default an image from the main branch. In this standard, “image” includes an equivalent artifact recorded in the profile. Every release has a safe failure plan; reverting code does not automatically reverse data changes or external effects.
 
-## Zakres weryfikacji
+## Verification scope
 
-Nowy projekt przed produkcją wymaga zabezpieczonego stagingu. Istniejący projekt zachowuje ustalony proces: staging jest wymagany, jeśli już go ma albo wymagają go instrukcje projektu lub decyzja człowieka. Braku wymaganego stagingu nie traktuj jako wyjątku.
+A new project requires protected staging before production. An existing project retains its established process: staging is required if it already has it or if project instructions or a human decision require it. Do not treat missing required staging as an exception.
 
-Jeśli istniejący projekt nie ma obowiązku stagingu, weryfikuj kandydata dostępnymi bezpiecznymi kontrolami zastanego procesu. W rekordzie wydania oddziel uzyskane dowody, brakujące sprawdzenia zdalne i ich ryzyko. Przed produkcją człowiek musi jawnie zaakceptować konkretne braki; zwykła zgoda bez ich wskazania nie wystarcza. Znany błąd wprowadzony przez zmianę lub niespełnione kryterium nie jest brakiem środowiska i nadal blokuje wydanie. Nie wykonuj niebezpiecznych testów na produkcji w zastępstwie stagingu.
+If an existing project has no staging requirement, verify the candidate with the available safe checks of the established process. In the release record, distinguish evidence obtained from missing remote checks and their risks. Before production, a human must explicitly accept the specific gaps; general approval without identifying them is insufficient. A known error introduced by the change or an unmet criterion is not an environment gap and still blocks release. Do not perform unsafe production tests as a substitute for staging.
 
-Uzupełnienie infrastruktury proponuj według [przygotowania środowisk](deployment-setup.md#zakres-i-moment-uruchomienia). Brak środowiska nie upoważnia agenta do samodzielnego zwiększenia zakresu lub kosztów.
+Propose infrastructure additions under [environment preparation](deployment-setup.md#scope-and-timing). A missing environment does not authorize the agent to expand scope or costs independently.
 
-## Koordynacja operacji
+## Operation coordination
 
-Wdrożenia, migracje, rollbacki i odtworzenia współdzielonych zasobów wykonuj kolejno pod wspólną blokadą, od pierwszej zmiany do końca kontroli i ewentualnego automatycznego rollbacku. Rollback wewnątrz tej operacji nie uzyskuje drugi raz własnej blokady. Stosuj przygotowany mechanizm z runbooka; konfigurację opisuje [setup](deployment-setup.md#konfiguracja-koordynacji-operacji).
+Execute deployments, migrations, rollbacks, and restorations of shared resources sequentially under a shared lock, from the first change through completion of checks and any automatic rollback. Rollback within this operation does not acquire its own lock again. Use the prepared runbook mechanism; [setup](deployment-setup.md#configuring-operation-coordination) describes configuration.
 
-Nie przerywaj rozpoczętej migracji nowszym wdrożeniem. Zawieszonej blokady nie zrywaj sam: ustal stan i zgłoś go człowiekowi. Anulowany run nie jest wdrożeniem; nowe uruchomienie potwierdza aktualne dowody i uzyskuje wymaganą dla niego zgodę, bez kopiowania poprzedniego zatwierdzenia.
+Do not interrupt a migration already in progress with a newer deployment. Do not break a stalled lock yourself: establish the state and report it to a human. A canceled run is not a deployment; a new run confirms current evidence and obtains its required approval without copying the previous approval.
 
-## Wdrożenie na staging
+## Staging deployment
 
-Poniższy automatyczny proces obowiązuje po przygotowaniu hostingu i CD. Staging może służyć już iteracjom implementacyjnym, jeśli uzasadnia to ryzyko i zatwierdzono koszty. W istniejącym projekcie zachowaj działający proces.
+The following automatic process applies once hosting and CD are prepared. Staging may already support implementation iterations if risk justifies it and costs are approved. Preserve the working process in an existing project.
 
-- Przed udostępnieniem środowiska skonfiguruj ochronę dostępu zgodnie ze standardem DevOps. Pierwsze uruchomienie nie może tworzyć okresu publicznego dostępu do niezabezpieczonej aplikacji.
-- Po publikacji obrazu z gałęzi głównej CI automatycznie wdraża go na staging.
-- Weryfikację powiąż z identyfikatorem wdrożenia; jeśli staging zmieni wersję lub istotną konfigurację w trakcie sprawdzania, wynik nie potwierdza scenariusza na jednym kandydacie. Na czas weryfikacji kandydata wydania wstrzymaj automatyczne wdrożenia stagingu: nowe merge budują artefakty, a wdrożenie czeka w kolejce do zakończenia lub przerwania weryfikacji. Wstrzymanie zapisz w rekordzie wydania i znieś po weryfikacji. Izolowane środowisko stosuj tylko przy zatwierdzonym koszcie.
-- Po wdrożeniu CI sprawdza odmowę dostępu bez uprawnień oraz uruchamia testy dymne przez autoryzowany dostęp techniczny.
-- Nieudane wdrożenie, kontrola ochrony dostępu lub testy dymne zatrzymują drogę zmiany na produkcję. Agent traktuje to jak błąd do naprawy w nowym zadaniu.
-- Jeśli kontrola ujawni publiczny dostęp do środowiska, ogranicz go przed dalszą weryfikacją i zgłoś problem. Jeśli nie możesz przywrócić ochrony, wyłącz publiczny dostęp do środowiska zamiast pozostawiać je otwarte.
-- Testy dymne mogą jednocześnie weryfikować ścieżki krytyczne, jeśli obejmują wszystkie ich kroki i wyniki według [standardu ścieżek](critical-paths.md). Sama dostępność aplikacji nie weryfikuje procesu biznesowego.
+- Configure access protection under the DevOps standard before making the environment available. Initial startup must not create a period of public access to an unprotected application.
+- After publishing an image from the main branch, CI automatically deploys it to staging.
+- Associate verification with the deployment identifier; if staging changes version or material configuration during checks, the result does not confirm the scenario on a single candidate. Pause automatic staging deployments while verifying a release candidate: new merges build artifacts, while deployment waits in a queue until verification finishes or is interrupted. Record the pause in the release record and lift it after verification. Use an isolated environment only with approved cost.
+- After deployment, CI checks denial of unauthorized access and runs smoke tests through authorized technical access.
+- Failed deployment, access protection checks, or smoke tests stop the change from proceeding to production. The agent treats this as an error to fix in a new task.
+- If a check reveals public access to the environment, restrict it before further verification and report the issue. If you cannot restore protection, disable public access to the environment rather than leaving it open.
+- Smoke tests may also verify critical paths if they cover all their steps and outcomes under the [path standard](critical-paths.md). Application availability alone does not verify a business process.
 
-## Weryfikacja ochrony środowisk testowych
+## Verifying test environment protection
 
-Wymagania ochrony stagingu, zdalnego develop i podglądów PR określa [DevOps](devops.md#dostęp-do-zdalnych-środowisk-testowych). Tu opisano ich sprawdzanie.
+[DevOps](devops.md#access-to-remote-test-environments) defines protection requirements for staging, remote develop, and PR previews. This section describes their verification.
 
-- Po każdym wdrożeniu wykonaj z zewnątrz, bez sesji i poświadczeń, kontrolę chronionej strony i reprezentatywnego endpointu API. Prawidłowa odmowa to odpowiedź właściwa dla mechanizmu, np. `401`, `403`, przekierowanie do bramki lub brak dostępu sieciowego. Sam brak połączenia nie dowodzi ochrony: potwierdź też, że uprawniony klient techniczny dociera do działającej aplikacji.
-- Przy pierwszym wdrożeniu i po zmianach sieci, proxy, routingu lub ochrony sprawdź pełny zakres: wszystkie komponenty, drogi obejścia z wymagań DevOps i wyjątki integracyjne (dozwolone wywołania działają, bez podpisu są odrzucane). Dobierz sprawdzenia do rzeczywiście skonfigurowanych dróg dostępu.
-- Kontrolę wykonuj z kontekstu osoby postronnej; wynik z prywatnej sieci nie potwierdza ochrony publicznych punktów.
-- Wynik zachowaj w raporcie CI albo w rekordzie wydania z wersją, środowiskiem i zakresem. Pełnej kontroli nie powtarzaj, jeśli konfiguracja dostępu się nie zmieniła.
+- After every deployment, check a protected page and a representative API endpoint externally, without a session or credentials. Correct denial is a response appropriate to the mechanism, e.g. `401`, `403`, a gateway redirect, or no network access. A failed connection alone does not prove protection: also confirm that an authorized technical client reaches the working application.
+- At first deployment and after network, proxy, routing, or protection changes, check the full scope: all components, bypass routes from DevOps requirements, and integration exceptions (allowed calls work, unsigned calls are rejected). Match checks to the access routes actually configured.
+- Perform checks from an outsider's context; a result from a private network does not confirm protection of public endpoints.
+- Keep the result in the CI report or release record with version, environment, and scope. Do not repeat the full check if access configuration has not changed.
 
-## Wdrożenie na produkcję
+## Production deployment
 
-### Zgoda człowieka
+### Human approval
 
-Każde wdrożenie produkcyjne wymaga jawnej zgody człowieka na wskazanego kandydata i istotną konfigurację. Agent nie zatwierdza ani nie omija zgody. Stosuj mechanizm zapisany w projekcie; jego konfigurację opisuje [przygotowanie środowisk](deployment-setup.md#mechanizm-zgody-na-produkcję). W trybie zastępczym workflow uruchamia wyłącznie człowiek, a w domyślnym agent może go uruchomić na prośbę człowieka, pozostawiając zatwierdzenie jemu.
+Every production deployment requires explicit human approval of the specified candidate and material configuration. The agent does not grant or bypass approval. Use the mechanism recorded in the project; [environment preparation](deployment-setup.md#production-approval-mechanism) describes its configuration. In fallback mode, only a human starts the workflow; in default mode, the agent may start it at a human's request, leaving approval to them.
 
-### Rekord wydania
+### Release record
 
-Kandydat wydania ma jeden rekord poza historią gałęzi, domyślnie szkic GitHub Release albo równoważny zapis platformy wskazany w profilu. Zapis poza repozytorium nie wymaga commita, więc nie zmienia kandydata ani stagingu. Rekord zawiera dane z listy gotowości poniżej, wynik ścieżek krytycznych, stan wstrzymania stagingu, blokady z warunkiem odblokowania i odwołanie do zgody platformy lub ręcznego uruchomienia przez człowieka. Po wdrożeniu produkcyjnym rekord staje się opublikowanym wydaniem z digestem artefaktu; historia potwierdzonych wdrożeń jest źródłem celów rollbacku. Sam opis lub publikacja Release nie dowodzi wdrożenia: zachowaj identyfikator operacji platformy, środowisko, digest i faktyczny wynik. Jeśli publikacja rekordu zawiedzie po udanym wdrożeniu, odtwórz rekord z dowodów operacji, bez ponownego wdrażania.
+A release candidate has one record outside branch history, by default a draft GitHub Release or equivalent platform record specified in the profile. A record outside the repository requires no commit and therefore does not change the candidate or staging. The record contains the readiness checklist data below, critical path results, staging pause state, blockers with their unblocking conditions, and a reference to platform approval or manual triggering by a human. After production deployment, the record becomes a published release with the artifact digest; confirmed deployment history is the source of rollback targets. A description or Release publication alone does not prove deployment: retain the platform operation identifier, environment, digest, and actual outcome. If record publication fails after successful deployment, reconstruct the record from operation evidence without deploying again.
 
-**Wersja istotnej konfiguracji** to skrót jawnej konfiguracji oraz identyfikatory rewizji sekretów udostępniane przez menedżer, bez wartości i bez skrótów samych sekretów. Jeśli menedżer nie udostępnia rewizji, np. GitHub Secrets, użyj nazwy sekretu i znacznika ostatniej zmiany z API platformy (`updated_at`); dzięki temu widoczna jest także zmiana wykonana ręcznie przez człowieka. Gdy platforma nie udostępnia nawet znacznika, rejestruj każdą zmianę sekretu jako zdarzenie w rekordzie wydania, także przy niezmienionej nazwie i odwołaniu. Rotacja poświadczenia do tego samego zasobu w zatwierdzonym runbooku nie musi zmieniać kandydata, lecz wymaga zapisu i właściwej kontroli działania; zmiana zasobu, konta, uprawnień lub znaczenia wymaga ponownej oceny dowodów i zgody.
+The **material configuration version** identifies non-secret configuration and secret revisions without their values; the project mechanism described in [environment preparation](deployment-setup.md#material-configuration-version) determines it. Rotating a credential for the same resource under an approved runbook need not change the candidate, but requires a record and appropriate operational checks; changing the resource, account, permissions, or meaning requires reassessment of evidence and approval.
 
-Edytowalny rekord porządkuje odwołania; nie zastępuje egzekwowanej zgody, wyników CI ani historii wykonania platformy. Workflow sprawdza źródłowe dowody, nie samą deklarację autora rekordu.
+The editable record organizes references; it does not replace enforced approval, CI results, or platform execution history. The workflow checks source evidence, not merely the record author's declaration.
 
-### Gotowość do wdrożenia
+### Deployment readiness
 
-Gdy zakres jest zintegrowany i spełnia [zakres weryfikacji](#zakres-weryfikacji), w tym wymagane ścieżki według [standardu ścieżek](critical-paths.md), agent zgłasza gotowość do wdrożenia:
+Once scope is integrated and meets the [verification scope](#verification-scope), including required paths under the [path standard](critical-paths.md), the agent reports deployment readiness:
 
-- listę zmian od ostatniego wydania, np. tytuły PR;
-- niezmienny identyfikator artefaktu, np. digest obrazu, oraz powiązany commit;
-- migracje w wydaniu, z oznaczeniem nieodwracalnych;
-- drobne decyzje produktowe i widoki zaprojektowane przez agenta, do oceny w dostępnym środowisku weryfikacji;
-- adres środowiska weryfikacji i sposób dostępu, bez sekretów; przy braku stagingu wskazanie przyjętego trybu;
-- nowe sekrety i konfiguracja wymagane na produkcji;
-- zbiorczy wynik weryfikacji wszystkich ścieżek krytycznych wymaganych dla wydawanej wersji, z odwołaniem do dowodów kandydata w wymaganym środowisku;
-- link do workflow wdrożenia i rekordu wydania.
+- changes since the last release, e.g. PR titles;
+- immutable artifact identifier, e.g. image digest, and associated commit;
+- migrations in the release, marking irreversible ones;
+- minor product decisions and views designed by the agent, for assessment in the available verification environment;
+- verification environment URL and access method, without secrets; where staging is absent, the adopted mode;
+- new secrets and configuration required in production;
+- aggregate verification result for all critical paths required for the version being released, referencing candidate evidence in the required environment;
+- link to the deployment workflow and release record.
 
-Zgoda dotyczy wskazanego kandydata i istotnej konfiguracji. Ich zmiana wymaga ponownej oceny dowodów i nowej zgody; nie używaj zatwierdzenia wcześniejszego kandydata.
+Approval covers the specified candidate and material configuration. Changing either requires reassessment of evidence and new approval; do not reuse approval of an earlier candidate.
 
-Workflow otrzymuje identyfikator artefaktu ustalony przed zgodą, odwołania do dowodów wymaganej weryfikacji i wersję istotnej konfiguracji. W obu trybach zgody pokazuje te same dane i przed zmianą produkcji sprawdza ich zgodność z zatwierdzeniem. Nie rozwiązuje ponownie ruchomego tagu, aktualnego `main` ani bieżącego stagingu jako wyboru wersji. Promuje dokładnie sprawdzony artefakt, bez przebudowy; brak zgodności blokuje wdrożenie. Kolejna wersja na stagingu nie zastępuje wcześniejszego zatwierdzonego kandydata.
+The workflow receives the artifact identifier established before approval, references to required verification evidence, and the material configuration version. In both approval modes, it shows the same data and checks consistency with approval before changing production. It does not resolve a moving tag, current `main`, or current staging again to select a version. It promotes exactly the verified artifact without rebuilding; any mismatch blocks deployment. A later staging version does not replace an earlier approved candidate.
 
-Gdy staging jest wymagany, brak pozytywnego wyniku wymaganej ścieżki na stagingu blokuje gotowość. Wyjątek istniejącego projektu bez obowiązku stagingu podlega powyższemu zakresowi weryfikacji. Przy pierwszym wydaniu publicznym spełnij [listę pierwszego wydania](deployment-setup.md#lista-przed-pierwszym-wydaniem); później wracaj do niej tylko w zakresie zmienianych wymagań.
+When staging is required, absence of a passing result for a required path on staging blocks readiness. The exception for an existing project without a staging requirement follows the verification scope above. For the first public release, complete the [first-release checklist](deployment-setup.md#checklist-before-the-first-release); return to it later only for requirements being changed.
 
-### Przebieg
+### Execution
 
-Przed pierwszą zmianą zasobów uzyskaj blokadę operacji środowiska według [koordynacji operacji](#koordynacja-operacji) i potwierdź przypiętego kandydata oraz zgodę. Utrzymuj blokadę do zakończenia weryfikacji i ewentualnego rollbacku. Ręczny rollback i odtworzenie backupu używają tej samej blokady.
+Before the first resource change, acquire the environment operation lock under [operation coordination](#operation-coordination) and confirm the pinned candidate and approval. Hold the lock until verification and any rollback finish. Manual rollback and backup restoration use the same lock.
 
-Workflow produkcyjny wykonuje kolejno:
+The production workflow performs, in order:
 
-1. kopię zapasową danych według skonfigurowanego [procesu odtwarzania](operations.md#kopie-zapasowe);
-2. migracje zgodne z działającą wersją aplikacji;
-3. wdrożenie bez przestoju: nowe kontenery przyjmują ruch dopiero po pozytywnym sprawdzeniu gotowości;
-4. weryfikację po wdrożeniu: punkt gotowości, testy dymne i liczbę błędów w pierwszych minutach;
-5. automatyczny powrót do poprzedniego obrazu, gdy weryfikacja się nie powiedzie i zgodność schematu oraz skutków pozwala na bezpieczny powrót; w innym przypadku zatrzymanie i uruchomienie uzgodnionej procedury naprawy;
-6. zapis faktycznego wyniku operacji i jej digestu w rekordzie oraz monitoringu; publikację udanego wydania tylko po potwierdzonym sukcesie. Metadane monitoringu można przygotować wcześniej, aby przypisać błędy nieudanego kandydata. Po rollbacku zapisz nieudane wdrożenie i wersję przywróconą; nie publikuj kandydata jako wdrożonego pomyślnie.
+1. data backup under the configured [recovery process](operations.md#backups);
+2. migrations compatible with the running application version;
+3. deployment without downtime: new containers receive traffic only after a successful readiness check;
+4. post-deployment verification: readiness endpoint, smoke tests, and error count in the first minutes;
+5. automatic rollback to the previous image if verification fails and schema and effect compatibility permit a safe return; otherwise, stop and start the agreed repair procedure;
+6. recording the actual operation outcome and its digest in the record and monitoring; publishing a successful release only after confirmed success. Monitoring metadata may be prepared earlier to attribute errors to a failed candidate. After rollback, record the failed deployment and restored version; do not publish the candidate as successfully deployed.
 
-Produkcyjne testy dymne nie mogą powodować rzeczywistych płatności, wysyłki wiadomości do użytkowników ani destrukcyjnych zmian danych; pełne ścieżki o takich skutkach wykonuj wyłącznie w izolowanym środowisku testowym.
-Warunki i dobór celu rollbacku określa [obsługa awarii](incidents.md#powrót-do-poprzedniej-wersji); podczas udanego rutynowego wydania nie wczytuj procedury diagnozy ani odtwarzania danych.
+Production smoke tests must not cause real payments, messages to users, or destructive data changes; execute full paths with such effects only in an isolated test environment.
+[Incident handling](incidents.md#rolling-back-to-a-previous-version) defines rollback conditions and target selection; do not load diagnosis or data restoration procedures during a successful routine release.
 
-## Flagi funkcji
+## Feature flags
 
-- Stosuj flagę, gdy niedokończona funkcja musi zostać zintegrowana przed włączeniem albo gdy włączenie wymaga osobnej decyzji lub stopniowego udostępnienia. Nie dodawaj flag na zapas.
-- Używaj najprostszego mechanizmu: konfiguracji środowiska albo tabeli w bazie. Zewnętrzną usługę wprowadzaj według zasad kosztów z rdzenia.
-- Każda flaga ma domyślnie bezpieczną wartość, właściciela i zadanie usunięcia po pełnym włączeniu. Testy obejmują oba stany, jeśli oba trafiają do wydania.
-- Flaga nie zastępuje kontroli uprawnień ani migracji expand/contract. Włączenie funkcji na produkcji dla użytkowników jest decyzją produktową.
+- Use a flag when an unfinished feature must be integrated before activation, or activation requires a separate decision or gradual rollout. Do not add flags in advance.
+- Use the simplest mechanism: environment configuration or a database table. Introduce an external service under the core's cost rules.
+- Every flag has a safe default, owner, and removal task after full activation. Tests cover both states if both are included in the release.
+- A flag does not replace authorization checks or expand/contract migrations. Enabling a production feature for users is a product decision.

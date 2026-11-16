@@ -1,50 +1,50 @@
-# Utrzymanie i odtwarzanie danych
+# Operations and data restoration
 
-Wersja: 1.0.0  
-Data: 2026-11-10
+Version: 1.0.1  
+Date: 2026-11-15
 
-Stosuj z [rdzeniem](../core.md), według [routingu](../routing.md). Czytaj przy organizacji utrzymania, konfiguracji i kontroli backupów lub monitoringu, rotacji sekretów i odtwarzaniu danych. Rutynowe wydanie korzysta z gotowych procedur projektu według [wdrożeń](deployment.md), a bieżący incydent z [awarii](incidents.md).
+Apply with the [core](../core.md), following [routing](../routing.md). Read when organizing operations, configuring and checking backups or monitoring, rotating secrets, and restoring data. A routine release uses the project's prepared procedures under [deployment](deployment.md); an active incident follows [incidents](incidents.md).
 
-## Runbook i organizacja utrzymania
+## Runbook and operational organization
 
-W `docs/runbook.md` lub istniejącym odpowiedniku zapisz jeden krótki profil operacyjny. Przygotuj go przed produkcją i aktualizuj razem ze zmianą procesu:
+Keep one brief operational profile in `docs/runbook.md` or its existing equivalent. Prepare it before production and update it whenever the process changes:
 
-| Ustalenie | Minimalna treść |
+| Arrangement | Minimum content |
 |---|---|
-| Odpowiedzialność | Właściciel usługi, odbiorca alertów i zastępstwo lub jawny brak zastępstwa |
-| Uruchamianie pracy | Reakcja ręczna, zdarzeniowa lub harmonogram; kto uruchamia agenta, przez jaki dostępny mechanizm; które kontrole cykliczne wykonuje CI lub usługa |
-| Granice reakcji | Dopuszczalne działania i limity czasu oraz kosztu; kiedy agent zgłasza blokadę. Nie rozszerza to zgód produkcyjnych z rdzenia |
-| Niedostępność człowieka | Kanał i sposób ponownej eskalacji, bezpieczny stan oczekiwania; brak odpowiedzi nie jest zgodą |
-| Odtwarzanie | Uzgodniona dopuszczalna utrata danych (RPO) i docelowy czas przywrócenia (RTO); sposób i wynik ich sprawdzenia |
-| Procedury | Odnośniki do wdrożenia, rollbacku, odtworzenia danych, rotacji sekretów oraz dostępu do logów i monitoringu, bez wartości sekretów |
+| Responsibility | Service owner, alert recipient, and substitute or an explicit statement that there is none |
+| Starting work | Manual, event-driven, or scheduled response; who starts the agent and through which available mechanism; which recurring checks CI or a service performs |
+| Response limits | Permitted actions and time and cost limits; when the agent reports a blocker. This does not extend the core's production approvals |
+| Human unavailability | Channel and method for repeated escalation, safe waiting state; no response is not approval |
+| Recovery | Agreed acceptable data loss (RPO) and recovery time objective (RTO); verification method and result |
+| Procedures | Links to deployment, rollback, data restoration, secret rotation, and access to logs and monitoring, without secret values |
 
-Właściciel akceptuje oczekiwania odtwarzania i obsługi; agent proponuje wariant na podstawie ryzyka i kosztów. Częstotliwość backupu i sposób odtwarzania muszą odpowiadać tym oczekiwaniom; domyślna kopia dzienna nie gwarantuje mniejszej utraty danych. Nie deklaruj czasu reakcji, którego wybrany tryb obsługi nie zapewnia.
+The owner accepts recovery and support expectations; the agent proposes an option based on risk and cost. Backup frequency and restoration method must meet those expectations; the default daily backup does not guarantee less data loss. Do not promise a response time the selected support arrangement cannot provide.
 
-Jeśli brak integracji uruchamiającej agenta, wpisz tryb ręczny i konkretną osobę odpowiedzialną. Samo wysłanie alertu nie oznacza rozpoczęcia diagnozy. Nie buduj osobnej platformy utrzymania bez potrzeby; preferuj istniejący monitoring, harmonogram CI i narzędzia projektu.
+If no integration starts the agent, record manual operation and a specific responsible person. Sending an alert alone does not mean diagnosis has started. Do not build a separate operations platform without a need; prefer existing monitoring, CI schedules, and project tools.
 
-## Kopie zapasowe
+## Backups
 
-- Kopie bazy danych i plików użytkowników wykonuj automatycznie, co najmniej raz dziennie, oraz przed każdą migracją produkcyjną.
-- Kopie są szyfrowane i przechowywane poza serwerem aplikacji, u innego dostawcy lub w innej lokalizacji.
-- Czas przechowywania ustala projekt; domyślnie 30 dni.
-- Odtwarzanie kopii testuj automatycznie, np. raz w miesiącu, w tymczasowym środowisku z ochroną dostępu i sekretami na poziomie produkcji. Zablokuj wysyłki do użytkowników i produkcyjne efekty integracji; dopuść tylko techniczny dostęp potrzebny do pobrania kopii i bezpiecznej obserwacji. Po teście usuń środowisko i dane. To jedyny dozwolony wyjątek od zakazu kopiowania danych produkcyjnych poza produkcję. Raport zawiera wynik, czas odtworzenia względem RTO i potwierdzony punkt odtworzenia danych względem RPO; sam wiek pliku kopii nie dowodzi jej kompletności. Bez danych osobowych.
-- Przed udostępnieniem systemu po odtworzeniu zastosuj usunięcia i anonimizacje wykonane po dacie kopii, według [prywatności](privacy.md#odtworzenie-po-usunięciu-danych). Próba odtworzenia sprawdza także ten krok. Nie uruchamiaj wysyłek i zadań zewnętrznych z przywróconych danych przed uzgodnieniem ich aktualnego stanu; odtworzenie nie może powtórzyć wcześniejszych skutków biznesowych.
+- Back up the database and user files automatically, at least daily and before every production migration.
+- Backups are encrypted and stored outside the application server, with another provider or in another location.
+- The project sets retention; the default is 30 days.
+- Test backup restoration automatically, e.g. monthly, in a temporary environment with production-level access protection and secrets. Block messages to users and production integration effects; allow only the technical access needed to retrieve the backup and observe safely. Delete the environment and data after the test. This is the only permitted exception to the prohibition on copying production data outside production. The report includes the result, restoration time against RTO, and confirmed data recovery point against RPO; the backup file's age alone does not prove completeness. Include no personal data.
+- Before making a restored system available, apply deletions and anonymizations performed after the backup date, following [privacy](privacy.md#restoration-after-data-deletion). The restoration test also checks this step. Do not start message delivery or external jobs from restored data before reconciling their current state; restoration must not repeat previous business effects.
 
-## Monitoring i alerty
+## Monitoring and alerts
 
-- Błędy backendu i frontendu zgłaszaj do Sentry lub narzędzia wskazanego przez projekt.
-- Integracja z Sentry:
-  - wydanie (`release`) to identyfikator commita, a środowisko (`environment`) to nazwa środowiska;
-  - CI tworzy wydanie w Sentry przy każdym wdrożeniu i wiąże je z commitami; połączenie Sentry z repozytorium GitHub pozwala wskazać commit, który prawdopodobnie wprowadził błąd;
-  - CI przesyła do Sentry mapy źródeł frontendu i nie publikuje ich na serwerze;
-  - zgłoszenia nie zawierają danych osobowych, haseł ani tokenów; wyłącz domyślne wysyłanie danych użytkownika i filtruj wrażliwe pola.
-- Monitor dostępności sprawdza z zewnątrz punkt kontroli stanu produkcji i stagingu.
-- Monitor stagingu korzysta z dedykowanego dostępu technicznego zgodnie ze standardem DevOps. Nie wyłączaj ochrony środowiska, aby umożliwić monitoring.
-- Oddziel sprawdzenie działania aplikacji przez autoryzowany dostęp od kontroli odmowy dostępu osobie postronnej.
-- Alerty trafiają kanałem wskazanym przez projekt, domyślnie e-mailem, przy: niedostępności aplikacji, nagłym wzroście liczby błędów, nieudanym wdrożeniu, nieudanej kopii zapasowej lub wykryciu nieuprawnionego publicznego dostępu do środowiska testowego.
+- Report backend and frontend errors to Sentry or the project's designated tool.
+- Sentry integration:
+  - `release` is the commit identifier, and `environment` is the environment name;
+  - CI creates a Sentry release for every deployment and associates it with commits; connecting Sentry to the GitHub repository helps identify the commit that likely introduced an error;
+  - CI uploads frontend source maps to Sentry and does not publish them on the server;
+  - reports contain no personal data, passwords, or tokens; disable default user data transmission and filter sensitive fields.
+- An uptime monitor checks the production and staging health endpoints externally.
+- The staging monitor uses dedicated technical access under the DevOps standard. Do not disable environment protection to enable monitoring.
+- Separate application checks through authorized access from checks that deny access to outsiders.
+- Alerts use the project's designated channel, email by default, for application unavailability, a sudden increase in errors, failed deployment, failed backup, or detected unauthorized public access to a test environment.
 
-## Dostęp agenta do produkcji
+## Agent access to production
 
-- Agent ma dostęp do produkcji tylko do odczytu, przez narzędzia obserwacji: monitoring błędów, logi, metryki, status wdrożeń. Nie ma powłoki z prawem zmian ani bezpośredniego dostępu do bazy.
-- Zapytanie do produkcyjnej bazy z danymi osobowymi wykonuje człowiek albo agent za jego zgodą, w trybie tylko do odczytu, w minimalnym zakresie. Nie kopiuj danych osobowych do rozmowy, zadań ani raportów; posługuj się identyfikatorami.
-- Działania zmieniające produkcję przechodzą przez [workflow wydań](deployment.md) i [rollbacku](incidents.md#powrót-do-poprzedniej-wersji).
+- The agent has read-only production access through observation tools: error monitoring, logs, metrics, and deployment status. It has no shell with modification privileges or direct database access.
+- A production database query involving personal data is performed by a human or, with their approval, by the agent, read-only and with minimal scope. Do not copy personal data into conversations, tasks, or reports; use identifiers.
+- Actions that change production go through the [release](deployment.md) and [rollback](incidents.md#rolling-back-to-a-previous-version) workflows.
